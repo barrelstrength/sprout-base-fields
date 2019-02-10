@@ -1,15 +1,15 @@
-# Sprout Base Email
+# Sprout Base Fields
 
-A collection of common email classes and libraries for the Sprout Plugins Suite for Craft CMS.
+A collection of common field classes and libraries for the Sprout Plugins Suite for Craft CMS.
 
 ## Usage
 
-Include Sprout Base in your Sprout plugin composer.json file:
+Include Sprout Base Fields in your Sprout plugin composer.json file:
 
 ``` json
 {
   "require": {
-    "barrelstrength/sprout-base-email": "^1.0.0"
+    "barrelstrength/sprout-base-fields": "^1.0.0"
   }
 }
 ```

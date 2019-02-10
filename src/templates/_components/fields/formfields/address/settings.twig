@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.selectField({
-    label: "Select Language"|t('sprout-base'),
-    instructions: "Choose the language to display the list of countries."|t('sprout-base'),
+    label: "Select Language"|t('sprout-base-fields'),
+    instructions: "Choose the language to display the list of countries."|t('sprout-base-fields'),
     id: 'defaultLanguage',
     name: 'defaultLanguage',
     options: languages,
@@ -10,8 +10,8 @@
 }) }}
 
 {{ forms.selectField({
-    label: "Default Country"|t('sprout-base'),
-    instructions: "Choose a default country input."|t('sprout-base'),
+    label: "Default Country"|t('sprout-base-fields'),
+    instructions: "Choose a default country input."|t('sprout-base-fields'),
     id: 'defaultCountry',
     name: 'defaultCountry',
     options: countries,
@@ -20,7 +20,7 @@
 
 {{ forms.lightswitchField({
     label: "Show country dropdown"|t,
-    instructions: 'Disable this setting to use the Default Country when saving the address field.'|t('sprout-base'),
+    instructions: 'Disable this setting to use the Default Country when saving the address field.'|t('sprout-base-fields'),
     id: 'showCountryDropdown',
     name: 'showCountryDropdown',
     on: field.showCountryDropdown,
@@ -29,8 +29,8 @@
 
 <div id="sprout-address-highlight-countries" class="sprout-address-highlight-countries {% if not field.showCountryDropdown %} hidden{% endif %}">
     {{ forms.checkboxSelectField({
-        label: "Highlight Countries"|t('sprout-base'),
-        instructions: "Select the countries to highlight at the top of the Country dropdown list."|t('sprout-base'),
+        label: "Highlight Countries"|t('sprout-base-fields'),
+        instructions: "Select the countries to highlight at the top of the Country dropdown list."|t('sprout-base-fields'),
         name: "highlightCountries",
         options: countries,
         values: field.highlightCountries

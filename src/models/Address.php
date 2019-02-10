@@ -142,7 +142,7 @@ class Address extends Model
         $rules[] = [
             'address1',
             'required',
-            'message' => Craft::t('sprout-base', 'Address 1 cannot be blank.')
+            'message' => Craft::t('sprout-base-fields', 'Address 1 cannot be blank.')
         ];
 
         return $rules;
@@ -172,7 +172,7 @@ class Address extends Model
             }
         }
 
-        $this->addError($attribute, Craft::t('sprout-base', '{postalName} is not a valid.', [
+        $this->addError($attribute, Craft::t('sprout-base-fields', '{postalName} is not a valid.', [
             'postalName' => ucwords($addressFormat->getPostalCodeType()),
         ]));
 

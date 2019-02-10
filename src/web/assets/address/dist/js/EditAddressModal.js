@@ -24,8 +24,8 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
 
             $(this.$addressFormHtml).appendTo(this.$bodyMeta);
 
-            this.modalTitle = Craft.t('sprout-base', 'Update Address');
-            this.submitLabel = Craft.t('sprout-base', 'Update');
+            this.modalTitle = Craft.t('sprout-base-fields', 'Update Address');
+            this.submitLabel = Craft.t('sprout-base-fields', 'Update');
 
             // Footer and buttons
             var $footer = $('<div class="footer"/>').appendTo(this.$form);
@@ -33,7 +33,7 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             var $mainBtnGroup = $('<div class="btngroup right"/>').appendTo($footer);
             this.$updateBtn = $('<input type="button" class="btn submit" value="' + this.submitLabel + '"/>').appendTo($mainBtnGroup);
             this.$footerSpinner = $('<div class="spinner right hidden"/>').appendTo($footer);
-            this.$cancelBtn = $('<input type="button" class="btn" value="' + Craft.t('sprout-base', 'Cancel') + '"/>').appendTo($btnGroup);
+            this.$cancelBtn = $('<input type="button" class="btn" value="' + Craft.t('sprout-base-fields', 'Cancel') + '"/>').appendTo($btnGroup);
 
             this.addListener(this.$cancelBtn, 'click', 'hide');
             this.addListener(this.$updateBtn, 'click', $.proxy(function(ev) {

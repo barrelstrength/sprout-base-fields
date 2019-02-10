@@ -62,7 +62,7 @@ class Phone extends Component
     {
         // Change empty condition to show default message when toggle settings is unchecked
         if ($field->customPatternErrorMessage) {
-            return Craft::t('sprout-base', $field->customPatternErrorMessage);
+            return Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
         }
 
         $phoneUtil = PhoneNumberUtil::getInstance();
@@ -70,7 +70,7 @@ class Phone extends Component
         $exampleNumber = $phoneUtil->getExampleNumber($country);
         $national = $phoneUtil->format($exampleNumber, PhoneNumberFormat::NATIONAL);
 
-        return Craft::t('sprout-base', '{field} is invalid. Required format: '.$national, [
+        return Craft::t('sprout-base-fields', '{field} is invalid. Required format: '.$national, [
             'field' => $field->name,
             'exampleNumber' => $exampleNumber
         ]);

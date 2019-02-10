@@ -488,6 +488,6 @@ class AddressHelper
      */
     protected function renderAddressLabel($label)
     {
-        return Craft::t('sprout-base', str_replace('_', ' ', ucwords($label)));
+        return Craft::t('sprout-base-fields', str_replace('_', ' ', ucwords($label)));
     }
 }

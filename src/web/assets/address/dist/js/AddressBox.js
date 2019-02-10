@@ -151,7 +151,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
                     var errors = response.errors;
                     $.each(errors, function(key, value) {
                         $.each(value, function(key2, value2) {
-                            Craft.cp.displayError(Craft.t('sprout-base', value2));
+                            Craft.cp.displayError(Craft.t('sprout-base-fields', value2));
                         });
                     });
                 }
@@ -231,7 +231,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
             self.addressInfo = spanValues.join("|");
 
             if ($('.address-format').is(':hidden')) {
-                Craft.cp.displayError(Craft.t('sprout-base', 'Please add an address'));
+                Craft.cp.displayError(Craft.t('sprout-base-fields', 'Please add an address'));
                 return false;
             }
 
@@ -247,10 +247,10 @@ if (typeof Craft.SproutBase === typeof undefined) {
                     $("input[name='sproutseo[globals][identity][latitude]']").val(latitude);
                     $("input[name='sproutseo[globals][identity][longitude]']").val(longitude);
 
-                    Craft.cp.displayNotice(Craft.t('sprout-base', 'Latitude and Longitude updated.'));
+                    Craft.cp.displayNotice(Craft.t('sprout-base-fields', 'Latitude and Longitude updated.'));
                 }
                 else {
-                    Craft.cp.displayError(Craft.t('sprout-base', 'Unable to find the address: ' + response.errors));
+                    Craft.cp.displayError(Craft.t('sprout-base-fields', 'Unable to find the address: ' + response.errors));
                 }
             }, this))
         }
