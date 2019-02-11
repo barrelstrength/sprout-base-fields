@@ -4,14 +4,17 @@
     padding: 0;
     border-radius: 5px;
 }
+
 .field[id=fields-FIELDHANDLE-field] .heading {
     background: #ebedef;
     padding: 7px 14px 7px;
     margin: 0;
 }
+
 .field[id=fields-FIELDHANDLE-field] .input {
     padding: 7px 14px 14px;
 }
+
 .field[id=fields-FIELDHANDLE-field] label {
     color: #576575;
     cursor: pointer;
@@ -20,6 +23,7 @@
     font-weight: bold;
     padding-right: 100px;
 }
+
 .field[id=fields-FIELDHANDLE-field] ul {
     color: #232323;
     list-style-type: disc;

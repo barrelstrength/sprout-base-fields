@@ -62,8 +62,7 @@ if (typeof Craft.SproutFields === typeof undefined) {
                     // Show the Text Field and display the existing value for editing
                     this.$textField.parent().removeClass('hidden');
                     this.$textField.focus().select();
-                }
-                else {
+                } else {
                     // Store the selected value in the other field, as it takes precedence
                     this.$textField.val(selectedValue);
                 }

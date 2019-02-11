@@ -56,17 +56,17 @@
 
 {% css %}
     textarea.sproutnotes {
-        min-height: 125px;
+    min-height: 125px;
     }
 
     .quill-editor {
-        height: auto;
-        min-height: 120px;
+    height: auto;
+    min-height: 120px;
     }
     .quill-editor p,
     .quill-editor ul,
     .quill-editor ol {
-        margin-bottom: 10px;
+    margin-bottom: 10px;
     }
 {% endcss %}
 
@@ -74,54 +74,54 @@
 
     $(document).ready(function() {
 
-        var initSelectValue = $("{{ '#' ~ selectId }}").val();
-        var textareaInput = $("#{{ selectTextarea }}");
-        var $textareaWrapper = $("#{{ textareaWrapper }}");
-        var $quillWrapper = $("#{{ quillWrapper }}");
+    var initSelectValue = $("{{ '#' ~ selectId }}").val();
+    var textareaInput = $("#{{ selectTextarea }}");
+    var $textareaWrapper = $("#{{ textareaWrapper }}");
+    var $quillWrapper = $("#{{ quillWrapper }}");
 
-        var quill = new Quill('#{{ quillEditor }}', {
-            bounds: ".quill-editor",
-            modules: {
-                toolbar: [
-                    ['bold', 'italic', 'link'],
-                    [{ 'list': 'ordered'}, { 'list': 'bullet' }]
-                ]
-            },
-            theme: 'snow'
-        });
+    var quill = new Quill('#{{ quillEditor }}', {
+    bounds: ".quill-editor",
+    modules: {
+    toolbar: [
+    ['bold', 'italic', 'link'],
+    [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+    ]
+    },
+    theme: 'snow'
+    });
 
-        quill.on('text-change', function(delta) {
-            textareaInput.val(quill.root.innerHTML);
-        });
+    quill.on('text-change', function(delta) {
+    textareaInput.val(quill.root.innerHTML);
+    });
 
-        if (initSelectValue == "richText") {
-            $quillWrapper.removeClass('hidden');
-        }
-        else {
-            $textareaWrapper.removeClass('hidden');
-        }
+    if (initSelectValue == "richText") {
+    $quillWrapper.removeClass('hidden');
+    }
+    else {
+    $textareaWrapper.removeClass('hidden');
+    }
 
-        $("{{ '#' ~ selectId }}").on('change', function() {
+    $("{{ '#' ~ selectId }}").on('change', function() {
 
-            var textareaType = $(this).val();
-            var textareaValue = $("#{{ selectTextarea }}").val();
+    var textareaType = $(this).val();
+    var textareaValue = $("#{{ selectTextarea }}").val();
 
-            if (textareaType == "richText") {
-                $textareaWrapper.addClass('hidden');
-                $quillWrapper.removeClass('hidden');
-            }
-            else
-            {
-                if (!$quillWrapper.hasClass('hidden'))
-                {
-                    $quillWrapper.addClass('hidden');
-                }
+    if (textareaType == "richText") {
+    $textareaWrapper.addClass('hidden');
+    $quillWrapper.removeClass('hidden');
+    }
+    else
+    {
+    if (!$quillWrapper.hasClass('hidden'))
+    {
+    $quillWrapper.addClass('hidden');
+    }
 
-                $textareaWrapper.removeClass('hidden');
-                // copy from rich text
-                //textareaInput.val(textareaInput.text());
-            }
-        });
+    $textareaWrapper.removeClass('hidden');
+    // copy from rich text
+    //textareaInput.val(textareaInput.text());
+    }
+    });
     });
 
 {% endjs %}

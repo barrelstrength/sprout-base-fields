@@ -41,8 +41,7 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
             if (this.isVisible()) {
                 this.initialize();
-            }
-            else {
+            } else {
                 this.addListener(Garnish.$win, 'resize', 'initializeIfVisible');
             }
         },
@@ -133,14 +132,12 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
                             if (typeof option.optgroup !== 'undefined') {
                                 if (hasOptgroups) {
                                     rowHtml += '</optgroup>';
-                                }
-                                else {
+                                } else {
                                     hasOptgroups = true;
                                 }
 
                                 rowHtml += '<optgroup label="' + option.optgroup + '">';
-                            }
-                            else {
+                            } else {
                                 var optionLabel = (typeof option.label !== 'undefined' ? option.label : option),
                                     optionValue = (typeof option.value !== 'undefined' ? option.value : key),
                                     optionDisabled = (typeof option.disabled !== 'undefined' ? option.disabled : false);
@@ -285,8 +282,7 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
                     // Select the whole value
                     var length = val.length * 2;
                     $textarea[0].setSelectionRange(0, length);
-                }
-                else {
+                } else {
                     // Refresh the value to get the cursor positioned at the end
                     $textarea.val(val);
                 }
@@ -301,9 +297,9 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
             var keyCode = ev.keyCode ? ev.keyCode : ev.charCode;
 
             if (!Garnish.isCtrlKeyPressed(ev) && (
-                    (keyCode === Garnish.RETURN_KEY) ||
-                    (ev.data.type === 'number' && !Craft.inArray(keyCode, Craft.SproutSeo.EditableTable.Row.numericKeyCodes))
-                )) {
+                (keyCode === Garnish.RETURN_KEY) ||
+                (ev.data.type === 'number' && !Craft.inArray(keyCode, Craft.SproutSeo.EditableTable.Row.numericKeyCodes))
+            )) {
                 ev.preventDefault();
             }
         },
@@ -317,12 +313,10 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
 
                 if (match !== null) {
                     safeValue = match[1];
-                }
-                else {
+                } else {
                     safeValue = '';
                 }
-            }
-            else {
+            } else {
                 // Just strip any newlines
                 safeValue = ev.currentTarget.value.replace(/[\r\n]/g, '');
             }

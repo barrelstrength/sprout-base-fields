@@ -24,8 +24,7 @@ function checkSproutEmailField(namespaceInputId, id, elementId, fieldHandle, fie
             if (response) {
                 $(sproutEmailButtonClass).addClass('fade');
                 $(sproutEmailButtonClass + ' a').attr("href", "mailto:" + data.value);
-            }
-            else {
+            } else {
                 $(sproutEmailButtonClass).removeClass('fade');
             }
         });

@@ -53,7 +53,7 @@ class AddressHelper
     protected $language = 'en';
 
     /**
-     * @var array 
+     * @var array
      */
     protected $highlightCountries = [];
 
@@ -82,6 +82,7 @@ class AddressHelper
 
     /**
      * Format common countries setting values with country names
+     *
      * @param $highlightCountries
      *
      * @return array

@@ -23,8 +23,7 @@ function checkSproutUrlField(namespaceInputId, id, fieldHandle, fieldContext) {
             if (response) {
                 $(sproutUrlButtonClass).addClass('fade');
                 $(sproutUrlButtonClass + ' a').attr("href", data.value);
-            }
-            else {
+            } else {
                 $(sproutUrlButtonClass).removeClass('fade');
             }
         });

@@ -87,8 +87,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 this.$addButtons.removeClass('hidden');
                 this.$editButtons.addClass('hidden');
                 this.$addressFormat.addClass('hidden');
-            }
-            else {
+            } else {
 
                 this.$addButtons.addClass('hidden');
                 this.$editButtons.removeClass('hidden');
@@ -145,8 +144,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
 
                     this.modal.hide();
                     this.modal.destroy();
-                }
-                else {
+                } else {
                     Garnish.shake(this.modal.$form);
                     var errors = response.errors;
                     $.each(errors, function(key, value) {
@@ -248,8 +246,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
                     $("input[name='sproutseo[globals][identity][longitude]']").val(longitude);
 
                     Craft.cp.displayNotice(Craft.t('sprout-base-fields', 'Latitude and Longitude updated.'));
-                }
-                else {
+                } else {
                     Craft.cp.displayError(Craft.t('sprout-base-fields', 'Unable to find the address: ' + response.errors));
                 }
             }, this))

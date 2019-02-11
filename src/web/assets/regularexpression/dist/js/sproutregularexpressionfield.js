@@ -22,8 +22,7 @@ function checkSproutRegularExpressionField(id, fieldHandle, fieldContext) {
         Craft.postActionRequest('sprout-base-fields/fields/regular-expression-validate', data, function(response) {
             if (response) {
                 $(sproutRegularExpressionClass).addClass('fade');
-            }
-            else {
+            } else {
                 $(sproutRegularExpressionClass).removeClass('fade');
             }
         });

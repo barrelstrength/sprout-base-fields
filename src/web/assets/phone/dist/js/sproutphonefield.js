@@ -46,8 +46,7 @@
                         if (response) {
                             $(sproutPhoneFieldButtonClass).addClass('fade');
                             $(sproutPhoneFieldButtonClass + ' a').attr("href", "tel:" + phoneNumber);
-                        }
-                        else {
+                        } else {
                             $(sproutPhoneFieldButtonClass).removeClass('fade');
 
                         }

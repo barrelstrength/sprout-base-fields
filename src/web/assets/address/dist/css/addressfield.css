@@ -5,7 +5,7 @@
 
 .sprout-address-modal {
     overflow: visible;
-    min-width: 380px!important;
+    min-width: 380px !important;
     height: auto !important;
     min-height: 0 !important;
 }
@@ -15,7 +15,7 @@
 }
 
 .sprout-address-body .meta {
-    background-color: #fff;
+    background-color: #ffffff;
 }
 
 .sprout-address-body .meta .field .heading {
