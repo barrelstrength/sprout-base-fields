@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use craft\base\Component;
-use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 
