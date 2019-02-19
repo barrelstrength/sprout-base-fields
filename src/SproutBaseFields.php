@@ -93,7 +93,7 @@ class SproutBaseFields extends Module
         self::$app = new App();
 
         Craft::setAlias('@sproutbasefields', $this->getBasePath());
-        Craft::setAlias('@sproutbasefieldslib', dirname(__DIR__, 2).'/sprout-base-fields/lib');
+        Craft::setAlias('@sproutbasefieldslib', dirname(__DIR__, 1).'/lib');
 
         // Setup Controllers
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
