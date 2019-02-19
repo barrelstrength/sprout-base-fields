@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use craft\base\Component;
+use barrelstrength\sproutbasefields\helpers\AddressHelper;
 
 class App extends Component
 {
@@ -47,6 +48,11 @@ class App extends Component
     public $regularExpressionField;
 
     /**
+     * @var AddressHelper
+     */
+    public $addressHelper;
+
+    /**
      * @inheritdoc
      */
     public function init()
@@ -59,5 +65,6 @@ class App extends Component
         $this->regularExpressionField = new RegularExpression();
         $this->urlField = new Url();
         $this->utilities = new Utilities();
+        $this->addressHelper = new AddressHelper();
     }
 }

@@ -85,6 +85,10 @@ class Address extends Component
         }
 
         $attributes = $model->getAttributes();
+
+        // Unset id to avoid postgres not null id error
+        unset($attributes['id']);
+
         $record->setAttributes($attributes, false);
 
         $db = Craft::$app->getDb();
