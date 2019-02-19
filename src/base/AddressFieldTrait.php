@@ -61,14 +61,6 @@ trait AddressFieldTrait
     public $highlightCountries = [];
 
     /**
-     * AddressFieldTrait constructor.
-     */
-    public function init()
-    {
-        $this->addressHelper = new AddressHelper();
-    }
-
-    /**
      * @return null|string
      * @throws \Twig_Error_Loader
      * @throws \yii\base\Exception
@@ -111,7 +103,7 @@ trait AddressFieldTrait
         $countries = $countryRepository->getList($this->defaultLanguage);
 
         if (count($this->highlightCountries)) {
-            $highlightCountries = $this->addressHelper->getHighlightCountries($this->highlightCountries);
+            $highlightCountries = SproutBaseFields::$app->addressHelper->getHighlightCountries($this->highlightCountries);
             $countries = array_merge($highlightCountries, $countries);
         }
 
@@ -161,17 +153,18 @@ trait AddressFieldTrait
 
         $countryCode = $addressModel->countryCode ?? $defaultCountryCode;
 
-        $this->addressHelper->setNamespace($name);
-        $this->addressHelper->setCountryCode($countryCode);
-        $this->addressHelper->setAddressModel($addressModel);
+        $addressHelper = SproutBaseFields::$app->addressHelper;
+        $addressHelper->setNamespace($name);
+        $addressHelper->setCountryCode($countryCode);
+        $addressHelper->setAddressModel($addressModel);
 
         if (count($this->highlightCountries)) {
-            $this->addressHelper->setHighlightCountries($this->highlightCountries);
+            $addressHelper->setHighlightCountries($this->highlightCountries);
         }
 
-        $addressDisplayHtml = $addressId ? $this->addressHelper->getAddressDisplayHtml($addressModel) : '';
-        $countryInputHtml = $this->addressHelper->getCountryInputHtml($showCountryDropdown);
-        $addressFormHtml = $this->addressHelper->getAddressFormHtml();
+        $addressDisplayHtml = $addressId ? $addressHelper->getAddressDisplayHtml($addressModel) : '';
+        $countryInputHtml = $addressHelper->getCountryInputHtml($showCountryDropdown);
+        $addressFormHtml = $addressHelper->getAddressFormHtml();
 
         return Craft::$app->getView()->renderTemplate(
             'sprout-base-fields/_components/fields/formfields/address/input', [
