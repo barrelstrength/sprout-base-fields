@@ -97,9 +97,9 @@ class SproutBaseFields extends Module
 
         // Setup Controllers
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
-            $this->controllerNamespace = 'sproutbaseemail\\console\\controllers';
+            $this->controllerNamespace = 'sproutbasefields\\console\\controllers';
         } else {
-            $this->controllerNamespace = 'sproutbaseemail\\controllers';
+            $this->controllerNamespace = 'sproutbasefields\\controllers';
 
             $this->controllerMap = [
                 'fields' => FieldsController::class,
