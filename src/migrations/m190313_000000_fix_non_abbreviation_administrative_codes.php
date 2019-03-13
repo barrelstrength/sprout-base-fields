@@ -27,18 +27,17 @@ class m190313_000000_fix_non_abbreviation_administrative_codes extends Migration
         $subdivisionRepository = new SubdivisionRepository();
 
         foreach ($addresses as $address) {
-            if (strlen($address['administrativeAreaCode']) > 2) {
-                $states = $subdivisionRepository->getAll(['US']);
-                foreach ($states as $state) {
-                    if ($state->getName() == $address['administrativeAreaCode']){
-                        $stateCode = $state->getCode();
+            $states = $subdivisionRepository->getAll($address['countryCode']);
 
-                        $this->update($tableName, [
-                            'administrativeAreaCode' => $stateCode
-                        ], [
-                            'id' => $address['id']
-                        ], [], false);
-                    }
+            foreach ($states as $state) {
+                if ($state->getName() == $address['administrativeAreaCode']){
+                    $stateCode = $state->getCode();
+
+                    $this->update($tableName, [
+                        'administrativeAreaCode' => $stateCode
+                    ], [
+                        'id' => $address['id']
+                    ], [], false);
                 }
             }
         }
