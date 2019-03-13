@@ -21,13 +21,12 @@ class m190313_000000_fix_non_abbreviation_administrative_codes extends Migration
         $addresses = (new Query())
             ->select('*')
             ->from($tableName)
-            ->where(['countryCode' => 'US'])
             ->all();
 
         $subdivisionRepository = new SubdivisionRepository();
 
         foreach ($addresses as $address) {
-            $states = $subdivisionRepository->getAll($address['countryCode']);
+            $states = $subdivisionRepository->getAll([$address['countryCode']]);
 
             foreach ($states as $state) {
                 if ($state->getName() == $address['administrativeAreaCode']){
