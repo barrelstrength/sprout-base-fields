@@ -1,8 +1,8 @@
 {% import "_includes/forms" as forms %}
 
 {{ forms.lightswitchField ({
-    label: "Display multiple fields"|t('sprout-fields'),
-    instructions: "Enable this setting if you wish to choose the specific name fields that display. By default the Name field displays a single field and dynamically treats everything that comes before the first space as the First Name and anything that comes after the first space as the Last Name."|t('sprout-fields'),
+    label: "Display multiple fields"|t('sprout-base-fields'),
+    instructions: "Enable this setting if you wish to choose the specific name fields that display. By default the Name field displays a single field and dynamically treats everything that comes before the first space as the First Name and anything that comes after the first space as the Last Name."|t('sprout-base-fields'),
     name: 'displayMultipleFields',
     on: field.displayMultipleFields,
     toggle: 'sproutnamefield-display-settings'
@@ -15,14 +15,14 @@
         <table class="data" style="width: auto;">
             <thead>
             <tr>
-                <th style="min-width: 180px;">{{ "Field"|t('sprout-fields') }}</th>
+                <th style="min-width: 180px;">{{ "Field"|t('sprout-base-fields') }}</th>
                 <th>{{ "Enabled?"|t }}</th>
             </tr>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    <label for="enableSentEmails">{{ "Prefix"|t('sprout-fields') }}</label>
+                    <label for="enableSentEmails">{{ "Prefix"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -36,7 +36,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableCampaignEmails">{{ "First Name"|t('sprout-fields') }}</label>
+                    <label for="enableCampaignEmails">{{ "First Name"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -51,7 +51,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableNotificationEmails">{{ "Middle Name"|t('sprout-fields') }}</label>
+                    <label for="enableNotificationEmails">{{ "Middle Name"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -65,7 +65,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableSentEmails">{{ "Last Name"|t('sprout-fields') }}</label>
+                    <label for="enableSentEmails">{{ "Last Name"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -80,7 +80,7 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableSentEmails">{{ "Suffix"|t('sprout-fields') }}</label>
+                    <label for="enableSentEmails">{{ "Suffix"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
@@ -98,8 +98,8 @@
     {% endset %}
 
     {{ forms.field({
-        label: "Which fields do you wish to display?"|t('sprout-fields'),
-        instructions: "First Name and Last Name are enabled by default. Fields will display in the order that they appear.."|t('sprout-fields')
+        label: "Which fields do you wish to display?"|t('sprout-base-fields'),
+        instructions: "First Name and Last Name are enabled by default. Fields will display in the order that they appear.."|t('sprout-base-fields')
     }, advancedInput) }}
 
 </div>

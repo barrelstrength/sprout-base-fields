@@ -16,7 +16,7 @@ use yii\web\Response;
 
 class FieldsController extends BaseController
 {
-    protected $allowAnonymous = ['actionSproutAddress'];
+    protected $allowAnonymous = ['action-sprout-address'];
 
     /**
      * @return \yii\web\Response

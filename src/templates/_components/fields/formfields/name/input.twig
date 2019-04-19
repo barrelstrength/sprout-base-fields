@@ -10,7 +10,7 @@
             {% if field.displayPrefix %}
                 <div class="sprout-address-input sprout-address-input-prefix">
                     {{ forms.textField({
-                        label: 'Prefix'|t('sprout-fields'),
+                        label: 'Prefix'|t('sprout-base-fields'),
                         name: name ~ '[address][prefix]',
                         value: value.prefix ?? ''
                     }) }}
@@ -19,7 +19,7 @@
 
             <div class="sprout-address-input sprout-address-input-firstname">
                 {{ forms.textField({
-                    label: 'First'|t('sprout-fields'),
+                    label: 'First'|t('sprout-base-fields'),
                     name: name ~ '[address][firstName]',
                     value: value.firstName ?? ''
                 }) }}
@@ -28,7 +28,7 @@
             {% if field.displayMiddleName %}
                 <div class="sprout-address-input sprout-address-input-middlename">
                     {{ forms.textField({
-                        label: 'Middle'|t('sprout-fields'),
+                        label: 'Middle'|t('sprout-base-fields'),
                         name: name ~ '[address][middleName]',
                         value: value.middleName ?? ''
                     }) }}
@@ -37,7 +37,7 @@
 
             <div class="sprout-address-input sprout-address-input-lastname">
                 {{ forms.textField({
-                    label: 'Last'|t('sprout-fields'),
+                    label: 'Last'|t('sprout-base-fields'),
                     name: name ~ '[address][lastName]',
                     value: value.lastName ?? ''
                 }) }}
@@ -46,7 +46,7 @@
             {% if field.displaySuffix %}
                 <div class="sprout-address-input sprout-address-input-suffix">
                     {{ forms.textField({
-                        label: 'Suffix'|t('sprout-fields'),
+                        label: 'Suffix'|t('sprout-base-fields'),
                         name: name ~ '[address][suffix]',
                         value: value.suffix ?? ''
                     }) }}
