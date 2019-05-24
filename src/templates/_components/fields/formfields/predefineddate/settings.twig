@@ -1,0 +1,23 @@
+{% import "_includes/forms" as forms %}
+
+{{ forms.textareaField({
+    label: 'Field Format'|t('sprout-base-fields'),
+    name: 'fieldFormat',
+    instructions: 'What the auto-generated field value should look like. You can include tags that output element properties, such as {myCustomField}.'|t('sprout-base-fields'),
+    placeholder: 'Submit only a Date in the proper Date format for the Date Data Type:
+{date}: {dateField|date(\'Y-m-d h:m:s\'}'|t('sprout-base-fields', {
+        'date': now|date('Y-m-d h:m:s')
+    }),
+    value: field.fieldFormat,
+    rows: 2,
+    class: 'code'
+}) }}
+
+{{ forms.lightswitchField({
+    label: "Show Field"|t('sprout-base-fields'),
+    instructions: "Display this field in the field layout."|t('sprout-base-fields'),
+    id: 'showField',
+    name: 'showField',
+    on: field.showField,
+    toggle: 'sproutfields-predefined-display-settings'
+}) }}

@@ -1,6 +1,8 @@
 {% import "_includes/forms" as forms %}
 
-{% if field.outputTextarea %}
+{% if field.outputFormat == 'html' %}
+    {{ value|raw }}
+{% elseif field.outputFormat == 'textarea' %}
     {{ forms.textareaField({
         id: name,
         name: name,
@@ -21,7 +23,8 @@
 
 {% css %}
     {% if field.showField %}
-        #fields-{{ name }}-field input {
+        #fields-{{ name }}-field input,
+        #fields-{{ name }}-field textarea {
         color: #aaa;
         }
     {% else %}

@@ -1,35 +1,20 @@
 {% import "_includes/forms" as forms %}
 
-{{ forms.selectField({
-    id: "contentColumnType",
-    name: 'contentColumnType',
-    label: 'Data Type',
-    instructions: 'What type of data should the predefined value be stored as?'|t('sprout-base-fields'),
-    options: contentColumnOptions,
-    value: field.contentColumnType,
-    warning: (field.id ? "Changing this may result in data loss."|t('sprout-base-fields'))
-}) }}
-
 {{ forms.textareaField({
     label: 'Field Format'|t('sprout-base-fields'),
     name: 'fieldFormat',
     instructions: 'What the auto-generated field value should look like. You can include tags that output element properties, such as {myCustomField}.'|t('sprout-base-fields'),
     placeholder: 'Reference the Element you are saving using the `object` variable:
 Object syntax: {{ object.title }}
-Shorthand Syntax: {title}
-
-Submit only a Date in the proper Date format for the Date Data Type:
-{date}: {dateField|date(\'Y-m-d h:m:s\'}'|t('sprout-base-fields', {
-        'date': now|date('Y-m-d h:m:s')
-    }),
+Shorthand Syntax: {title}'|t('sprout-base-fields'),
     value: field.fieldFormat,
     rows: 10,
     class: 'code'
 }) }}
 
 {{ forms.lightswitchField({
-    label: "Show Field"|t,
-    instructions: "Display this field in the Field Layout. The field value will still be available in your templates."|t,
+    label: "Show Field"|t('sprout-base-fields'),
+    instructions: "Display this field in the field layout."|t('sprout-base-fields'),
     id: 'showField',
     name: 'showField',
     on: field.showField,
@@ -38,13 +23,28 @@ Submit only a Date in the proper Date format for the Date Data Type:
 
 <div id="sproutfields-predefined-display-settings" {% if not field.showField %}class="hidden"{% endif %}>
 
+    {{ forms.selectField({
+        label: 'Output Format'|t('sprout-base-fields'),
+        instructions: "The format to use when displaying the Predefined Field value in the field layout."|t('sprout-base-fields'),
+        id: "outputFormat",
+        name: 'outputFormat',
+        options: {
+            singleLine: 'Plain Text'|t('sprout-base-fields'),
+            textarea: 'Textarea'|t('sprout-base-fields'),
+            html: 'HTML'|t('sprout-base-fields')
+        },
+        value: field.outputFormat
+    }) }}
+
     {{ forms.lightswitchField({
-        label: "Output as Textarea"|t,
-        instructions: 'By default, the Predefined field will display as a single line text field. Enable this setting to display it as a textarea field.'|t,
-        id: 'outputTextarea',
-        name: 'outputTextarea',
-        on: field.outputTextarea,
+        label: "Render dynamically in field layout"|t('sprout-base-fields'),
+        instructions: "Process the Predefined Field value dynamically in the field layout. Enabling this setting will process the value defined by Field Format each time the Field Layout is loaded."|t('sprout-base-fields'),
+        id: 'renderDynamically',
+        name: 'renderDynamically',
+        on: field.renderDynamically,
+        warning: "Enable this setting with caution. Adding additional processing when loading a field layout can have side effects on performance and usability."|t('sprout-base-fields'),
     }) }}
 
 </div>
 
+<br>
