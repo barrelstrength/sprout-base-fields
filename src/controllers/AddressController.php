@@ -51,8 +51,10 @@ class AddressController extends Controller
      *
      * @return \yii\web\Response
      * @throws BadRequestHttpException
-     * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \craft\errors\MissingComponentException
      */
     public function actionUpdateAddressFormHtml(): Response
     {
@@ -96,7 +98,6 @@ class AddressController extends Controller
      * @return \yii\web\Response
      * @throws BadRequestHttpException
      * @throws \Exception
-     * @throws \Twig_Error_Loader
      */
     public function actionGetAddressFormFieldsHtml(): Response
     {
@@ -149,8 +150,9 @@ class AddressController extends Controller
      *
      * @return \yii\web\Response
      * @throws BadRequestHttpException
-     * @throws Exception
-     * @throws \Twig_Error_Loader
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function actionGetAddressDisplayHtml(): Response
     {

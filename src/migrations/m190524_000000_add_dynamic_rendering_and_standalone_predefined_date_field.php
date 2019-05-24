@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutbasefields\migrations;
 
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\Json;

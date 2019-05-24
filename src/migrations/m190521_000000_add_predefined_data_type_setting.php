@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutbasefields\migrations;
 
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\Json;
@@ -28,7 +27,7 @@ class m190521_000000_add_predefined_data_type_setting extends Migration
             ->all();
 
         foreach ($predefinedFields as $predefinedField) {
-            $settings = Json::decode($predefinedField['settings'], true);
+            $settings = Json::decode($predefinedField['settings']);
 
             if (!isset($settings['contentColumnType'])) {
                 $settings['contentColumnType'] = 'text';

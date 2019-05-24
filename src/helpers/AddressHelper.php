@@ -219,8 +219,9 @@ class AddressHelper
      * Returns all input fields necessary for a user submit an address
      *
      * @return null|string|string[]
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getAddressFormHtml()
     {
@@ -289,8 +290,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function getAddressIdInputHtml(): string
     {
@@ -307,8 +309,9 @@ class AddressHelper
      * @param bool $showCountryDropdown
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getCountryInputHtml($showCountryDropdown = true): string
     {
@@ -334,8 +337,9 @@ class AddressHelper
      * @param $addressName
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function getAddressLineInputHtml($addressName): string
     {
@@ -363,8 +367,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function getSortingCodeInputHtml(): string
     {
@@ -384,8 +389,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function getLocalityInputHtml(): string
     {
@@ -405,8 +411,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function getDependentLocalityInputHtml(): string
     {
@@ -426,8 +433,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     private function getAdministrativeAreaInputHtml(): string
     {
@@ -463,8 +471,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getPostalCodeInputHtml(): string
     {

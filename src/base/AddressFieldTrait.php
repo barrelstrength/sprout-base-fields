@@ -62,8 +62,10 @@ trait AddressFieldTrait
 
     /**
      * @return null|string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
+     * @throws \craft\errors\SiteNotFoundException
      */
     public function getSettingsHtml()
     {
@@ -121,8 +123,9 @@ trait AddressFieldTrait
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig_Error_Loader
-     * @throws \yii\base\Exception
+     * @throws \Twig\Error\LoaderError
+     * @throws \Twig\Error\RuntimeError
+     * @throws \Twig\Error\SyntaxError
      */
     public function getInputHtml(
         $value, /** @noinspection PhpUnusedParameterInspection */
@@ -291,7 +294,6 @@ trait AddressFieldTrait
      *
      * @return bool
      * @throws \Exception
-     * @throws \yii\db\Exception
      */
     public function beforeElementSave(
         ElementInterface $element, /** @noinspection PhpUnusedParameterInspection */
@@ -318,7 +320,6 @@ trait AddressFieldTrait
      *
      * @return bool|void
      * @throws \Exception
-     * @throws \yii\db\Exception
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {

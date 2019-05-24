@@ -2,7 +2,6 @@
 
 namespace barrelstrength\sproutbasefields\migrations;
 
-use barrelstrength\sproutbaseemail\migrations\m190212_000003_update_email_template_id;
 use craft\db\Migration;
 
 /**

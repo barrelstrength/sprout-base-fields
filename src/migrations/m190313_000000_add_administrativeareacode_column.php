@@ -2,8 +2,8 @@
 
 namespace barrelstrength\sproutbasefields\migrations;
 
-use barrelstrength\sproutbaseemail\migrations\m190212_000003_update_email_template_id;
 use craft\db\Migration;
+use yii\base\NotSupportedException;
 
 /**
  * m190313_000000_add_administrativeareacode_column migration.
@@ -12,6 +12,8 @@ class m190313_000000_add_administrativeareacode_column extends Migration
 {
     /**
      * @inheritdoc
+     *
+     * @throws NotSupportedException
      */
     public function safeUp(): bool
     {

@@ -68,7 +68,6 @@ class Address extends Component
      *
      * @return bool
      * @throws \Exception
-     * @throws \yii\db\Exception
      */
     public function saveAddress(AddressModel $model, $source = ''): bool
     {

@@ -93,7 +93,7 @@ class SproutBaseFields extends Module
         self::$app = new App();
 
         Craft::setAlias('@sproutbasefields', $this->getBasePath());
-        Craft::setAlias('@sproutbasefieldslib', dirname(__DIR__, 1).'/lib');
+        Craft::setAlias('@sproutbasefieldslib', dirname(__DIR__).'/lib');
 
         // Setup Controllers
         if (Craft::$app->getRequest()->getIsConsoleRequest()) {
@@ -113,7 +113,7 @@ class SproutBaseFields extends Module
         });
 
         // Setup Variables
-        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, function(Event $event) {
+        Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, static function(Event $event) {
             $event->sender->set('sproutFields', SproutFieldsVariable::class);
         });
 
