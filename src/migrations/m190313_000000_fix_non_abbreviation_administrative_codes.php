@@ -29,7 +29,7 @@ class m190313_000000_fix_non_abbreviation_administrative_codes extends Migration
             $states = $subdivisionRepository->getAll([$address['countryCode']]);
 
             foreach ($states as $state) {
-                if ($state->getName() == $address['administrativeAreaCode']){
+                if ($state->getName() == $address['administrativeAreaCode']) {
                     $stateCode = $state->getCode();
 
                     $this->update($tableName, [

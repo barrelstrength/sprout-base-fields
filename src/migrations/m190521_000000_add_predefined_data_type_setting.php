@@ -36,7 +36,8 @@ class m190521_000000_add_predefined_data_type_setting extends Migration
 
             // Save the new settings
             $this->update('{{%fields}}', [
-                'settings' => Json::encode($settings)],
+                'settings' => Json::encode($settings)
+            ],
                 ['id' => $predefinedField['id']], [], false);
         }
 

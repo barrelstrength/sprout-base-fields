@@ -129,10 +129,10 @@ class Address extends Model
     }
 
     /**
+     * @return array
      * @todo - Add support for Symfony validation library
      *       https://github.com/commerceguys/addressing
      *
-     * @return array
      */
     public function rules(): array
     {

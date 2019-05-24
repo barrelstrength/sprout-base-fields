@@ -42,7 +42,7 @@ class RegularExpression extends Component
     /**
      * Return error message
      *
-     * @param  mixed $field
+     * @param mixed $field
      *
      * @return string
      */
