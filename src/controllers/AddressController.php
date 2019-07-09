@@ -32,7 +32,7 @@ class AddressController extends Controller
      * @var array
      */
     protected $allowAnonymous = [
-        'action-update-address-form-html'
+        'update-address-form-html'
     ];
 
     /**
