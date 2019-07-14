@@ -61,7 +61,14 @@ if (typeof Craft.SproutFields === typeof undefined) {
 
                     // Show the Text Field and display the existing value for editing
                     this.$textField.parent().removeClass('hidden');
-                    this.$textField.focus().select();
+                    if (this.$textField.val().indexOf('{') > -1) {
+                        // If the setting is using custom Twig syntax, don't clear the field
+                        this.$textField.focus().select();
+                    } else {
+                        // If the setting is not using Twig syntax, clear the field so the user sees the placeholder example
+                        this.$textField.val('').focus().select();
+                    }
+
                 } else {
                     // Store the selected value in the other field, as it takes precedence
                     this.$textField.val(selectedValue);
