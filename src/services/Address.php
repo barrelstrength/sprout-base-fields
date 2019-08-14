@@ -13,6 +13,7 @@ use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Component;
+use InvalidArgumentException;
 
 class Address extends Component
 {
@@ -79,7 +80,7 @@ class Address extends Component
             $record = AddressRecord::findOne($model->id);
 
             if (!$record) {
-                throw new \InvalidArgumentException(Craft::t('sprout-base-fields', 'No Address exists with the ID “{id}”', ['id' => $model->id]));
+                throw new InvalidArgumentException('No Address exists with the ID '.$model->id);
             }
         }
 
