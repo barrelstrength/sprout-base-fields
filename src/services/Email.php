@@ -11,6 +11,7 @@ use Craft;
 use craft\base\Field;
 use yii\base\Component;
 use craft\db\Query;
+use craft\db\Table;
 
 /**
  * Class EmailService
@@ -89,7 +90,9 @@ class Email extends Component
         $query = (new Query())
             ->select($fieldHandle)
             ->from($contentTable)
-            ->where([$fieldHandle => $value]);
+            ->innerJoin(Table::ELEMENTS . ' e', '[[e.id]] = ' . $contentTable . '.`elementId`')
+            ->where([$fieldHandle => $value])
+            ->andWhere(['e.dateDeleted' => null]);
 
         if (is_numeric($element->id)) {
             // Exclude current elementId from our results
