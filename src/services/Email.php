@@ -90,9 +90,9 @@ class Email extends Component
         $query = (new Query())
             ->select($fieldHandle)
             ->from($contentTable)
-            ->innerJoin(Table::ELEMENTS . ' e', '[[e.id]] = ' . $contentTable . '.`elementId`')
+            ->innerJoin(Table::ELEMENTS . ' elements', '[[elements.id]] = ' . $contentTable . '.`elementId`')
             ->where([$fieldHandle => $value])
-            ->andWhere(['e.dateDeleted' => null]);
+            ->andWhere(['elements.dateDeleted' => null]);
 
         if (is_numeric($element->id)) {
             // Exclude current elementId from our results
