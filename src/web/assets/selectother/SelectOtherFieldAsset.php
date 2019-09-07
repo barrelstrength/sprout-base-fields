@@ -16,15 +16,12 @@ class SelectOtherFieldAsset extends AssetBundle
     {
         $this->sourcePath = '@sproutbasefields/web/assets/selectother/dist';
 
-        // @todo - update this file to be named better
-        $this->js = [
-            'js/sproutfields.js',
-            'js/EditableTable.js',
-            'js/initialize.js'
-        ];
-
         $this->depends = [
             CpAsset::class
+        ];
+
+        $this->js = [
+            'js/selectotherfield.js'
         ];
 
         parent::init();

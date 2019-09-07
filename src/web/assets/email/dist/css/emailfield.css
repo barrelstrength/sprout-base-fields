@@ -1,0 +1,27 @@
+.sprout-email-button svg path {
+  fill: #98A3AE;
+}
+
+.sprout-email-button svg:hover path {
+  fill: #32475E;
+}
+
+.sprout-email-button {
+  background-color: #ffffff;
+  display: inline-block;
+  height: 14px;
+  width: 14px;
+  opacity: 0;
+  padding: 8px 6px 8px 6px;
+  position: absolute;
+  right: 1px;
+  top: 1px;
+  transition: opacity 0.15s ease-in-out;
+  -moz-transition: opacity 0.15s ease-in-out;
+  -webkit-transition: opacity 0.15s ease-in-out;
+}
+
+.fade {
+  opacity: 1;
+}
+

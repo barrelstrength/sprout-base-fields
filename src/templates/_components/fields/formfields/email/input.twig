@@ -20,11 +20,11 @@
 {% js %}
 
     (function() {
-    checkSproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
-    })();
+    new SproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
 
     $('input#{{ namespaceInputId }}').on('input', function() {
-    checkSproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
+    new SproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
     });
+    })();
 
 {% endjs %}

@@ -65,7 +65,7 @@
 {% endcss %}
 
 {% js %}
-    $( document ).ready(function() {
+    (function() {
     new Craft.SproutBase.AddressBox($('.{{ addressBox }}'), { namespace: '{{ name }}' })
-    });
+    })();
 {% endjs %}

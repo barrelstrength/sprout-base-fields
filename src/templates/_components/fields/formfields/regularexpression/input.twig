@@ -10,11 +10,12 @@
 
 <span class="sprout-regularexpression-button {{ id }}"></span>
 
+{% do view.registerAssetBundle("barrelstrength\\sproutbasefields\\web\\assets\\regularexpression\\RegularExpressionFieldAsset") %}
 
 {% js %}
 
     (function() {
-    checkSproutRegularExpressionField("{{ id }}", "{{ name }}", "{{ fieldContext }}");
+    new SproutRegularExpressionField("{{ id }}", "{{ name }}", "{{ fieldContext }}");
     })();
 
 {% endjs %}
