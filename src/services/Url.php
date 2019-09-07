@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
+use barrelstrength\sproutfields\fields\Url as UrlField;
 use craft\base\Field;
 use yii\base\Component;
 use Craft;
@@ -19,8 +20,8 @@ class Url extends Component
     /**
      * Validates a phone number against a given mask/pattern
      *
-     * @param       $value
-     * @param Field $field
+     * @param                $value
+     * @param Field|UrlField $field
      *
      * @return bool
      */
@@ -65,5 +66,4 @@ class Url extends Component
 
         return Craft::t('sprout-base-fields', $fieldName.' must be a valid URL.');
     }
-
 }

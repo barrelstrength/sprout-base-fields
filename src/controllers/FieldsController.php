@@ -12,13 +12,14 @@ use Craft;
 use craft\base\Field;
 use craft\web\Controller as BaseController;
 
+use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
 class FieldsController extends BaseController
 {
     /**
-     * @return \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @return Response
+     * @throws BadRequestHttpException
      */
     public function actionEmailValidate(): Response
     {
@@ -52,8 +53,8 @@ class FieldsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @return Response
+     * @throws BadRequestHttpException
      */
     public function actionUrlValidate(): Response
     {
@@ -85,8 +86,8 @@ class FieldsController extends BaseController
     }
 
     /**
-     * @return \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @return Response
+     * @throws BadRequestHttpException
      */
     public function actionPhoneValidate(): Response
     {
@@ -97,15 +98,19 @@ class FieldsController extends BaseController
         $country = Craft::$app->getRequest()->getParam('country');
 
         if (!SproutBaseFields::$app->phoneField->validate($phone, $country)) {
-            return $this->asJson(false);
+            return $this->asJson([
+                'success' => false
+            ]);
         }
 
-        return $this->asJson(true);
+        return $this->asJson([
+            'success' => true
+        ]);
     }
 
     /**
-     * @return \yii\web\Response
-     * @throws \yii\web\BadRequestHttpException
+     * @return Response
+     * @throws BadRequestHttpException
      */
     public function actionRegularExpressionValidate(): Response
     {

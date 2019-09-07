@@ -13,7 +13,10 @@ use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Component;
+use Exception;
 use InvalidArgumentException;
+use Throwable;
+use yii\db\StaleObjectException;
 
 class Address extends Component
 {
@@ -27,9 +30,9 @@ class Address extends Component
      * @param int|null $fieldId
      *
      * @return int|null
-     * @throws \Throwable
+     * @throws Throwable
      * @throws \yii\db\Exception
-     * @throws \yii\db\StaleObjectException
+     * @throws StaleObjectException
      */
     public function saveAddressByPost($namespace = 'address', int $fieldId = null)
     {
@@ -68,18 +71,18 @@ class Address extends Component
      * @param string       $source
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function saveAddress(AddressModel $model, $source = ''): bool
     {
         $result = false;
 
-        $record = new AddressRecord;
+        $addressRecord = new AddressRecord();
 
         if (!empty($model->id)) {
-            $record = AddressRecord::findOne($model->id);
+            $addressRecord = AddressRecord::findOne($model->id);
 
-            if (!$record) {
+            if (!$addressRecord) {
                 throw new InvalidArgumentException('No Address exists with the ID '.$model->id);
             }
         }
@@ -89,20 +92,20 @@ class Address extends Component
         // Unset id to avoid postgres not null id error
         unset($attributes['id']);
 
-        $record->setAttributes($attributes, false);
+        $addressRecord->setAttributes($attributes, false);
 
         $db = Craft::$app->getDb();
         $transaction = $db->beginTransaction();
 
         if ($model->validate()) {
             try {
-                if ($record->save()) {
+                if ($addressRecord->save()) {
 
                     if ($transaction) {
                         $transaction->commit();
                     }
 
-                    $model->id = $record->id;
+                    $model->id = $addressRecord->id;
 
                     $result = true;
 
@@ -113,7 +116,7 @@ class Address extends Component
 
                     $this->trigger(self::EVENT_ON_SAVE_ADDRESS, $event);
                 }
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 if ($transaction) {
                     $transaction->rollBack();
                 }
@@ -165,9 +168,9 @@ class Address extends Component
      * @param null $id
      *
      * @return bool|false|int
-     * @throws \Exception
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws Exception
+     * @throws Throwable
+     * @throws StaleObjectException
      */
     public function deleteAddressById($id = null)
     {
@@ -185,9 +188,9 @@ class Address extends Component
      * @param null $id
      *
      * @return bool|false|int
-     * @throws \Exception
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws Exception
+     * @throws Throwable
+     * @throws StaleObjectException
      */
     public function deleteAddressByFieldId($id = null)
     {

@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
+use barrelstrength\sproutfields\fields\Email as EmailField;
 use Craft;
 use craft\base\Field;
 use yii\base\Component;
@@ -22,9 +23,9 @@ class Email extends Component
     /**
      * Handles validation of an email address as user edits email in the UI
      *
-     * @param string $value
-     * @param int    $elementId
-     * @param Field  $field
+     * @param string           $value
+     * @param int              $elementId
+     * @param Field|EmailField $field
      *
      * @return bool
      */
@@ -90,7 +91,7 @@ class Email extends Component
         $query = (new Query())
             ->select($fieldHandle)
             ->from($contentTable)
-            ->innerJoin(Table::ELEMENTS . ' elements', '[[elements.id]] = ' . $contentTable . '.`elementId`')
+            ->innerJoin(Table::ELEMENTS.' elements', '[[elements.id]] = '.$contentTable.'.`elementId`')
             ->where([$fieldHandle => $value])
             ->andWhere(['elements.dateDeleted' => null]);
 

@@ -236,7 +236,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 Craft.cp.displayError(Craft.t('sprout-base-fields', 'Please add an address'));
                 return false;
             }
-            
+
             const data = {
                 addressInfo: self.addressInfo
             };

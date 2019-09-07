@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutbasefields\models;
 
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
-use CommerceGuys\Intl\Country\Country;
+use CommerceGuys\Addressing\Country\Country;
 use Craft;
 use barrelstrength\sproutbasefields\helpers\AddressHelper;
 use craft\base\Model;

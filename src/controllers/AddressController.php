@@ -12,10 +12,15 @@ use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use craft\db\Query;
+use craft\errors\MissingComponentException;
 use craft\helpers\Json;
 use craft\web\Controller;
 use Craft;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -36,8 +41,7 @@ class AddressController extends Controller
     ];
 
     /**
-     * Initialize the Address Field Helper
-     *
+     * @throws InvalidConfigException
      */
     public function init()
     {
@@ -49,12 +53,12 @@ class AddressController extends Controller
     /**
      * Update the Address Form HTML
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\MissingComponentException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws MissingComponentException
      */
     public function actionUpdateAddressFormHtml(): Response
     {
@@ -95,7 +99,7 @@ class AddressController extends Controller
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
      * @throws \Exception
      */
@@ -148,11 +152,11 @@ class AddressController extends Controller
     /**
      * Get an address
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function actionGetAddressDisplayHtml(): Response
     {
@@ -202,7 +206,7 @@ class AddressController extends Controller
     /**
      * Delete an address
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
      */
     public function actionDeleteAddress(): Response
@@ -238,7 +242,7 @@ class AddressController extends Controller
 
             if ($globals && $response) {
                 $identity = $globals['identity'];
-                $identity = Json::decode($identity, true);
+                $identity = Json::decode($identity);
 
                 if ($identity['addressId'] != null) {
                     $identity['addressId'] = '';
@@ -262,7 +266,7 @@ class AddressController extends Controller
     /**
      * Returns the Geo Coordinates for an Address via the Google Maps service
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
      */
     public function actionQueryAddressCoordinatesFromGoogleMaps(): Response
@@ -291,7 +295,7 @@ class AddressController extends Controller
                 $geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($addressInfo).'&sensor=false');
 
                 // Convert the JSON to an array
-                $geo = Json::decode($geo, true);
+                $geo = Json::decode($geo);
 
                 if ($geo['status'] === 'OK') {
                     $data['latitude'] = $geo['results'][0]['geometry']['location']['lat'];

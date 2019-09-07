@@ -14,6 +14,9 @@ use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use CommerceGuys\Addressing\Country\CountryRepository;
 use CommerceGuys\Addressing\Formatter\DefaultFormatter;
 use CommerceGuys\Addressing\Address;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 class AddressHelper
 {
@@ -89,7 +92,7 @@ class AddressHelper
      */
     public function getHighlightCountries($highlightCountries): array
     {
-        $countryRepository = new \CommerceGuys\Intl\Country\CountryRepository();
+        $countryRepository = new CountryRepository();
         $options = [];
 
         $commonCountries = $highlightCountries;
@@ -219,9 +222,9 @@ class AddressHelper
      * Returns all input fields necessary for a user submit an address
      *
      * @return null|string|string[]
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getAddressFormHtml()
     {
@@ -290,9 +293,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function getAddressIdInputHtml(): string
     {
@@ -309,9 +312,9 @@ class AddressHelper
      * @param bool $showCountryDropdown
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getCountryInputHtml($showCountryDropdown = true): string
     {
@@ -337,9 +340,9 @@ class AddressHelper
      * @param $addressName
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function getAddressLineInputHtml($addressName): string
     {
@@ -367,9 +370,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function getSortingCodeInputHtml(): string
     {
@@ -389,9 +392,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function getLocalityInputHtml(): string
     {
@@ -411,9 +414,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function getDependentLocalityInputHtml(): string
     {
@@ -433,9 +436,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     private function getAdministrativeAreaInputHtml(): string
     {
@@ -471,9 +474,9 @@ class AddressHelper
 
     /**
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getPostalCodeInputHtml(): string
     {

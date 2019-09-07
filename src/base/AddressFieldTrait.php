@@ -10,6 +10,7 @@ namespace barrelstrength\sproutbasefields\base;
 use barrelstrength\sproutbasefields\helpers\AddressHelper;
 use barrelstrength\sproutbasefields\services\Address;
 use barrelstrength\sproutbasefields\SproutBaseFields;
+use CommerceGuys\Addressing\Country\CountryRepository;
 use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use CommerceGuys\Intl\Language\Language;
 use CommerceGuys\Intl\Language\LanguageRepository;
@@ -18,8 +19,14 @@ use craft\base\ElementInterface;
 use Craft;
 use craft\base\Field;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
-use CommerceGuys\Intl\Country\CountryRepository;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Template;
+use Exception;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\db\StaleObjectException;
 
 /**
  * Trait AddressFieldTrait
@@ -62,10 +69,10 @@ trait AddressFieldTrait
 
     /**
      * @return null|string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws SiteNotFoundException
      */
     public function getSettingsHtml()
     {
@@ -123,14 +130,11 @@ trait AddressFieldTrait
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
-    public function getInputHtml(
-        $value, /** @noinspection PhpUnusedParameterInspection */
-        ElementInterface $element = null
-    ): string {
+    public function getInputHtml($value, ElementInterface $element = null): string {
         /** @var $this Field */
         $name = $this->handle;
 
@@ -192,8 +196,8 @@ trait AddressFieldTrait
      * @param ElementInterface|null $element
      *
      * @return array|AddressModel|int|mixed|string
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws Throwable
+     * @throws StaleObjectException
      */
     public function normalizeValue(
         $value, /** @noinspection PhpUnusedParameterInspection */
@@ -293,7 +297,7 @@ trait AddressFieldTrait
      * @param bool                     $isNew
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function beforeElementSave(
         ElementInterface $element, /** @noinspection PhpUnusedParameterInspection */
@@ -319,7 +323,7 @@ trait AddressFieldTrait
      * @param bool                     $isNew
      *
      * @return bool|void
-     * @throws \Exception
+     * @throws Exception
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {
