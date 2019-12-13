@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutbasefields\base;
 
+use barrelstrength\sproutbasefields\helpers\AddressFieldHelper;
 use barrelstrength\sproutbasefields\helpers\AddressHelper;
 use barrelstrength\sproutbasefields\helpers\CountryRepositoryHelper;
 use barrelstrength\sproutbasefields\services\Address;
@@ -40,6 +41,11 @@ trait AddressFieldTrait
      * @var AddressHelper $addressHelper
      */
     public $addressHelper;
+
+    /**
+     * @var AddressFieldHelper $addressFieldHelper
+     */
+    public $addressFieldHelper;
 
     /**
      * @var string
