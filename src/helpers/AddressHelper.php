@@ -281,6 +281,9 @@ class AddressHelper
         if ($this->countryCode === 'AX') {
             $addressLayout = str_replace('ÅLAND', '', $addressLayout);
         }
+        if ($this->countryCode === 'GI') {
+            $addressLayout = str_replace('GIBRALTAR', '', $addressLayout);
+        }
         if ($this->countryCode === 'JE') {
             $addressLayout = str_replace('JERSEY', '', $addressLayout);
         }
