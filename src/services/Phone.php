@@ -11,7 +11,7 @@ use barrelstrength\sproutbase\SproutBase;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use CommerceGuys\Intl\Country\CountryRepository;
+use CommerceGuys\Addressing\Country\CountryRepository;
 use yii\base\Component;
 use Craft;
 

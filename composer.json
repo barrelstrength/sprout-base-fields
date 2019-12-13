@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-base-fields",
   "description": "Common fields libraries for Sprout Plugins for Craft CMS",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "yii-module",
   "license": "proprietary",
   "authors": [
@@ -19,9 +19,8 @@
   },
   "require": {
     "craftcms/cms": "^3.1.0",
-    "commerceguys/addressing": "^1.0.1",
-    "commerceguys/intl": "^0.7.5",
-    "giggsey/libphonenumber-for-php": "^8.8.11"
+    "commerceguys/addressing": "^1.0.6",
+    "giggsey/libphonenumber-for-php": "^8.11.1"
   },
   "autoload": {
     "psr-4": {

@@ -8,18 +8,24 @@
 namespace barrelstrength\sproutbasefields\base;
 
 use barrelstrength\sproutbasefields\helpers\AddressHelper;
+use barrelstrength\sproutbasefields\helpers\CountryRepositoryHelper;
 use barrelstrength\sproutbasefields\services\Address;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
-use CommerceGuys\Intl\Language\Language;
-use CommerceGuys\Intl\Language\LanguageRepository;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use Craft;
 use craft\base\Field;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
-use CommerceGuys\Intl\Country\CountryRepository;
+use CommerceGuys\Addressing\Country\CountryRepository;
+use craft\errors\SiteNotFoundException;
 use craft\helpers\Template;
+use Exception;
+use Throwable;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use yii\db\StaleObjectException;
 
 /**
  * Trait AddressFieldTrait
@@ -62,27 +68,31 @@ trait AddressFieldTrait
 
     /**
      * @return null|string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\SiteNotFoundException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws SiteNotFoundException
      */
     public function getSettingsHtml()
     {
-        $allCraftLocaleIds = Craft::$app->getI18n()->getAllLocaleIds();
+        $countryRepositoryHelper = new CountryRepositoryHelper();
+        $addressingAvailableLocales = $countryRepositoryHelper->getAvailableLocales();
 
-        // Reads the language definitions from resources/language.
-        $languageRepository = new LanguageRepository();
-        $supportedLanguages = $languageRepository->getAll();
+        $craftAvailableLocales = [];
 
-        $availableLanguages = [];
-        foreach ($allCraftLocaleIds as $craftLocaleId) {
-            if (isset($supportedLanguages[$craftLocaleId])) {
-                /**
-                 * @var Language $language
-                 */
-                $language = $supportedLanguages[$craftLocaleId];
-                $availableLanguages[$craftLocaleId] = $language->getName();
+        foreach (Craft::$app->getI18n()->getAllLocales() as $locale) {
+            $craftAvailableLocales[$locale->id] = Craft::t('app', '{id} – {name}', [
+                    'name' => $locale->getDisplayName(Craft::$app->language),
+                    'id' => $locale->id
+                ])
+            ;
+        }
+
+        $availableLocales = [];
+
+        foreach ($craftAvailableLocales as $localeId => $localeName) {
+            if (in_array($localeId, $addressingAvailableLocales, true)) {
+                $availableLocales[$localeId] = $localeName;
             }
         }
 
@@ -91,7 +101,7 @@ trait AddressFieldTrait
 
             // If the primary site language is available choose it as a default language.
             $primarySiteLocaleId = Craft::$app->getSites()->getPrimarySite()->language;
-            if (isset($availableLanguages[$primarySiteLocaleId])) {
+            if (isset($availableLocales[$primarySiteLocaleId])) {
                 $this->defaultLanguage = $primarySiteLocaleId;
             }
         }
@@ -113,7 +123,7 @@ trait AddressFieldTrait
             'sprout-base-fields/_components/fields/formfields/address/settings', [
                 'field' => $this,
                 'countries' => $countries,
-                'languages' => $availableLanguages
+                'languages' => $availableLocales
             ]
         );
     }
@@ -123,9 +133,9 @@ trait AddressFieldTrait
      * @param ElementInterface|null $element
      *
      * @return string
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function getInputHtml(
         $value, /** @noinspection PhpUnusedParameterInspection */
@@ -141,6 +151,7 @@ trait AddressFieldTrait
         /** @var $this Field */
         $settings = $this->getSettings();
 
+        $defaultLanguage = $settings['defaultLanguage'] ?? 'en';
         $defaultCountryCode = $settings['defaultCountry'] ?? null;
         $showCountryDropdown = $settings['showCountryDropdown'] ?? null;
 
@@ -158,6 +169,7 @@ trait AddressFieldTrait
 
         $addressHelper = SproutBaseFields::$app->addressHelper;
         $addressHelper->setNamespace($name);
+        $addressHelper->setLanguage($defaultLanguage);
         $addressHelper->setCountryCode($countryCode);
         $addressHelper->setAddressModel($addressModel);
 
@@ -192,8 +204,8 @@ trait AddressFieldTrait
      * @param ElementInterface|null $element
      *
      * @return array|AddressModel|int|mixed|string
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws Throwable
+     * @throws StaleObjectException
      */
     public function normalizeValue(
         $value, /** @noinspection PhpUnusedParameterInspection */
@@ -293,7 +305,7 @@ trait AddressFieldTrait
      * @param bool                     $isNew
      *
      * @return bool
-     * @throws \Exception
+     * @throws Exception
      */
     public function beforeElementSave(
         ElementInterface $element, /** @noinspection PhpUnusedParameterInspection */
@@ -319,7 +331,7 @@ trait AddressFieldTrait
      * @param bool                     $isNew
      *
      * @return bool|void
-     * @throws \Exception
+     * @throws Exception
      */
     public function afterElementSave(ElementInterface $element, bool $isNew)
     {

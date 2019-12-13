@@ -89,7 +89,7 @@ class AddressHelper
      */
     public function getHighlightCountries($highlightCountries): array
     {
-        $countryRepository = new \CommerceGuys\Intl\Country\CountryRepository();
+        $countryRepository = new CountryRepository();
         $options = [];
 
         $commonCountries = $highlightCountries;
