@@ -49,7 +49,8 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             });
 
             // Select the country dropdown again for some reason it does not get right value at the form box
-            this.$form.find(".sprout-address-country-select select").val(this.settings.countryCode);
+            // And trigger the onchange event manually to ensure the form displays after values have been cleared
+            this.$form.find(".sprout-address-country-select select").val(this.settings.countryCode).change();
 
             this.base(this.$form, settings);
         },
@@ -119,7 +120,7 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
                 formValues[el] = self.$form.find("[name='" + namespace + "[" + el + "]']").val()
             });
 
-            formValues.id = this.settings.addressInfoId;
+            formValues.id = this.settings.addressId;
 
             var data = {
                 formValues: formValues
