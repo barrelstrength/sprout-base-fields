@@ -7,8 +7,11 @@
 
 namespace barrelstrength\sproutbasefields\models;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
 use CommerceGuys\Addressing\Country\Country;
+use CommerceGuys\Addressing\Country\CountryRepository;
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use Craft;
 use craft\base\Model;
 
@@ -108,6 +111,31 @@ class Address extends Model
     public function __toString()
     {
         return SproutBaseFields::$app->addressFormatter->getAddressDisplayHtml($this);
+    }
+
+    /**
+     * @todo - test now that this is on the model we may need to revisit how this is processed so it doesn't override any default variables...
+     *         Previously this happened in the normalizeValue method
+     */
+    public function getCountryCode() {
+        // Adds country property that returns the country name
+        if ($this->countryCode) {
+            $countryRepository = new CountryRepository();
+            $country = $countryRepository->get($this->countryCode);
+
+            $this->country = $country->getName();
+            $this->countryCode = $country->getCountryCode();
+            $this->countryThreeLetterCode = $country->getThreeLetterCode();
+            $this->currencyCode = $country->getCurrencyCode();
+            $this->locale = $country->getLocale();
+
+            $subdivisionRepository = new SubdivisionRepository();
+            $subdivision = $subdivisionRepository->get($this->administrativeAreaCode, [$this->countryCode]);
+
+            if ($subdivision) {
+                $this->administrativeArea = $subdivision->getName();
+            }
+        }
     }
 
     /**

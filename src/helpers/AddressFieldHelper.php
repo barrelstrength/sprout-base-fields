@@ -219,46 +219,27 @@ class AddressFieldHelper
      */
     public function normalizeValue($addressField, $value, ElementInterface $element = null)
     {
-        $addressModel = new AddressModel();
+//        return null;
 
-        $elementId = $element->id ?? null;
-        $siteId = $element->siteId ?? null;
-        $fieldId = $addressField->id;
-
-        // @todo Address field column has Numeric value when retrieved from db, however, we can
-        // possibly remove that column and just depend on the relational information to get the field data
-        if (is_numeric($value) OR ($elementId && $siteId && $fieldId)) {
-            $addressModel = SproutBaseFields::$app->addressField->getAddress($elementId, $siteId, $fieldId);
+        if (!$element instanceof Element) {
+            return null;
         }
 
-        // Array value from post data
+        //        $isDraftOrRevision = ElementHelper::isDraftOrRevision($element);
+
+        $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $addressField->id);
+
+        // Add the address field array from the POST data to the Address Model
+        // @todo - find a more appropriate place to delete a cleared address
         if (is_array($value)) {
             if (!empty($value['delete'])) {
                 SproutBaseFields::$app->addressField->deleteAddressById($value['id']);
-            } else {
-                $value['fieldId'] = $addressField->id ?? null;
-                $addressModel = new AddressModel();
-                $addressModel->setAttributes($value, false);
+                return null;
             }
-        }
 
-        // Adds country property that return country name
-        if ($addressModel->countryCode) {
-            $countryRepository = new CountryRepository();
-            $country = $countryRepository->get($addressModel->countryCode);
-
-            $addressModel->country = $country->getName();
-            $addressModel->countryCode = $country->getCountryCode();
-            $addressModel->countryThreeLetterCode = $country->getThreeLetterCode();
-            $addressModel->currencyCode = $country->getCurrencyCode();
-            $addressModel->locale = $country->getLocale();
-
-            $subdivisionRepository = new SubdivisionRepository();
-            $subdivision = $subdivisionRepository->get($addressModel->administrativeAreaCode, [$addressModel->countryCode]);
-
-            if ($subdivision) {
-                $addressModel->administrativeArea = $subdivision->getName();
-            }
+            $value['fieldId'] = $addressField->id ?? null;
+            $addressModel = new AddressModel();
+            $addressModel->setAttributes($value, false);
         }
 
         return $addressModel;
@@ -312,44 +293,50 @@ class AddressFieldHelper
      *
      * @return void
      * @throws Exception
+     * @throws Throwable
      */
     public function beforeElementSave(FieldInterface $field, ElementInterface $element, bool $isNew)
     {
         $address = $element->getFieldValue($field->handle);
 
-        if ($address instanceof AddressModel) {
-            $address->elementId = $element->id;
-            $address->siteId = $element->siteId;
-            $address->fieldId = $field->id;
-
-            SproutBaseFields::$app->addressField->saveAddress($address);
+        // If our address is null, we're probably deleting something
+        if (!$address instanceof AddressModel) {
+            return;
         }
+
+        // Make sure we don't overwrite the root record when saving revisions
+        if ($isNew) {
+            $address->id = null;
+        }
+
+        $address->elementId = $element->id;
+        $address->siteId = $element->siteId;
+        $address->fieldId = $field->id;
+
+        SproutBaseFields::$app->addressField->saveAddress($address);
+
     }
 
     /**
      * Save our Address Field a second time for New Entries to ensure we have the Element ID.
      *
-     * @param FieldInterface           $field
-     * @param Element|ElementInterface $element
-     * @param bool                     $isNew
+     * @param FieldInterface   $field
+     * @param ElementInterface $element
+     * @param bool             $isNew
      *
-     * @return bool|void
-     * @throws Exception
+     * @throws Throwable
      */
     public function afterElementSave(FieldInterface $field, ElementInterface $element, bool $isNew)
     {
-        if (!$isNew) {
-            return;
-        }
-
         /** @var $this Field */
         $address = $element->getFieldValue($field->handle);
 
-        if ($address instanceof AddressModel) {
-            // WHEN the REVISION ID changes, the ADDRESS ID stays the same... updating the original address..
-
-            $address->elementId = $element->id;
-            SproutBaseFields::$app->addressField->saveAddress($address);
+        if (!$isNew || !$address instanceof AddressModel) {
+            return;
         }
+
+        $address->elementId = $element->id;
+
+        SproutBaseFields::$app->addressField->saveAddress($address);
     }
 }
