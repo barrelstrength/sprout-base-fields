@@ -166,6 +166,42 @@ class AddressFieldHelper
         );
     }
 
+    public function getStaticHtml(Field $field, $value, ElementInterface $element = null): string
+    {
+        $noAddressHtml = '<p class="light">'.Craft::t('sprout-base-fields', 'No address saved.').'</p>';
+
+        if (!$value instanceof AddressModel) {
+            return $noAddressHtml;
+        }
+
+        /** @var $this Field */
+        $name = $field->handle;
+
+        $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $field->id);
+
+        /** @var $this Field */
+        $settings = $field->getSettings();
+        $defaultLanguage = $settings['defaultLanguage'] ?? AddressService::DEFAULT_LANGUAGE;
+        $defaultCountryCode = $settings['defaultCountry'] ?? AddressService::DEFAULT_COUNTRY;
+        $countryCode = $addressModel->countryCode ?? $defaultCountryCode;
+        $addressFormatter = SproutBaseFields::$app->addressFormatter;
+        $addressFormatter->setNamespace($name);
+        $addressFormatter->setLanguage($defaultLanguage);
+        $addressFormatter->setCountryCode($countryCode);
+        $addressFormatter->setAddressModel($addressModel);
+        if (count($field->highlightCountries)) {
+            $addressFormatter->setHighlightCountries($field->highlightCountries);
+        }
+
+        $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel) ;
+
+        if (empty($addressDisplayHtml)) {
+            return $noAddressHtml;
+        }
+
+        return $addressDisplayHtml;
+    }
+
     /**
      * Prepare our Address for use as an AddressModel
      *
