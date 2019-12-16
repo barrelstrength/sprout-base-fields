@@ -91,42 +91,26 @@ class Address extends Component
 
         $record->setAttributes($attributes, false);
 
+        if (!$model->validate()) {
+            return false;
+        }
         $db = Craft::$app->getDb();
         $transaction = $db->beginTransaction();
 
-        if ($model->validate()) {
-            try {
-                if ($record->save()) {
+        try {
+            $record->save();
 
-                    if ($transaction) {
-                        $transaction->commit();
-                    }
+            $model->id = $record->id;
 
-                    $model->id = $record->id;
+            $this->afterSaveAddress($model, $source);
 
-                    $result = true;
+            $transaction->commit();
 
-                    $event = new OnSaveAddressEvent([
-                        'model' => $model,
-                        'source' => $source
-                    ]);
-
-                    $this->trigger(self::EVENT_ON_SAVE_ADDRESS, $event);
-                }
-            } catch (\Exception $e) {
-                if ($transaction) {
-                    $transaction->rollBack();
-                }
-
-                throw $e;
-            }
-        }
-
-        if (!$result) {
+            return true;
+        } catch (Throwable $e) {
             $transaction->rollBack();
+            throw $e;
         }
-
-        return $result;
     }
 
     /**
@@ -182,22 +166,17 @@ class Address extends Component
     }
 
     /**
-     * @param null $id
-     *
-     * @return bool|false|int
-     * @throws \Exception
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @param AddressModel $model
+     * @param              $source
      */
-    public function deleteAddressByFieldId($id = null)
+    public function afterSaveAddress(AddressModel $model, $source)
     {
-        $record = AddressRecord::findOne(['fieldId' => $id]);
-        $result = false;
+        $event = new OnSaveAddressEvent([
+            'model' => $model,
+            'address' => $model,
+            'source' => $source
+        ]);
 
-        if ($record) {
-            $result = $record->delete();
-        }
-
-        return $result;
+        $this->trigger(self::EVENT_ON_SAVE_ADDRESS, $event);
     }
 }
