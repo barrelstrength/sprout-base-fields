@@ -19,19 +19,21 @@ use barrelstrength\sproutbasefields\helpers\AddressFieldHelper;
 trait AddressFieldTrait
 {
     /**
+     * Shared methods for managing Field Types between Sprout Forms and Sprout Fields
+     *
      * @var AddressFieldHelper $addressFieldHelper
      */
-    public $addressFieldHelper;
+    protected $addressFieldHelper;
 
     /**
      * @var string
      */
-    public $defaultLanguage;
+    public $defaultLanguage = 'en';
 
     /**
      * @var string
      */
-    public $defaultCountry;
+    public $defaultCountry = 'US';
 
     /**
      * @var bool
@@ -39,7 +41,7 @@ trait AddressFieldTrait
     public $showCountryDropdown = true;
 
     /**
-     * @deprecated No longer in user. Necessary in craft 3.1 migration
+     * @deprecated No longer in use. Necessary in craft 3.1 migration. Remove in Sprout Forms 4.x and Sprout Fields 4.x
      */
     public $hideCountryDropdown;
 
