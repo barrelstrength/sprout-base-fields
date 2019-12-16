@@ -126,9 +126,6 @@ class Address extends Model
 
     /**
      * @return array
-     * @todo - Add support for Symfony validation library
-     *       https://github.com/commerceguys/addressing
-     *
      */
     public function rules(): array
     {
@@ -138,7 +135,7 @@ class Address extends Model
         $rules[] = [
             'address1',
             'required',
-            'message' => Craft::t('sprout-base-fields', 'Address 1 cannot be blank.')
+            'message' => Craft::t('sprout-base-fields', 'Address 1 field cannot be blank.')
         ];
 
         return $rules;

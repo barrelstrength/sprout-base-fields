@@ -7,19 +7,21 @@
 
 namespace barrelstrength\sproutbasefields\helpers;
 
+use barrelstrength\sproutbasefields\base\AddressFieldTrait;
+use barrelstrength\sproutforms\fields\formfields\Address as AddressFormField;
+use barrelstrength\sproutfields\fields\Address as AddressField;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
+use barrelstrength\sproutbasefields\services\Address as AddressService;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
-use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use CommerceGuys\Addressing\Country\CountryRepository;
-use CommerceGuys\Addressing\Formatter\DefaultFormatter;
-use CommerceGuys\Addressing\Address;
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\FieldInterface;
+use craft\db\Query;
 use craft\errors\SiteNotFoundException;
+use craft\helpers\ElementHelper;
 use craft\helpers\Template;
 use Exception;
 use Throwable;
@@ -38,13 +40,15 @@ use yii\db\StaleObjectException;
 class AddressFieldHelper
 {
     /**
+     * @param FieldInterface|AddressField|AddressFormField $field
+     *
      * @return null|string
      * @throws LoaderError
      * @throws RuntimeError
-     * @throws SyntaxError
      * @throws SiteNotFoundException
+     * @throws SyntaxError
      */
-    public function getSettingsHtml($field)
+    public function getSettingsHtml(FieldInterface $field)
     {
         $countryRepositoryHelper = new CountryRepositoryHelper();
         $addressingAvailableLocales = $countryRepositoryHelper->getAvailableLocales();
@@ -66,23 +70,23 @@ class AddressFieldHelper
             }
         }
 
-        if ($this->defaultLanguage === null) {
-            $this->defaultLanguage = \barrelstrength\sproutbasefields\services\Address::DEFAULT_LANGUAGE;
+        if ($field->defaultLanguage === null) {
+            $field->defaultLanguage = AddressService::DEFAULT_LANGUAGE;
 
             // If the primary site language is available choose it as a default language.
             $primarySiteLocaleId = Craft::$app->getSites()->getPrimarySite()->language;
             if (isset($availableLocales[$primarySiteLocaleId])) {
-                $this->defaultLanguage = $primarySiteLocaleId;
+                $field->defaultLanguage = $primarySiteLocaleId;
             }
         }
 
         // Countries
-        if ($this->defaultCountry === null) {
-            $this->defaultCountry = Address::DEFAULT_COUNTRY;
+        if ($field->defaultCountry === null) {
+            $field->defaultCountry = AddressService::DEFAULT_COUNTRY;
         }
 
         $countryRepository = new CountryRepository();
-        $countries = $countryRepository->getList($this->defaultLanguage);
+        $countries = $countryRepository->getList($field->defaultLanguage);
 
         if (count($field->highlightCountries)) {
             $highlightCountries = SproutBaseFields::$app->addressFormatter->getHighlightCountries($field->highlightCountries);
@@ -120,8 +124,8 @@ class AddressFieldHelper
         /** @var $this Field */
         $settings = $field->getSettings();
 
-        $defaultLanguage = $settings['defaultLanguage'] ?? 'en';
-        $defaultCountryCode = $settings['defaultCountry'] ?? null;
+        $defaultLanguage = $settings['defaultLanguage'] ?? AddressService::DEFAULT_LANGUAGE;
+        $defaultCountryCode = $settings['defaultCountry'] ?? AddressService::DEFAULT_COUNTRY;
         $showCountryDropdown = $settings['showCountryDropdown'] ?? null;
 
         $addressId = null;

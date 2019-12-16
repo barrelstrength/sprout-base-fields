@@ -12,9 +12,13 @@ use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use craft\db\Query;
+use craft\errors\MissingComponentException;
 use craft\helpers\Json;
 use craft\web\Controller;
 use Craft;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
@@ -29,25 +33,14 @@ class AddressController extends Controller
     ];
 
     /**
-     * Initialize the Address Field Helper
+     * Updates the Address Form Input HTML
      *
-     */
-    public function init()
-    {
-        $this->addressHelper = new AddressHelper();
-
-        parent::init();
-    }
-
-    /**
-     * Update the Address Form HTML
-     *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
-     * @throws \craft\errors\MissingComponentException
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws MissingComponentException
      */
     public function actionUpdateAddressFormHtml(): Response
     {
@@ -258,7 +251,7 @@ class AddressController extends Controller
     /**
      * Returns the Geo Coordinates for an Address via the Google Maps service
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
      */
     public function actionQueryAddressCoordinatesFromGoogleMaps(): Response
