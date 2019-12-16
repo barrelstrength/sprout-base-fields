@@ -27,8 +27,6 @@ class AddressController extends Controller
     protected $addressHelper;
 
     /**
-     * Allow anonymous actions as defined within this array
-     *
      * @var array
      */
     protected $allowAnonymous = [
