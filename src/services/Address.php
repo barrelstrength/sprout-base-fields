@@ -13,7 +13,13 @@ use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Component;
+use craft\base\Element;
+use craft\base\ElementInterface;
+use craft\db\Query;
+use Exception;
 use InvalidArgumentException;
+use Throwable;
+use yii\db\StaleObjectException;
 
 class Address extends Component
 {
@@ -27,9 +33,9 @@ class Address extends Component
      * @param int|null $fieldId
      *
      * @return int|null
-     * @throws \Throwable
+     * @throws Throwable
      * @throws \yii\db\Exception
-     * @throws \yii\db\StaleObjectException
+     * @throws StaleObjectException
      */
     public function saveAddressByPost($namespace = 'address', int $fieldId = null)
     {
@@ -68,20 +74,18 @@ class Address extends Component
      * @param string       $source
      *
      * @return bool
-     * @throws \Exception
+     * @throws Throwable
      */
     public function saveAddress(AddressModel $model, $source = ''): bool
     {
-        $result = false;
-
-        $record = new AddressRecord;
-
         if (!empty($model->id)) {
             $record = AddressRecord::findOne($model->id);
 
             if (!$record) {
                 throw new InvalidArgumentException('No Address exists with the ID '.$model->id);
             }
+        } else {
+            $record = new AddressRecord;
         }
 
         $attributes = $model->getAttributes();
@@ -94,6 +98,7 @@ class Address extends Component
         if (!$model->validate()) {
             return false;
         }
+
         $db = Craft::$app->getDb();
         $transaction = $db->beginTransaction();
 
@@ -116,32 +121,69 @@ class Address extends Component
     /**
      * @param $id
      *
-     * @return AddressModel
+     * @return AddressModel|null
      */
-    public function getAddressById($id): AddressModel
+    public function getAddressById($id)
     {
-        $model = new AddressModel();
+        $result = (new Query())
+            ->select([
+                'id',
+                'elementId',
+                'siteId',
+                'fieldId',
+                'countryCode',
+                'administrativeAreaCode',
+                'locality',
+                'dependentLocality',
+                'postalCode',
+                'sortingCode',
+                'address1',
+                'address2'
+            ])
+            ->from('{{%sproutfields_addresses}}')
+            ->where(['id' => $id])
+            ->one();
 
-        if ($record = AddressRecord::findOne($id)) {
-            $model->setAttributes($record->getAttributes(), false);
-        }
-
-        return $model;
+        return $result ? new AddressModel($result) : null;
     }
 
-    public function getAddress($elementId, $siteId, $fieldId): AddressModel
+    /**
+     * @param ElementInterface $element
+     * @param                  $fieldId
+     *
+     * @return AddressModel|null
+     */
+    public function getAddressFromElement(ElementInterface $element, $fieldId)
     {
-        $model = new AddressModel();
+        /** @var Element $element */
+        $query = (new Query())
+            ->select([
+                'id',
+                'elementId',
+                'siteId',
+                'fieldId',
+                'countryCode',
+                'administrativeAreaCode',
+                'locality',
+                'dependentLocality',
+                'postalCode',
+                'sortingCode',
+                'address1',
+                'address2'
+            ])
+            ->from('{{%sproutfields_addresses}}')
+            ->where([
+                'siteId' => $element->siteId,
+                'fieldId' => $fieldId
+            ]);
 
-        if ($record = AddressRecord::findOne([
-            'elementId' => $elementId,
-            'siteId' => $siteId,
-            'fieldId' => $fieldId
-        ])) {
-            $model->setAttributes($record->getAttributes(), false);
+        if ($element->id) {
+            $query->where(['elementId' => $element->id]);
         }
 
-        return $model;
+        $result = $query->one();
+
+        return $result ? new AddressModel($result) : null;
     }
 
 
@@ -149,20 +191,19 @@ class Address extends Component
      * @param null $id
      *
      * @return bool|false|int
-     * @throws \Exception
-     * @throws \Throwable
-     * @throws \yii\db\StaleObjectException
+     * @throws Exception
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function deleteAddressById($id = null)
+    public function deleteAddressById($id)
     {
         $record = AddressRecord::findOne($id);
-        $result = false;
 
         if ($record) {
-            $result = $record->delete();
+            return $record->delete();
         }
 
-        return $result;
+        return false;
     }
 
     /**

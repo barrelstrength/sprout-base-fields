@@ -99,9 +99,9 @@ class AddressFieldHelper
     }
 
     /**
-     * @param Field                 $field
-     * @param                       $value
-     * @param ElementInterface|null $element
+     * @param Field|AddressFieldTrait $field
+     * @param                         $value
+     * @param ElementInterface|null   $element
      *
      * @return string
      * @throws LoaderError
@@ -132,7 +132,7 @@ class AddressFieldHelper
             $addressId = $value['id'];
         }
 
-        $addressModel = SproutBaseFields::$app->addressField->getAddress($element->id, $element->siteId, $field->id);
+        $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $field->id);
 
         $countryCode = $addressModel->countryCode ?? $defaultCountryCode;
 
