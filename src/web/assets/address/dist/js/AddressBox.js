@@ -44,7 +44,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
         $clearButton: null,
         $queryButton: null,
 
-        addressInfoId: null,
+        addressId: null,
         addressInfo: null,
         $addressForm: null,
         countryCode: null,
@@ -71,7 +71,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 this.settings.namespace = 'address';
             }
 
-            this.addressInfoId = this.$addressBox.data('addressinfoid');
+            this.addressId = this.$addressBox.data('addressid');
 
             this.renderAddress();
 
@@ -83,7 +83,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
 
         renderAddress: function() {
 
-            if (this.addressInfoId == '' || this.addressInfoId == null) {
+            if (this.addressId == '' || this.addressId == null) {
                 this.$addButtons.removeClass('hidden');
                 this.$editButtons.addClass('hidden');
                 this.$addressFormat.addClass('hidden');
@@ -102,7 +102,6 @@ if (typeof Craft.SproutBase === typeof undefined) {
         },
 
         editAddressBox: function(ev) {
-
             ev.preventDefault();
 
             var source = null;
@@ -119,7 +118,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 onSubmit: $.proxy(this, 'getAddressDisplayHtml'),
                 countryCode: countryCode,
                 actionUrl: this.actionUrl,
-                addressInfoId: this.addressInfoId,
+                addressId: this.addressId,
                 namespace: this.settings.namespace,
                 source: source
             }, this.$target);
@@ -165,7 +164,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
             var showCountryDropdown = this.$addressBox.data('showcountrydropdown');
 
             Craft.postActionRequest('sprout-base-fields/fields-address/get-address-form-fields-html', {
-                addressInfoId: this.addressInfoId,
+                addressId: this.addressId,
                 defaultCountryCode: defaultCountryCode,
                 showCountryDropdown: showCountryDropdown,
                 namespace: this.settings.namespace
@@ -189,7 +188,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
 
             this.$addressForm.find("[name='" + this.settings.namespace + "[delete]']").val(1);
 
-            self.addressInfoId = null;
+            self.addressId = null;
 
             this.$addressBox.find('.sprout-address-onchange-country').remove();
 
