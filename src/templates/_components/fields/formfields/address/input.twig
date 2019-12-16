@@ -5,15 +5,15 @@
 {% set addressInput %}
     <div class="{{ addressBox }}"
         {% if addressId is defined and addressId %}
-            data-addressid='{{ addressId }}'
+            data-address-id='{{ addressId }}'
         {% endif %}
 
         {% if defaultCountryCode is defined and defaultCountryCode %}
-            data-defaultcountrycode='{{ defaultCountryCode }}'
+            data-default-country-code='{{ defaultCountryCode }}'
         {% endif %}
 
         {% if showCountryDropdown is defined and showCountryDropdown %}
-            data-showcountrydropdown='{{ showCountryDropdown }}'
+            data-show-country-dropdown='{{ showCountryDropdown }}'
         {% endif %}
     >
         <div class='address-add-button hidden'>
@@ -30,8 +30,8 @@
             {{ addressDisplayHtml }}
         </div>
         <div class='sproutfields-address-formfields hidden'>
-            <input type="hidden" name="{{ field.handle }}[delete]"/>
-            <input type="hidden" name="{{ field.handle }}[fieldId]" value="{{ fieldId }}"/>
+{#            <input type="hidden" name="{{ field.handle }}[delete]" class="sprout-address-delete">#}
+{#            <input type="hidden" name="{{ field.handle }}[fieldId]" value="{{ fieldId }}">#}
             {{ countryInputHtml }}
             {{ addressFormHtml }}
         </div>

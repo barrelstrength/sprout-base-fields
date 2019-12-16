@@ -49,6 +49,7 @@ class AddressController extends Controller
 
         $addressFormatter = SproutBaseFields::$app->addressFormatter;
 
+        $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
         $countryCode = Craft::$app->getRequest()->getBodyParam('countryCode');
         $namespace = Craft::$app->getRequest()->getBodyParam('namespace') ?? 'address';
         $overrideTemplatePaths = Craft::$app->getRequest()->getBodyParam('overrideTemplatePaths', false);
@@ -63,9 +64,12 @@ class AddressController extends Controller
             $addressFormatter->setBaseAddressFieldPath('');
         }
 
+        $addressModel = new AddressModel();
+        $addressModel->id = $addressId;
+
         $addressFormatter->setNamespace($namespace);
         $addressFormatter->setCountryCode($countryCode);
-        $addressFormatter->setAddressModel();
+        $addressFormatter->setAddressModel($addressModel);
 
         $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
@@ -151,7 +155,9 @@ class AddressController extends Controller
         $formValues = Craft::$app->getRequest()->getBodyParam('formValues');
         $namespace = Craft::$app->getRequest()->getBodyParam('namespace') ?? 'address';
 
+        $addressId = $formValues['id'] ?? null;
         $addressModel = new AddressModel($formValues);
+        $addressModel->id = $addressId;
 
         if (!$addressModel->validate()) {
             return $this->asJson([

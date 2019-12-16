@@ -49,8 +49,13 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             });
 
             // Select the country dropdown again for some reason it does not get right value at the form box
+            $countrySelectField = this.$form.find(".sprout-address-country-select select");
+            $countrySelectField.val(this.settings.countryCode);
+
             // And trigger the onchange event manually to ensure the form displays after values have been cleared
-            this.$form.find(".sprout-address-country-select select").val(this.settings.countryCode).change();
+            if (this.$form.find(".sprout-address-delete").val()) {
+                $countrySelectField.change();
+            }
 
             this.base(this.$form, settings);
         },
@@ -60,23 +65,18 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             var $target = $(target);
             var countryCode = $(target).val();
             var $parents = $target.parents('.sprout-address-body');
+            var addressId = this.$addressForm.find('.sprout-address-id').val();
 
-            var self = this;
             Craft.postActionRequest('sprout-base-fields/fields-address/update-address-form-html', {
+                addressId: addressId,
                 countryCode: countryCode,
                 namespace: this.settings.namespace
             }, $.proxy(function(response) {
                 $parents.find('.sprout-address-onchange-country').remove();
 
-                var $addressIdInput = $parents.find('.sprout-address-id');
-                $parents.find('.sprout-address-id').remove();
-
                 if (response.html) {
                     $parents.find('.meta').append(response.html);
                 }
-
-                // Add our input back at the bottom
-                $parents.find('.meta').append($addressIdInput);
             }, this))
         },
 
@@ -101,6 +101,7 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             var namespace = this.settings.namespace;
 
             var formKeys = [
+                'id',
                 'fieldId',
                 'countryCode',
                 'administrativeAreaCode',
@@ -120,7 +121,8 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
                 formValues[el] = self.$form.find("[name='" + namespace + "[" + el + "]']").val()
             });
 
-            formValues.id = this.settings.addressId;
+            // @todo - I don't believe this is used.
+            this.id = formValues.id;
 
             var data = {
                 formValues: formValues

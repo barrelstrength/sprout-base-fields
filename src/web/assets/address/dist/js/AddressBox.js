@@ -71,7 +71,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 this.settings.namespace = 'address';
             }
 
-            this.addressId = this.$addressBox.data('addressid');
+            this.addressId = this.$addressBox.data('addressId');
 
             this.renderAddress();
 
@@ -113,12 +113,13 @@ if (typeof Craft.SproutBase === typeof undefined) {
             this.$target = $(ev.currentTarget);
 
             var countryCode = this.$addressForm.find('.sprout-address-country-select select').val();
+            var addressId = this.$addressBox.data('addressId');
 
             this.modal = new Craft.SproutBase.EditAddressModal(this.$addressForm, {
                 onSubmit: $.proxy(this, 'getAddressDisplayHtml'),
                 countryCode: countryCode,
                 actionUrl: this.actionUrl,
-                addressId: this.addressId,
+                addressId: addressId,
                 namespace: this.settings.namespace,
                 source: source
             }, this.$target);
@@ -160,11 +161,12 @@ if (typeof Craft.SproutBase === typeof undefined) {
 
             var self = this;
 
-            var defaultCountryCode = this.$addressBox.data('defaultcountrycode');
-            var showCountryDropdown = this.$addressBox.data('showcountrydropdown');
+            var addressId = this.$addressBox.data('addressId');
+            var defaultCountryCode = this.$addressBox.data('defaultCountryCode');
+            var showCountryDropdown = this.$addressBox.data('showCountryDropdown');
 
             Craft.postActionRequest('sprout-base-fields/fields-address/get-address-form-fields-html', {
-                addressId: this.addressId,
+                addressId: addressId,
                 defaultCountryCode: defaultCountryCode,
                 showCountryDropdown: showCountryDropdown,
                 namespace: this.settings.namespace

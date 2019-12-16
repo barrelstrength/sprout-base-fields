@@ -274,9 +274,29 @@ class AddressFormatter
             $addressLayout = preg_replace('/%sortingCode/', $this->getSortingCodeInputHtml(), $addressLayout);
         }
 
-        if ($this->addressModel->id !== null) {
-            $addressLayout .= $this->getAddressIdInputHtml();
-        }
+        $addressLayout .= Craft::$app->view->renderTemplate(
+            $this->getBaseAddressFieldPath().'address/_components/hidden', [
+            'class' => 'sprout-address-delete',
+            'name' => $this->namespace,
+            'inputName' => 'delete',
+            'value' => null
+        ]);
+
+        $addressLayout .= Craft::$app->view->renderTemplate(
+            $this->getBaseAddressFieldPath().'address/_components/hidden', [
+            'class' => 'sprout-address-field-id',
+            'name' => $this->namespace,
+            'inputName' => 'fieldId',
+            'value' => $this->addressModel->fieldId
+        ]);
+
+        $addressLayout .= Craft::$app->view->renderTemplate(
+            $this->getBaseAddressFieldPath().'address/_components/hidden', [
+            'class' => 'sprout-address-id',
+            'name' => $this->namespace,
+            'inputName' => 'id',
+            'value' => $this->addressModel->id
+        ]);
 
         // A few exceptions when building our Form Input Fields for the CP
         // Removes a hardcoded locality that is needed for the Address Display Only
@@ -292,23 +312,6 @@ class AddressFormatter
         }
 
         return $addressLayout;
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    private function getAddressIdInputHtml(): string
-    {
-        return Craft::$app->view->renderTemplate(
-            $this->getBaseAddressFieldPath().'address/_components/hidden', [
-            'class' => 'sprout-address-id',
-            'name' => $this->namespace,
-            'inputName' => 'id',
-            'value' => $this->addressModel->id
-        ]);
     }
 
     /**
