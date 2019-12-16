@@ -5,7 +5,7 @@
  * @license   http://sprout.barrelstrengthdesign.com/license
  */
 
-namespace barrelstrength\sproutbasefields\helpers;
+namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use Craft;
@@ -18,7 +18,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class AddressHelper
+class AddressFormatter
 {
     /**
      * @var AddressFormatRepository
@@ -48,7 +48,7 @@ class AddressHelper
     /**
      * @var
      */
-    protected $countryCode;
+    protected $countryCode = 'US';
 
     /**
      * @var

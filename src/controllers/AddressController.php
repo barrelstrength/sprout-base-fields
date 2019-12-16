@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutbasefields\controllers;
 
-use barrelstrength\sproutbasefields\helpers\AddressHelper;
+use barrelstrength\sproutbasefields\services\AddressFormatter;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
@@ -21,11 +21,6 @@ use yii\web\Response;
 
 class AddressController extends Controller
 {
-    /**
-     * @var AddressHelper $addressHelper
-     */
-    protected $addressHelper;
-
     /**
      * @var array
      */
@@ -59,6 +54,8 @@ class AddressController extends Controller
         $this->requireAcceptsJson();
         $this->requirePostRequest();
 
+        $addressFormatter = SproutBaseFields::$app->addressFormatter;
+
         $countryCode = Craft::$app->getRequest()->getBodyParam('countryCode');
         $namespace = Craft::$app->getRequest()->getBodyParam('namespace') ?? 'address';
         $overrideTemplatePaths = Craft::$app->getRequest()->getBodyParam('overrideTemplatePaths', false);
@@ -70,18 +67,18 @@ class AddressController extends Controller
             Craft::$app->getView()->setTemplatesPath($sproutFormsTemplatePath);
 
             // Set the base path to blank to enable Sprout Forms and Template Overrides
-            $this->addressHelper->setBaseAddressFieldPath('');
+            $addressFormatter->setBaseAddressFieldPath('');
         }
 
-        $this->addressHelper->setNamespace($namespace);
-        $this->addressHelper->setCountryCode($countryCode);
-        $this->addressHelper->setAddressModel();
+        $addressFormatter->setNamespace($namespace);
+        $addressFormatter->setCountryCode($countryCode);
+        $addressFormatter->setAddressModel();
 
-        $addressFormHtml = $this->addressHelper->getAddressFormHtml();
+        $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
         if ($overrideTemplatePaths) {
             // Set the base path to blank to enable Sprout Forms and Template Overrides
-            $this->addressHelper->setBaseAddressFieldPath('');
+            $addressFormatter->setBaseAddressFieldPath('');
 
             // Set our template path back to what it was before our ajax request
             Craft::$app->getView()->setTemplatesPath($oldTemplatePath);
@@ -93,7 +90,7 @@ class AddressController extends Controller
     }
 
     /**
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
      * @throws \Exception
      */
@@ -102,23 +99,22 @@ class AddressController extends Controller
         $this->requireAcceptsJson();
         $this->requirePostRequest();
 
-        $addressInfoId = null;
+        $addressFormatter = SproutBaseFields::$app->addressFormatter;
+        $addressId = null;
 
         $addressModel = new AddressModel();
 
-        if (Craft::$app->getRequest()->getBodyParam('addressInfoId') != null) {
-            $addressInfoId = Craft::$app->getRequest()->getBodyParam('addressInfoId');
-
-            $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressInfoId);
+        if (Craft::$app->getRequest()->getBodyParam('addressId') != null) {
+            $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
+            $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressId);
         } elseif (Craft::$app->getRequest()->getBodyParam('defaultCountryCode') != null) {
             $defaultCountryCode = Craft::$app->getRequest()->getBodyParam('defaultCountryCode');
-
             $addressModel->countryCode = $defaultCountryCode;
         }
 
-        $addressDisplayHtml = $this->addressHelper->getAddressDisplayHtml($addressModel);
+        $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
 
-        if ($addressInfoId == null) {
+        if ($addressId == null) {
             $addressDisplayHtml = '';
         }
 
@@ -126,14 +122,14 @@ class AddressController extends Controller
 
         $namespace = Craft::$app->getRequest()->getBodyParam('namespace') ?? 'address';
 
-        $this->addressHelper->setNamespace($namespace);
-        $this->addressHelper->setCountryCode($countryCode);
-        $this->addressHelper->setAddressModel($addressModel);
+        $addressFormatter->setNamespace($namespace);
+        $addressFormatter->setCountryCode($countryCode);
+        $addressFormatter->setAddressModel($addressModel);
 
         $showCountryDropdown = Craft::$app->getRequest()->getBodyParam('showCountryDropdown') !== null;
 
-        $countryCodeHtml = $this->addressHelper->getCountryInputHtml($showCountryDropdown);
-        $addressFormHtml = $this->addressHelper->getAddressFormHtml();
+        $countryCodeHtml = $addressFormatter->getCountryInputHtml($showCountryDropdown);
+        $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
         return $this->asJson([
             'html' => $addressDisplayHtml,
@@ -146,16 +142,18 @@ class AddressController extends Controller
     /**
      * Get an address
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
-     * @throws \Twig\Error\LoaderError
-     * @throws \Twig\Error\RuntimeError
-     * @throws \Twig\Error\SyntaxError
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
      */
     public function actionGetAddressDisplayHtml(): Response
     {
         $this->requireAcceptsJson();
         $this->requirePostRequest();
+
+        $addressFormatter = SproutBaseFields::$app->addressFormatter;
 
         $formValues = Craft::$app->getRequest()->getBodyParam('formValues');
         $namespace = Craft::$app->getRequest()->getBodyParam('namespace') ?? 'address';
@@ -169,24 +167,24 @@ class AddressController extends Controller
             ]);
         }
 
-        $addressDisplayHtml = $this->addressHelper->getAddressDisplayHtml($addressModel);
+        $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
         $countryCode = $addressModel->countryCode;
 
-        $this->addressHelper->setNamespace($namespace);
+        $addressFormatter->setNamespace($namespace);
 
         if ($addressModel->fieldId) {
             $field = Craft::$app->fields->getFieldById($addressModel->fieldId);
 
             if (isset($field->highlightCountries) && count($field->highlightCountries)) {
-                $this->addressHelper->setHighlightCountries($field->highlightCountries);
+                $addressFormatter->setHighlightCountries($field->highlightCountries);
             }
         }
 
-        $this->addressHelper->setCountryCode($countryCode);
-        $this->addressHelper->setAddressModel($addressModel);
+        $addressFormatter->setCountryCode($countryCode);
+        $addressFormatter->setAddressModel($addressModel);
 
-        $countryCodeHtml = $this->addressHelper->getCountryInputHtml();
-        $addressFormHtml = $this->addressHelper->getAddressFormHtml();
+        $countryCodeHtml = $addressFormatter->getCountryInputHtml();
+        $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
         return $this->asJson([
             'result' => true,
@@ -200,7 +198,7 @@ class AddressController extends Controller
     /**
      * Delete an address
      *
-     * @return \yii\web\Response
+     * @return Response
      * @throws BadRequestHttpException
      */
     public function actionDeleteAddress(): Response
@@ -211,8 +209,8 @@ class AddressController extends Controller
         $addressId = null;
         $addressModel = null;
 
-        if (Craft::$app->getRequest()->getBodyParam('addressInfoId') != null) {
-            $addressId = Craft::$app->getRequest()->getBodyParam('addressInfoId');
+        if (Craft::$app->getRequest()->getBodyParam('addressId') != null) {
+            $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
             $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressId);
         }
 

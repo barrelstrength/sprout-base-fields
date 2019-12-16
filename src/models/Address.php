@@ -10,7 +10,6 @@ namespace barrelstrength\sproutbasefields\models;
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
 use CommerceGuys\Addressing\Country\Country;
 use Craft;
-use barrelstrength\sproutbasefields\helpers\AddressHelper;
 use craft\base\Model;
 
 /**
@@ -108,8 +107,7 @@ class Address extends Model
 
     public function __toString()
     {
-        $addressHelper = new AddressHelper();
-        return $addressHelper->getAddressDisplayHtml($this);
+        return SproutBaseFields::$app->addressFormatter->getAddressDisplayHtml($this);
     }
 
     /**
@@ -123,9 +121,7 @@ class Address extends Model
             return '';
         }
 
-        $addressHelper = new AddressHelper();
-
-        return $addressHelper->getAddressDisplayHtml($this);
+        return SproutBaseFields::$app->addressFormatter->getAddressDisplayHtml($this);
     }
 
     /**

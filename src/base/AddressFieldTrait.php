@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutbasefields\base;
 
 use barrelstrength\sproutbasefields\helpers\AddressFieldHelper;
-use barrelstrength\sproutbasefields\helpers\AddressHelper;
 
 /**
  * Trait AddressFieldTrait
@@ -19,11 +18,6 @@ use barrelstrength\sproutbasefields\helpers\AddressHelper;
  */
 trait AddressFieldTrait
 {
-    /**
-     * @var AddressHelper $addressHelper
-     */
-    public $addressHelper;
-
     /**
      * @var AddressFieldHelper $addressFieldHelper
      */

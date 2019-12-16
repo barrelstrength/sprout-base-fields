@@ -84,8 +84,8 @@ class AddressFieldHelper
         $countryRepository = new CountryRepository();
         $countries = $countryRepository->getList($this->defaultLanguage);
 
-        if (count($this->highlightCountries)) {
-            $highlightCountries = SproutBaseFields::$app->addressHelper->getHighlightCountries($this->highlightCountries);
+        if (count($field->highlightCountries)) {
+            $highlightCountries = SproutBaseFields::$app->addressFormatter->getHighlightCountries($field->highlightCountries);
             $countries = array_merge($highlightCountries, $countries);
         }
 
@@ -136,19 +136,19 @@ class AddressFieldHelper
 
         $countryCode = $addressModel->countryCode ?? $defaultCountryCode;
 
-        $addressHelper = SproutBaseFields::$app->addressHelper;
-        $addressHelper->setNamespace($name);
-        $addressHelper->setLanguage($defaultLanguage);
-        $addressHelper->setCountryCode($countryCode);
-        $addressHelper->setAddressModel($addressModel);
+        $addressFormatter = SproutBaseFields::$app->addressFormatter;
+        $addressFormatter->setNamespace($name);
+        $addressFormatter->setLanguage($defaultLanguage);
+        $addressFormatter->setCountryCode($countryCode);
+        $addressFormatter->setAddressModel($addressModel);
 
         if (count($field->highlightCountries)) {
-            $addressHelper->setHighlightCountries($field->highlightCountries);
+            $addressFormatter->setHighlightCountries($field->highlightCountries);
         }
 
-        $addressDisplayHtml = $addressId ? $addressHelper->getAddressDisplayHtml($addressModel) : '';
-        $countryInputHtml = $addressHelper->getCountryInputHtml($showCountryDropdown);
-        $addressFormHtml = $addressHelper->getAddressFormHtml();
+        $addressDisplayHtml = $addressId ? $addressFormatter->getAddressDisplayHtml($addressModel) : '';
+        $countryInputHtml = $addressFormatter->getCountryInputHtml($showCountryDropdown);
+        $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
         return Craft::$app->getView()->renderTemplate(
             'sprout-base-fields/_components/fields/formfields/address/input', [
