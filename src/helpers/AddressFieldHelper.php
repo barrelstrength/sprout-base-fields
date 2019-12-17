@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutbasefields\helpers;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
+use barrelstrength\sproutfields\fields\Address;
 use barrelstrength\sproutforms\fields\formfields\Address as AddressFormField;
 use barrelstrength\sproutfields\fields\Address as AddressField;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
@@ -197,7 +198,7 @@ class AddressFieldHelper
             $addressFormatter->setHighlightCountries($field->highlightCountries);
         }
 
-        $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel) ;
+        $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
 
         if (empty($addressDisplayHtml)) {
             return $noAddressHtml;
@@ -223,40 +224,31 @@ class AddressFieldHelper
             return null;
         }
 
-        $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $addressField->id);
+        $address = SproutBaseFields::$app->addressField->getAddressFromElement($element, $addressField->id);
 
-        // Add the address field array from the POST data to the Address Model
-        // @todo - find a more appropriate place to delete a cleared address
+        // Add the address field array from the POST data to the Address Modeladdress
         if (is_array($value)) {
-            if (!empty($value['delete'])) {
-                SproutBaseFields::$app->addressField->deleteAddressById($value['id']);
-                return null;
+
+            if ($address instanceof AddressModel) {
+                $address->id = $value['id'] ?? null;
+            } else {
+                $address = new AddressModel();
             }
 
-//            if ($element->getIsDraft()) {
-//                // Make sure we don't overwrite the new Address ID for the Draft Element with the current Address ID
-//                // BUT just do this the first time, because then we need to support this when editing the draft...
-//                unset($value['id']);
-//            }
-
-            if (!$addressModel instanceof AddressModel) {
-                $addressModel = new AddressModel();
-            }
-
-            $addressModel->elementId = $element->id;
-            $addressModel->siteId = $element->siteId;
-            $addressModel->fieldId = $addressField->id;
-            $addressModel->countryCode = $value['countryCode'];
-            $addressModel->administrativeAreaCode = $value['administrativeAreaCode'] ?? null;
-            $addressModel->locality = $value['locality'] ?? null;;
-            $addressModel->dependentLocality = $value['dependentLocality'] ?? null;;
-            $addressModel->postalCode = $value['postalCode'] ?? null;;
-            $addressModel->sortingCode = $value['sortingCode'] ?? null;;
-            $addressModel->address1 = $value['address1'];
-            $addressModel->address2 = $value['address2'] ?? null;;
+            $address->elementId = $element->id;
+            $address->siteId = $element->siteId;
+            $address->fieldId = $addressField->id;
+            $address->countryCode = $value['countryCode'];
+            $address->administrativeAreaCode = $value['administrativeAreaCode'] ?? null;
+            $address->locality = $value['locality'] ?? null;;
+            $address->dependentLocality = $value['dependentLocality'] ?? null;;
+            $address->postalCode = $value['postalCode'] ?? null;;
+            $address->sortingCode = $value['sortingCode'] ?? null;;
+            $address->address1 = $value['address1'];
+            $address->address2 = $value['address2'] ?? null;;
         }
 
-        return $addressModel;
+        return $address;
     }
 
     /**
@@ -351,5 +343,24 @@ class AddressFieldHelper
         $address->elementId = $element->id;
 
         SproutBaseFields::$app->addressField->saveAddress($address);
+    }
+
+    public function duplicateAddress(FieldInterface $field, ElementInterface $source, ElementInterface $target, bool $isNew)
+    {
+        /** @var AddressModel $address */
+        $address = $source->getFieldValue($field->handle);
+
+        /** Element $target */
+        $transaction = Craft::$app->getDb()->beginTransaction();
+        try {
+            $newAddress = $address;
+            $newAddress->id = null;
+            SproutBaseFields::$app->addressField->saveAddress($newAddress, $target, $isNew);
+
+            $transaction->commit();
+        } catch (\Throwable $e) {
+            $transaction->rollBack();
+            throw $e;
+        }
     }
 }

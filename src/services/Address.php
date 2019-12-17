@@ -70,32 +70,43 @@ class Address extends Component
     }
 
     /**
-     * @param AddressModel $model
-     * @param string       $source
+     * @param AddressModel     $address
+     * @param ElementInterface $element
+     *
+     * @param bool             $isNew
      *
      * @return bool
      * @throws Throwable
      */
-    public function saveAddress(AddressModel $model, $source = ''): bool
+    public function saveAddress(AddressModel $address, ElementInterface $element, bool $isNew): bool
     {
-        if (!empty($model->id)) {
-            $record = AddressRecord::findOne($model->id);
+        $record = AddressRecord::findOne([
+            'elementId' => $element->id,
+            'siteId' => $element->siteId,
+            'fieldId' => $address->fieldId
+        ]);
 
-            if (!$record) {
-                throw new InvalidArgumentException('No Address exists with the ID '.$model->id);
-            }
-        } else {
-            $record = new AddressRecord;
+        if (!$record) {
+            $record = new AddressRecord();
         }
 
-        $attributes = $model->getAttributes();
+        if ($isNew) {
+            $record->id = null;
+        }
 
-        // Unset id to avoid postgres not null id error
-        unset($attributes['id']);
+        $record->elementId = $element->id;
+        $record->siteId = $element->siteId;
+        $record->fieldId = $address->fieldId;
+        $record->countryCode = $address->countryCode;
+        $record->administrativeAreaCode = $address->administrativeAreaCode;
+        $record->locality = $address->locality;
+        $record->dependentLocality = $address->dependentLocality;
+        $record->postalCode = $address->postalCode;
+        $record->sortingCode = $address->sortingCode;
+        $record->address1 = $address->address1;
+        $record->address2 = $address->address2;
 
-        $record->setAttributes($attributes, false);
-
-        if (!$model->validate()) {
+        if (!$address->validate()) {
             return false;
         }
 
@@ -105,9 +116,10 @@ class Address extends Component
         try {
             $record->save();
 
-            $model->id = $record->id;
+            $address->id = $record->id;
 
-            $this->afterSaveAddress($model, $source);
+
+            $this->afterSaveAddress($address, $element);
 
             $transaction->commit();
 
