@@ -66,13 +66,20 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             var countryCode = $(target).val();
             var $parents = $target.parents('.sprout-address-body');
             var addressId = this.$addressForm.find('.sprout-address-id').val();
+            var fieldId = this.$addressForm.find('.sprout-address-field-id').val();
 
             Craft.postActionRequest('sprout-base-fields/fields-address/update-address-form-html', {
                 addressId: addressId,
+                fieldId: fieldId,
                 countryCode: countryCode,
                 namespace: this.settings.namespace
             }, $.proxy(function(response) {
+                // Cleanup some duplicate fields because the country dropdown is already on the page
+                // @todo - refactor how this HTML is built so Country Dropdown we don't need to use sleight of hand like this
                 $parents.find('.sprout-address-onchange-country').remove();
+                $parents.find('.sprout-address-delete').first().remove();
+                $parents.find('.sprout-address-field-id').first().remove();
+                $parents.find('.sprout-address-id').first().remove();
 
                 if (response.html) {
                     $parents.find('.meta').append(response.html);

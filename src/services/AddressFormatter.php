@@ -260,6 +260,19 @@ class AddressFormatter
             $addressLayout = preg_replace('`%locality\/`', '%locality', $addressLayout);
         }
 
+        // A few exceptions when building our Form Input Fields for the CP
+        // Removes a hardcoded locality that is needed for the Address Display Only
+        // These are added automatically in the AddressFormat for front-end display
+        if ($this->countryCode === 'AX') {
+            $addressLayout = str_replace('ÅLAND', '', $addressLayout);
+        }
+        if ($this->countryCode === 'GI') {
+            $addressLayout = str_replace('GIBRALTAR', '', $addressLayout);
+        }
+        if ($this->countryCode === 'JE') {
+            $addressLayout = str_replace('JERSEY', '', $addressLayout);
+        }
+
         // More whitespace
         $addressLayout = preg_replace('/,/', '', $addressLayout);
 
@@ -297,19 +310,6 @@ class AddressFormatter
             'inputName' => 'id',
             'value' => $this->addressModel->id
         ]);
-
-        // A few exceptions when building our Form Input Fields for the CP
-        // Removes a hardcoded locality that is needed for the Address Display Only
-        // These are added automatically in the AddressFormat for front-end display
-        if ($this->countryCode === 'AX') {
-            $addressLayout = str_replace('ÅLAND', '', $addressLayout);
-        }
-        if ($this->countryCode === 'GI') {
-            $addressLayout = str_replace('GIBRALTAR', '', $addressLayout);
-        }
-        if ($this->countryCode === 'JE') {
-            $addressLayout = str_replace('JERSEY', '', $addressLayout);
-        }
 
         return $addressLayout;
     }

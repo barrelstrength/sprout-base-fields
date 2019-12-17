@@ -219,13 +219,9 @@ class AddressFieldHelper
      */
     public function normalizeValue($addressField, $value, ElementInterface $element = null)
     {
-//        return null;
-
         if (!$element instanceof Element) {
             return null;
         }
-
-        //        $isDraftOrRevision = ElementHelper::isDraftOrRevision($element);
 
         $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $addressField->id);
 
@@ -237,9 +233,27 @@ class AddressFieldHelper
                 return null;
             }
 
-            $value['fieldId'] = $addressField->id ?? null;
-            $addressModel = new AddressModel();
-            $addressModel->setAttributes($value, false);
+//            if ($element->getIsDraft()) {
+//                // Make sure we don't overwrite the new Address ID for the Draft Element with the current Address ID
+//                // BUT just do this the first time, because then we need to support this when editing the draft...
+//                unset($value['id']);
+//            }
+
+            if (!$addressModel instanceof AddressModel) {
+                $addressModel = new AddressModel();
+            }
+
+            $addressModel->elementId = $element->id;
+            $addressModel->siteId = $element->siteId;
+            $addressModel->fieldId = $addressField->id;
+            $addressModel->countryCode = $value['countryCode'];
+            $addressModel->administrativeAreaCode = $value['administrativeAreaCode'] ?? null;
+            $addressModel->locality = $value['locality'] ?? null;;
+            $addressModel->dependentLocality = $value['dependentLocality'] ?? null;;
+            $addressModel->postalCode = $value['postalCode'] ?? null;;
+            $addressModel->sortingCode = $value['sortingCode'] ?? null;;
+            $addressModel->address1 = $value['address1'];
+            $addressModel->address2 = $value['address2'] ?? null;;
         }
 
         return $addressModel;
@@ -314,7 +328,6 @@ class AddressFieldHelper
         $address->fieldId = $field->id;
 
         SproutBaseFields::$app->addressField->saveAddress($address);
-
     }
 
     /**

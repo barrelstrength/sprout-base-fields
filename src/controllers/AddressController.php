@@ -50,6 +50,7 @@ class AddressController extends Controller
         $addressFormatter = SproutBaseFields::$app->addressFormatter;
 
         $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
+        $fieldId = Craft::$app->getRequest()->getBodyParam('fieldId');
         $countryCode = Craft::$app->getRequest()->getBodyParam('countryCode');
         $namespace = Craft::$app->getRequest()->getBodyParam('namespace') ?? 'address';
         $overrideTemplatePaths = Craft::$app->getRequest()->getBodyParam('overrideTemplatePaths', false);
@@ -66,6 +67,7 @@ class AddressController extends Controller
 
         $addressModel = new AddressModel();
         $addressModel->id = $addressId;
+        $addressModel->fieldId = $fieldId;
 
         $addressFormatter->setNamespace($namespace);
         $addressFormatter->setCountryCode($countryCode);

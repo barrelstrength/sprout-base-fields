@@ -155,6 +155,12 @@ class Address extends Component
      */
     public function getAddressFromElement(ElementInterface $element, $fieldId)
     {
+        $elementId = $element->id ?? null;
+
+        if (!$elementId) {
+            return null;
+        }
+
         /** @var Element $element */
         $query = (new Query())
             ->select([
