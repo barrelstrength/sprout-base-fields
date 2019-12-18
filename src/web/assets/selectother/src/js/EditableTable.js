@@ -1,8 +1,4 @@
-/*
- * @link      https://sprout.barrelstrengthdesign.com/
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- */
+/* global Craft */
 
 if (typeof Craft.SproutSeo === typeof undefined) {
     Craft.SproutSeo = {};
@@ -58,9 +54,9 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
             this.initialized = true;
             this.removeListener(Garnish.$win, 'resize');
 
-            var $rows = this.$tbody.children();
+            const $rows = this.$tbody.children();
 
-            for (var i = 0; i < $rows.length; i++) {
+            for (let i = 0; i < $rows.length; i++) {
                 new Craft.SproutSeo.EditableTable.Row(this, $rows[i]);
             }
 
@@ -76,13 +72,11 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
         },
 
         addRow: function() {
-            var rowId = this.settings.rowIdPrefix + (this.biggestId + 1),
+            const rowId = this.settings.rowIdPrefix + (this.biggestId + 1),
                 rowHtml = Craft.SproutSeo.EditableTable.getRowHtml(rowId, this.columns, this.baseName, {}),
                 $tr = $(rowHtml).appendTo(this.$tbody);
 
             new Craft.SproutSeo.EditableTable.Row(this, $tr);
-
-            var $container = $tr.find('.sprout-selectother');
 
             this.sorter.addItems($tr);
 
@@ -102,9 +96,9 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
         getRowHtml: function(rowId, columns, baseName, values) {
 
-            var rowHtml = '<tr data-id="' + rowId + '">';
-            for (var colId in columns) {
-                var col = columns[colId],
+            let rowHtml = '<tr data-id="' + rowId + '">';
+            for (let colId in columns) {
+                const col = columns[colId],
                     name = baseName + '[' + rowId + '][' + colId + ']',
                     value = (typeof values[colId] !== 'undefined' ? values[colId] : ''),
                     textual = Craft.inArray(col.type, Craft.SproutSeo.EditableTable.textualColTypes);
@@ -115,19 +109,19 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
                 switch (col.type) {
                     case 'selectOther': {
-                        var isOwnership = baseName.indexOf('ownership') > -1;
+                        const isOwnership = baseName.indexOf('ownership') > -1;
                         if (isOwnership) {
                             rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select onchange="setDefault(this)" name="' + name + '">';
                         } else {
                             rowHtml += '<div class="field sprout-selectother"><div class="select sprout-selectotherdropdown"><select name="' + name + '">';
                         }
 
-                        var hasOptgroups = false;
+                        let hasOptgroups = false;
 
-                        var firstRow = 'disabled selected';
+                        let firstRow = 'disabled selected';
 
-                        for (var key in col.options) {
-                            var option = col.options[key];
+                        for (let key in col.options) {
+                            const option = col.options[key];
 
                             if (typeof option.optgroup !== 'undefined') {
                                 if (hasOptgroups) {
@@ -138,11 +132,11 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend(
 
                                 rowHtml += '<optgroup label="' + option.optgroup + '">';
                             } else {
-                                var optionLabel = (typeof option.label !== 'undefined' ? option.label : option),
+                                const optionLabel = (typeof option.label !== 'undefined' ? option.label : option),
                                     optionValue = (typeof option.value !== 'undefined' ? option.value : key),
                                     optionDisabled = (typeof option.disabled !== 'undefined' ? option.disabled : false);
 
-                                rowHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue == value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
+                                rowHtml += '<option ' + firstRow + ' value="' + optionValue + '"' + (optionValue === value ? ' selected' : '') + (optionDisabled ? ' disabled' : '') + '>' + optionLabel + '</option>';
                             }
 
                             firstRow = '';
@@ -205,7 +199,7 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
             this.$tds = this.$tr.children();
 
             // Get the row ID, sans prefix
-            var id = parseInt(this.$tr.attr('data-id').substr(this.table.settings.rowIdPrefix.length));
+            const id = parseInt(this.$tr.attr('data-id').substr(this.table.settings.rowIdPrefix.length));
 
             if (id > this.table.biggestId) {
                 this.table.biggestId = id;
@@ -213,15 +207,15 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
 
             this.$textareas = $();
             this.niceTexts = [];
-            var textareasByColId = {};
+            const textareasByColId = {};
 
-            var i = 0;
+            let i = 0;
 
-            for (var colId in this.table.columns) {
-                var col = this.table.columns[colId];
+            for (let colId in this.table.columns) {
+                let col = this.table.columns[colId];
 
                 if (Craft.inArray(col.type, Craft.SproutSeo.EditableTable.textualColTypes)) {
-                    var $textarea = $('textarea', this.$tds[i]);
+                    const $textarea = $('textarea', this.$tds[i]);
                     this.$textareas = this.$textareas.add($textarea);
 
                     this.addListener($textarea, 'focus', 'onTextareaFocus');
@@ -248,15 +242,17 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
             this.onTextareaHeightChange();
 
             // Now look for any autopopulate columns
-            for (var colId in this.table.columns) {
-                var col = this.table.columns[colId];
-
+            for (let colId in this.table.columns) {
+                /**
+                 * @param {boolean} col.autopopulate
+                 */
+                let col = this.table.columns[colId];
                 if (col.autopopulate && typeof textareasByColId[col.autopopulate] !== 'undefined' && !textareasByColId[colId].val()) {
                     new Craft.HandleGenerator(textareasByColId[colId], textareasByColId[col.autopopulate]);
                 }
             }
 
-            var $deleteBtn = this.$tr.children().last().find('.delete');
+            const $deleteBtn = this.$tr.children().last().find('.delete');
             this.addListener($deleteBtn, 'click', 'deleteRow');
         },
 
@@ -267,7 +263,7 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
         onTextareaFocus: function(ev) {
             this.onTextareaHeightChange();
 
-            var $textarea = $(ev.currentTarget);
+            const $textarea = $(ev.currentTarget);
 
             if ($textarea.data('ignoreNextFocus')) {
                 $textarea.data('ignoreNextFocus', false);
@@ -275,12 +271,12 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
             }
 
             setTimeout(function() {
-                var val = $textarea.val();
+                const val = $textarea.val();
 
                 // Does the browser support setSelectionRange()?
                 if (typeof $textarea[0].setSelectionRange !== 'undefined') {
                     // Select the whole value
-                    var length = val.length * 2;
+                    const length = val.length * 2;
                     $textarea[0].setSelectionRange(0, length);
                 } else {
                     // Refresh the value to get the cursor positioned at the end
@@ -294,7 +290,7 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
         },
 
         validateKeypress: function(ev) {
-            var keyCode = ev.keyCode ? ev.keyCode : ev.charCode;
+            const keyCode = ev.keyCode ? ev.keyCode : ev.charCode;
 
             if (!Garnish.isCtrlKeyPressed(ev) && (
                 (keyCode === Garnish.RETURN_KEY) ||
@@ -305,11 +301,11 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
         },
 
         validateValue: function(ev) {
-            var safeValue;
+            let safeValue;
 
             if (ev.data.type === 'number') {
                 // Only grab the number at the beginning of the value (if any)
-                var match = ev.currentTarget.value.match(/^\s*(-?[\d\.]*)/);
+                const match = ev.currentTarget.value.match(/^\s*(-?[\d\.]*)/);
 
                 if (match !== null) {
                     safeValue = match[1];
@@ -328,9 +324,9 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
 
         onTextareaHeightChange: function() {
             // Keep all the textareas' heights in sync
-            var tallestTextareaHeight = -1;
+            let tallestTextareaHeight = -1;
 
-            for (var i = 0; i < this.niceTexts.length; i++) {
+            for (let i = 0; i < this.niceTexts.length; i++) {
                 if (this.niceTexts[i].height > tallestTextareaHeight) {
                     tallestTextareaHeight = this.niceTexts[i].height;
                 }
@@ -339,7 +335,7 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
             this.$textareas.css('min-height', tallestTextareaHeight);
 
             // If the <td> is still taller, go with that insted
-            var tdHeight = this.$textareas.first().parent().height();
+            const tdHeight = this.$textareas.first().parent().height();
 
             if (tdHeight > tallestTextareaHeight) {
                 this.$textareas.css('min-height', tdHeight);

@@ -8,10 +8,10 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbase\SproutBase;
+use CommerceGuys\Addressing\Country\CountryRepository;
 use libphonenumber\NumberParseException;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
-use CommerceGuys\Addressing\Country\CountryRepository;
 use yii\base\Component;
 use Craft;
 
@@ -87,7 +87,7 @@ class Phone extends Component
 
         foreach ($regions as $countryCode) {
             $code = $phoneUtil->getCountryCodeForRegion($countryCode);
-            $countryRepository = new CountryRepository;
+            $countryRepository = new CountryRepository();
             $country = $countryRepository->get($countryCode);
 
             if ($country) {

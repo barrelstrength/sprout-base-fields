@@ -13,6 +13,7 @@ use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Component;
+
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\db\Query;
@@ -117,7 +118,6 @@ class Address extends Component
             $record->save();
 
             $address->id = $record->id;
-
 
             $this->afterSaveAddress($address, $element);
 

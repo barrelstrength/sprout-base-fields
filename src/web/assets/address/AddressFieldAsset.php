@@ -25,8 +25,7 @@ class AddressFieldAsset extends AssetBundle
         ];
 
         $this->js = [
-            'js/AddressBox.js',
-            'js/EditAddressModal.js'
+            'js/addressfield.js'
         ];
 
         parent::init();

@@ -1,8 +1,4 @@
-/*
- * @link      https://sprout.barrelstrengthdesign.com/
- * @copyright Copyright (c) Barrel Strength Design LLC
- * @license   http://sprout.barrelstrengthdesign.com/license
- */
+/* global Craft */
 
 if (typeof Craft.SproutBase === typeof undefined) {
     Craft.SproutBase = {};
@@ -11,7 +7,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
 Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
     {
         id: null,
-        init: function($addressForm, settings, target) {
+        init: function($addressForm, settings) {
 
             this.setSettings(settings, Garnish.Modal.defaults);
 
@@ -28,9 +24,9 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             this.submitLabel = Craft.t('sprout-base-fields', 'Update');
 
             // Footer and buttons
-            var $footer = $('<div class="footer"/>').appendTo(this.$form);
-            var $btnGroup = $('<div class="btngroup left"/>').appendTo($footer);
-            var $mainBtnGroup = $('<div class="btngroup right"/>').appendTo($footer);
+            let $footer = $('<div class="footer"/>').appendTo(this.$form);
+            let $btnGroup = $('<div class="btngroup left"/>').appendTo($footer);
+            let $mainBtnGroup = $('<div class="btngroup right"/>').appendTo($footer);
             this.$updateBtn = $('<input type="button" class="btn submit" value="' + this.submitLabel + '"/>').appendTo($mainBtnGroup);
             this.$footerSpinner = $('<div class="spinner right hidden"/>').appendTo($footer);
             this.$cancelBtn = $('<input type="button" class="btn" value="' + Craft.t('sprout-base-fields', 'Cancel') + '"/>').appendTo($btnGroup);
@@ -41,8 +37,6 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
 
                 this.updateAddress();
             }, this));
-
-            var self = this;
 
             this.addListener('.sprout-address-country-select select', 'change', function(ev) {
                 this.changeFormInput(ev.currentTarget);
@@ -62,11 +56,11 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
 
         changeFormInput: function(target) {
 
-            var $target = $(target);
-            var countryCode = $(target).val();
-            var $parents = $target.parents('.sprout-address-body');
-            var addressId = this.$addressForm.find('.sprout-address-id').val();
-            var fieldId = this.$addressForm.find('.sprout-address-field-id').val();
+            let $target = $(target);
+            let countryCode = $(target).val();
+            let $parents = $target.parents('.sprout-address-body');
+            let addressId = this.$addressForm.find('.sprout-address-id').val();
+            let fieldId = this.$addressForm.find('.sprout-address-field-id').val();
 
             Craft.postActionRequest('sprout-base-fields/fields-address/update-address-form-html', {
                 addressId: addressId,
@@ -105,9 +99,9 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
 
         updateAddress: function() {
 
-            var namespace = this.settings.namespace;
+            const namespace = this.settings.namespace;
 
-            var formKeys = [
+            let formKeys = [
                 'id',
                 'fieldId',
                 'countryCode',
@@ -120,9 +114,9 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
                 'address2'
             ];
 
-            var formValues = {};
+            const formValues = {};
 
-            var self = this;
+            const self = this;
 
             $.each(formKeys, function(index, el) {
                 formValues[el] = self.$form.find("[name='" + namespace + "[" + el + "]']").val()
@@ -131,7 +125,7 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
             // @todo - I don't believe this is used.
             this.id = formValues.id;
 
-            var data = {
+            const data = {
                 formValues: formValues
             };
 
@@ -145,9 +139,9 @@ Craft.SproutBase.EditAddressModal = Garnish.Modal.extend(
 
                 $.each(errors, function(index, val) {
 
-                    var errorHtml = "<ul class='errors'>";
+                    let errorHtml = "<ul class='errors'>";
 
-                    var $element = self.$form.find("[name='" + namespace + "[" + index + "]']");
+                    const $element = self.$form.find("[name='" + namespace + "[" + index + "]']");
                     $element.parent().addClass('errors');
 
                     errorHtml += "<li>" + val + "</li>";

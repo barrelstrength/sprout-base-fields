@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
+use barrelstrength\sproutfields\fields\RegularExpression as RegularExpressionField;
 use craft\base\Field;
 use yii\base\Component;
 use Craft;
@@ -18,8 +19,8 @@ use Craft;
 class RegularExpression extends Component
 {
     /**
-     * @param $value
-     * @param $field
+     * @param                              $value
+     * @param Field|RegularExpressionField $field
      *
      * @return bool
      */

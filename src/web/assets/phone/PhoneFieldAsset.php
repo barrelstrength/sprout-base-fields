@@ -15,19 +15,19 @@ class PhoneFieldAsset extends AssetBundle
     public function init()
     {
         // define the path that your publishable resources live
-        $this->sourcePath = '@sproutbasefields/web/assets';
+        $this->sourcePath = '@sproutbasefields/web/assets/phone/dist';
 
         // define the dependencies
         $this->depends = [
             CpAsset::class
         ];
 
-        $this->js = [
-            'phone/dist/js/sproutphonefield.js'
+        $this->css = [
+            'css/phonefield.css',
         ];
 
-        $this->css = [
-            'base/css/sproutfields.css',
+        $this->js = [
+            'js/phonefield.js'
         ];
 
         parent::init();

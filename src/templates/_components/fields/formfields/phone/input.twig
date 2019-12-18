@@ -32,5 +32,7 @@
 {% do view.registerAssetBundle("barrelstrength\\sproutbasefields\\web\\assets\\phone\\PhoneFieldAsset") %}
 
 {% js %}
-    new Craft.PhoneField("{{ namespaceInputId }}","{{ namespaceCountryId }}");
+    (function() {
+    new SproutPhoneField("{{ namespaceInputId }}","{{ namespaceCountryId }}");
+    })();
 {% endjs %}

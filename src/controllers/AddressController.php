@@ -20,6 +20,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -235,7 +236,7 @@ class AddressController extends Controller
 
             if ($globals && $response) {
                 $identity = $globals['identity'];
-                $identity = Json::decode($identity, true);
+                $identity = Json::decode($identity);
 
                 if ($identity['addressId'] != null) {
                     $identity['addressId'] = '';
@@ -288,7 +289,7 @@ class AddressController extends Controller
                 $geo = file_get_contents('http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($addressInfo).'&sensor=false');
 
                 // Convert the JSON to an array
-                $geo = Json::decode($geo, true);
+                $geo = Json::decode($geo);
 
                 if ($geo['status'] === 'OK') {
                     $data['latitude'] = $geo['results'][0]['geometry']['location']['lat'];

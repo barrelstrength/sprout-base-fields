@@ -17,11 +17,11 @@
 {% js %}
 
     (function() {
-    checkSproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ name }}", "{{ fieldContext }}");
-    })();
+    new SproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ name }}", "{{ fieldContext }}");
 
     $('input#{{ namespaceInputId }}').on('input', function () {
-    checkSproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ name }}", "{{ fieldContext }}");
+    new SproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ name }}", "{{ fieldContext }}");
     });
+    })();
 
 {% endjs %}
