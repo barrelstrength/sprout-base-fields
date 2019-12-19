@@ -119,6 +119,8 @@ class Address extends Component
 
             $address->id = $record->id;
 
+            $this->deleteUnusedAddresses();
+
             $this->afterSaveAddress($address, $element);
 
             $transaction->commit();
@@ -128,6 +130,27 @@ class Address extends Component
             $transaction->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * Deletes any addresses that are found that no longer match an existing Element ID
+     *
+     * @throws \yii\db\Exception
+     */
+    public function deleteUnusedAddresses()
+    {
+        $addressIdsWithDeletedElementIds = (new Query())
+            ->select('addresses.id')
+            ->from('{{%sproutfields_addresses}} addresses')
+            ->leftJoin('{{%elements}} elements', '[[addresses.elementId]] = [[elements.id]]')
+            ->where(['elements.id' => null])
+            ->column();
+
+            Craft::$app->db->createCommand()
+            ->delete('{{%sproutfields_addresses}}', [
+                'id' => $addressIdsWithDeletedElementIds
+            ])
+            ->execute();
     }
 
     /**
