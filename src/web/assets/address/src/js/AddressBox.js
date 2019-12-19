@@ -80,7 +80,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
 
         renderAddress: function() {
 
-            if (this.addressId == '' || this.addressId == null) {
+            if (this.addressId === '' || this.addressId == null) {
                 this.$addButtons.removeClass('hidden');
                 this.$editButtons.addClass('hidden');
                 this.$addressFormat.addClass('hidden');
