@@ -30,47 +30,6 @@ class Address extends Component
     const DEFAULT_LANGUAGE = 'en';
 
     /**
-     * @param string   $namespace
-     * @param int|null $fieldId
-     *
-     * @return int|null
-     * @throws Throwable
-     * @throws \yii\db\Exception
-     * @throws StaleObjectException
-     */
-    public function saveAddressByPost($namespace = 'address', int $fieldId = null)
-    {
-        if (Craft::$app->getRequest()->getBodyParam($namespace) === null) {
-            return null;
-        }
-
-        $addressInfo = Craft::$app->getRequest()->getBodyParam($namespace);
-
-        if ($fieldId !== null) {
-            $addressInfo['fieldId'] = $fieldId;
-        }
-
-        $isDelete = $addressInfo['delete'] ?? null;
-        $addressId = $addressInfo['id'] ?? null;
-
-        if ($isDelete !== null && $addressId !== null) {
-            SproutBaseFields::$app->addressField->deleteAddressById($addressId);
-
-            return null;
-        }
-
-        unset($addressInfo['delete']);
-
-        $addressModel = new AddressModel($addressInfo);
-
-        if ($addressModel->validate() == true && $this->saveAddress($addressModel)) {
-            return $addressModel->id;
-        }
-
-        return null;
-    }
-
-    /**
      * @param AddressModel     $address
      * @param ElementInterface $element
      *
@@ -81,6 +40,10 @@ class Address extends Component
      */
     public function saveAddress(AddressModel $address, ElementInterface $element, bool $isNew): bool
     {
+        if ($address->getDeleteAddress()) {
+            return $this->deleteAddressById($address->id);
+        }
+
         $record = AddressRecord::findOne([
             'elementId' => $element->id,
             'siteId' => $element->siteId,
@@ -226,7 +189,6 @@ class Address extends Component
 
         return $result ? new AddressModel($result) : null;
     }
-
 
     /**
      * @param null $id
