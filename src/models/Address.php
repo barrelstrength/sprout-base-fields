@@ -46,7 +46,7 @@ class Address extends Model
     /**
      * @var string
      */
-    public $countryCode;
+    public $countryCode = 'US';
 
     /**
      * @var string
