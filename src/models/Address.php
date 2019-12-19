@@ -113,12 +113,9 @@ class Address extends Model
         return SproutBaseFields::$app->addressFormatter->getAddressDisplayHtml($this);
     }
 
-    /**
-     * @todo - test now that this is on the model we may need to revisit how this is processed so it doesn't override any default variables...
-     *         Previously this happened in the normalizeValue method
-     */
-    public function getCountryCode() {
-        // Adds country property that returns the country name
+    public function init()
+    {
+        // Initialize country-related information based on the country code
         if ($this->countryCode) {
             $countryRepository = new CountryRepository();
             $country = $countryRepository->get($this->countryCode);
@@ -141,12 +138,12 @@ class Address extends Model
     /**
      * Return the Address HTML for the appropriate region
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddressDisplayHtml(): string
+    public function getAddressDisplayHtml()
     {
         if (!$this->id) {
-            return '';
+            return null;
         }
 
         return SproutBaseFields::$app->addressFormatter->getAddressDisplayHtml($this);
