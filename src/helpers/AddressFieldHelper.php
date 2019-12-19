@@ -290,59 +290,31 @@ class AddressFieldHelper
     }
 
     /**
-     * Save our Address Field a first time and assign the Address Record ID back to the Address field model
-     * We'll save our Address Field a second time in afterElementSave to capture the Element ID for new entries.
-     *
-     * @param FieldInterface           $field
-     * @param Element|ElementInterface $element
-     * @param bool                     $isNew
-     *
-     * @return void
-     * @throws Exception
-     * @throws Throwable
-     */
-    public function beforeElementSave(FieldInterface $field, ElementInterface $element, bool $isNew)
-    {
-        $address = $element->getFieldValue($field->handle);
-
-        // If our address is null, we're probably deleting something
-        if (!$address instanceof AddressModel) {
-            return;
-        }
-
-        // Make sure we don't overwrite the root record when saving revisions
-        if ($isNew) {
-            $address->id = null;
-        }
-
-        $address->elementId = $element->id;
-        $address->siteId = $element->siteId;
-        $address->fieldId = $field->id;
-
-        SproutBaseFields::$app->addressField->saveAddress($address);
-    }
-
-    /**
-     * Save our Address Field a second time for New Entries to ensure we have the Element ID.
-     *
      * @param FieldInterface   $field
      * @param ElementInterface $element
      * @param bool             $isNew
      *
      * @throws Throwable
      */
-    public function afterElementSave(FieldInterface $field, ElementInterface $element, bool $isNew)
+    public function afterElementPropagate(FieldInterface $field, ElementInterface $element, bool $isNew)
     {
-        /** @var $this Field */
         $address = $element->getFieldValue($field->handle);
 
-        if (!$isNew || !$address instanceof AddressModel) {
+        if (!$address instanceof AddressModel) {
             return;
         }
 
-        $address->elementId = $element->id;
+        /** @var Element $element */
+        if ($element->duplicateOf !== null) {
+            $this->duplicateAddress($field, $element->duplicateOf, $element, $isNew);
+        } else {
+            SproutBaseFields::$app->addressField->saveAddress($address, $element, $isNew);
+        }
 
-        SproutBaseFields::$app->addressField->saveAddress($address);
+        // Reset the field value if this is a new element
+        if ($element->duplicateOf || $isNew) {
+            $element->setFieldValue($field->handle, null);
+        }
     }
 
     public function duplicateAddress(FieldInterface $field, ElementInterface $source, ElementInterface $target, bool $isNew)
