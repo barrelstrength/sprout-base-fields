@@ -229,6 +229,13 @@ class AddressFieldHelper
         // Add the address field array from the POST data to the Address Modeladdress
         if (is_array($value)) {
 
+            $clearAddress = (int)$value['delete'];
+            $addressId = $value['id'] ?? null;
+
+            if ($clearAddress) {
+                return $this->handleClearAddress($addressId);
+            }
+
             if ($address instanceof AddressModel) {
                 $address->id = $value['id'] ?? null;
             } else {
@@ -334,5 +341,23 @@ class AddressFieldHelper
             $transaction->rollBack();
             throw $e;
         }
+    }
+
+    /**
+     * 1. If we have an addressId, we want to delete the cleared address
+     * 2. If we don't have an addressId, we just want to make sure the Address Model is null
+     *
+     * @param $addressId
+     *
+     * @return null
+     * @throws StaleObjectException
+     * @throws Throwable
+     */
+    public function handleClearAddress($addressId) {
+        if ($addressId) {
+            SproutBaseFields::$app->addressField->deleteAddressById($addressId);
+        }
+
+        return null;
     }
 }
