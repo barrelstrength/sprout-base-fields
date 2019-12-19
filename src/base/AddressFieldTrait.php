@@ -26,6 +26,12 @@ trait AddressFieldTrait
     protected $addressFieldHelper;
 
     /**
+     * @deprecated  Remove in Sprout Forms v4.x and Sprout Fields 4.x.
+     * Removed in Sprout Forms v3.6.6 and Sprout Fields v3.4.4 and remains to assist in migrations.
+     */
+    public $addressHelper;
+
+    /**
      * @var string
      */
     public $defaultLanguage = 'en';
