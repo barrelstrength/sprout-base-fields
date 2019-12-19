@@ -1,65 +1,65 @@
 let mix = require('laravel-mix');
 
 if (mix.inProduction()) {
-    // we can import this file directly from node_modules but then
-    // scss variables fail to autocomplete. So, we import this file
-    // from a location that is available to the plugin, but only
-    // want to copy it once.
-    mix.copy(
-        'node_modules/craftcms-sass/src/_mixins.scss',
-        'lib/craftcms-sass/_mixins.scss'
-    );
+  // we can import this file directly from node_modules but then
+  // scss variables fail to autocomplete. So, we import this file
+  // from a location that is available to the plugin, but only
+  // want to copy it once.
+  mix.copy(
+    'node_modules/craftcms-sass/src/_mixins.scss',
+    'lib/craftcms-sass/_mixins.scss'
+  );
 }
 
 mix
-    // Address
-    .js([
-            'src/web/assets/address/src/js/AddressBox.js',
-            'src/web/assets/address/src/js/EditAddressModal.js'
-        ],
-        'src/web/assets/address/dist/js/addressfield.js')
-    .sass(
-        'src/web/assets/address/src/scss/addressfield.scss',
-        'src/web/assets/address/dist/css/addressfield.css'
-    )
+// Address
+  .js([
+      'src/web/assets/address/src/js/AddressBox.js',
+      'src/web/assets/address/src/js/EditAddressModal.js'
+    ],
+    'src/web/assets/address/dist/js/addressfield.js')
+  .sass(
+    'src/web/assets/address/src/scss/addressfield.scss',
+    'src/web/assets/address/dist/css/addressfield.css'
+  )
 
-    // Email
-    .js([
-        'src/web/assets/email/src/js/emailfield.js'
-    ], 'src/web/assets/email/dist/js/emailfield.js')
-    .sass(
-        'src/web/assets/email/src/scss/emailfield.scss',
-        'src/web/assets/email/dist/css/emailfield.css'
-    )
+  // Email
+  .js([
+    'src/web/assets/email/src/js/emailfield.js'
+  ], 'src/web/assets/email/dist/js/emailfield.js')
+  .sass(
+    'src/web/assets/email/src/scss/emailfield.scss',
+    'src/web/assets/email/dist/css/emailfield.css'
+  )
 
-    // Phone
-    .js([
-        'src/web/assets/phone/src/js/phonefield.js'
-    ], 'src/web/assets/phone/dist/js/phonefield.js')
-    .sass(
-        'src/web/assets/phone/src/scss/phonefield.scss',
-        'src/web/assets/phone/dist/css/phonefield.css'
-    )
+  // Phone
+  .js([
+    'src/web/assets/phone/src/js/phonefield.js'
+  ], 'src/web/assets/phone/dist/js/phonefield.js')
+  .sass(
+    'src/web/assets/phone/src/scss/phonefield.scss',
+    'src/web/assets/phone/dist/css/phonefield.css'
+  )
 
-    // Regular Expression
-    .js([
-        'src/web/assets/regularexpression/src/js/regularexpressionfield.js'
-    ], 'src/web/assets/regularexpression/dist/js/regularexpressionfield.js')
+  // Regular Expression
+  .js([
+    'src/web/assets/regularexpression/src/js/regularexpressionfield.js'
+  ], 'src/web/assets/regularexpression/dist/js/regularexpressionfield.js')
 
-    // Select Other
-    .js([
-        'src/web/assets/selectother/src/js/EditableTable.js',
-        'src/web/assets/selectother/src/js/SelectOtherField.js'
-    ], 'src/web/assets/selectother/dist/js/selectotherfield.js')
+  // Select Other
+  .js([
+    'src/web/assets/selectother/src/js/EditableTable.js',
+    'src/web/assets/selectother/src/js/SelectOtherField.js'
+  ], 'src/web/assets/selectother/dist/js/selectotherfield.js')
 
-    // URL
-    .js([
-        'src/web/assets/url/src/js/urlfield.js'
-    ], 'src/web/assets/url/dist/js/urlfield.js')
-    .sass(
-        'src/web/assets/url/src/scss/urlfield.scss',
-        'src/web/assets/url/dist/css/urlfield.css'
-    );
+  // URL
+  .js([
+    'src/web/assets/url/src/js/urlfield.js'
+  ], 'src/web/assets/url/dist/js/urlfield.js')
+  .sass(
+    'src/web/assets/url/src/scss/urlfield.scss',
+    'src/web/assets/url/dist/css/urlfield.css'
+  );
 
 // Full API
 // mix.js(src, output);
