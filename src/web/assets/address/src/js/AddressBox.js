@@ -45,7 +45,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
         addressInfo: null,
         $addressForm: null,
         countryCode: null,
-        actionUrl: null,
+        // actionUrl: null,
         $none: null,
         modal: null,
 
@@ -85,7 +85,6 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 this.$editButtons.addClass('hidden');
                 this.$addressFormat.addClass('hidden');
             } else {
-
                 this.$addButtons.addClass('hidden');
                 this.$editButtons.removeClass('hidden');
                 this.$addressFormat.removeClass('hidden');
@@ -94,12 +93,10 @@ if (typeof Craft.SproutBase === typeof undefined) {
             this.$addressForm = this.$addressBox.find('.sproutfields-address-formfields');
 
             this.getAddressFormFields();
-
-            this.actionUrl = Craft.getActionUrl('sprout-base-fields/fields-address/update-address-form-html');
         },
 
-        editAddressBox: function(ev) {
-            ev.preventDefault();
+        editAddressBox: function(event) {
+            event.preventDefault();
 
             let source = null;
 
@@ -107,16 +104,13 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 source = this.settings.source;
             }
 
-            this.$target = $(ev.currentTarget);
+            this.$target = $(event.currentTarget);
 
             let countryCode = this.$addressForm.find('.sprout-address-country-select select').val();
-            let addressId = this.$addressBox.data('addressId');
 
             this.modal = new Craft.SproutBase.EditAddressModal(this.$addressForm, {
                 onSubmit: $.proxy(this, 'getAddressDisplayHtml'),
                 countryCode: countryCode,
-                actionUrl: this.actionUrl,
-                addressId: addressId,
                 namespace: this.settings.namespace,
                 source: source
             }, this.$target);
@@ -173,23 +167,20 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 showCountryDropdown: showCountryDropdown,
                 namespace: this.settings.namespace
             }, $.proxy(function(response) {
-
                 this.$addressBox.find('.address-format .spinner').remove();
                 self.$addressBox.find('.address-format').empty();
                 self.$addressBox.find('.address-format').append(response.html);
-
             }, this), []);
         },
 
-        clearAddressBox: function(ev) {
-            ev.preventDefault();
+        clearAddressBox: function(event) {
+            event.preventDefault();
 
             const self = this;
 
             this.$addButtons.removeClass('hidden');
             this.$editButtons.addClass('hidden');
             this.$addressFormat.addClass('hidden');
-
             this.$addressForm.find("[name='" + this.settings.namespace + "[delete]']").val(1);
 
             self.addressId = null;
@@ -199,6 +190,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
             this.emptyForm();
             this.getAddressFormFields();
         },
+
         emptyForm: function() {
 
             const formKeys = [
@@ -218,9 +210,10 @@ if (typeof Craft.SproutBase === typeof undefined) {
                 self.$addressBox.find("[name='" + self.settings.namespace + "[" + el + "]']").attr('value', '')
             });
         },
-        queryAddressCoordinatesFromGoogleMaps: function(ev) {
 
-            ev.preventDefault();
+        queryAddressCoordinatesFromGoogleMaps: function(event) {
+
+            event.preventDefault();
 
             const self = this;
             const spanValues = [];
