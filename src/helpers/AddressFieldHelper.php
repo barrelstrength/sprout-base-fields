@@ -215,10 +215,9 @@ class AddressFieldHelper
      * @param ElementInterface|null $element
      *
      * @return array|AddressModel|int|mixed|string
-     * @throws StaleObjectException
      * @throws Throwable
      */
-    public function normalizeValue($addressField, $value, ElementInterface $element = null)
+    public function normalizeValue(FieldInterface $addressField, $value, ElementInterface $element = null)
     {
         if (!$element instanceof Element) {
             return null;
@@ -226,15 +225,8 @@ class AddressFieldHelper
 
         $address = SproutBaseFields::$app->addressField->getAddressFromElement($element, $addressField->id);
 
-        // Add the address field array from the POST data to the Address Modeladdress
+        // Add the address field array from the POST data to the Address Model address
         if (is_array($value)) {
-
-            $clearAddress = (int)$value['delete'];
-            $addressId = $value['id'] ?? null;
-
-            if ($clearAddress) {
-                return $this->handleClearAddress($addressId);
-            }
 
             if ($address instanceof AddressModel) {
                 $address->id = $value['id'] ?? null;
@@ -247,12 +239,18 @@ class AddressFieldHelper
             $address->fieldId = $addressField->id;
             $address->countryCode = $value['countryCode'];
             $address->administrativeAreaCode = $value['administrativeAreaCode'] ?? null;
-            $address->locality = $value['locality'] ?? null;;
-            $address->dependentLocality = $value['dependentLocality'] ?? null;;
-            $address->postalCode = $value['postalCode'] ?? null;;
-            $address->sortingCode = $value['sortingCode'] ?? null;;
-            $address->address1 = $value['address1'];
-            $address->address2 = $value['address2'] ?? null;;
+            $address->locality = $value['locality'] ?? null;
+            $address->dependentLocality = $value['dependentLocality'] ?? null;
+            $address->postalCode = $value['postalCode'] ?? null;
+            $address->sortingCode = $value['sortingCode'] ?? null;
+            $address->address1 = $value['address1'] ?? null;
+            $address->address2 = $value['address2'] ?? null;
+
+            // Mark this address for deletion. This is processed in the saveAddress method
+            $deleteAddress = (bool)$value['delete'];
+
+            /** @var AddressFieldTrait $addressField */
+            $addressField->setClearAddress($deleteAddress);
         }
 
         return $address;
@@ -297,9 +295,9 @@ class AddressFieldHelper
     }
 
     /**
-     * @param FieldInterface   $field
-     * @param ElementInterface $element
-     * @param bool             $isNew
+     * @param FieldInterface|AddressFieldTrait $field
+     * @param ElementInterface                 $element
+     * @param bool                             $isNew
      *
      * @throws Throwable
      */
@@ -308,6 +306,15 @@ class AddressFieldHelper
         $address = $element->getFieldValue($field->handle);
 
         if (!$address instanceof AddressModel) {
+            return;
+        }
+
+        // If the user cleared the address, delete it if it exists and don't save anything
+        if ($field->getClearAddress()) {
+            if ($address->id) {
+                SproutBaseFields::$app->addressField->deleteAddressById($address->id);
+            }
+
             return;
         }
 
@@ -324,6 +331,14 @@ class AddressFieldHelper
         }
     }
 
+    /**
+     * @param FieldInterface   $field
+     * @param ElementInterface $source
+     * @param ElementInterface $target
+     * @param bool             $isNew
+     *
+     * @throws Throwable
+     */
     public function duplicateAddress(FieldInterface $field, ElementInterface $source, ElementInterface $target, bool $isNew)
     {
         /** @var AddressModel $address */
@@ -341,23 +356,5 @@ class AddressFieldHelper
             $transaction->rollBack();
             throw $e;
         }
-    }
-
-    /**
-     * 1. If we have an addressId, we want to delete the cleared address
-     * 2. If we don't have an addressId, we just want to make sure the Address Model is null
-     *
-     * @param $addressId
-     *
-     * @return null
-     * @throws StaleObjectException
-     * @throws Throwable
-     */
-    public function handleClearAddress($addressId) {
-        if ($addressId) {
-            SproutBaseFields::$app->addressField->deleteAddressById($addressId);
-        }
-
-        return null;
     }
 }

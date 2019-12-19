@@ -55,4 +55,25 @@ trait AddressFieldTrait
      * @var array
      */
     public $highlightCountries = [];
+
+    /**
+     * Indicate if this Address should be removed from the database when saved.
+     *
+     * @var bool
+     */
+    protected $clearAddress = false;
+
+    /**
+     * @param bool $delete
+     */
+    public function setClearAddress(bool $delete) {
+        $this->clearAddress = $delete;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getClearAddress(): bool {
+        return $this->clearAddress;
+    }
 }

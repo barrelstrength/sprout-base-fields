@@ -40,10 +40,6 @@ class Address extends Component
      */
     public function saveAddress(AddressModel $address, ElementInterface $element, bool $isNew): bool
     {
-        if ($address->getDeleteAddress()) {
-            return $this->deleteAddressById($address->id);
-        }
-
         $record = AddressRecord::findOne([
             'elementId' => $element->id,
             'siteId' => $element->siteId,
