@@ -114,28 +114,8 @@ class AddressController extends Controller
 
         $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
 
-        if ($addressId == null) {
-            $addressDisplayHtml = '';
-        }
-
-        $countryCode = $addressModel->countryCode;
-
-        $namespace = Craft::$app->getRequest()->getBodyParam('namespace') ?? 'address';
-
-        $addressFormatter->setNamespace($namespace);
-        $addressFormatter->setCountryCode($countryCode);
-        $addressFormatter->setAddressModel($addressModel);
-
-        $showCountryDropdown = Craft::$app->getRequest()->getBodyParam('showCountryDropdown') !== null;
-
-        $countryCodeHtml = $addressFormatter->getCountryInputHtml($showCountryDropdown);
-        $addressFormHtml = $addressFormatter->getAddressFormHtml();
-
         return $this->asJson([
-            'html' => $addressDisplayHtml,
-            'countryCodeHtml' => $countryCodeHtml,
-            'addressFormHtml' => $addressFormHtml,
-            'countryCode' => $countryCode
+            'html' => $addressDisplayHtml
         ]);
     }
 
