@@ -144,12 +144,14 @@ class AddressFieldHelper
             $addressModel->countryCode = $defaultCountryCode;
             $addressModel->fieldId = $field->id;
         }
-        $countryCode = $addressModel->countryCode ?? $defaultCountryCode;
+
+        // Override the Default Country Code with the current country code if it exists
+        $defaultCountryCode = $addressModel->countryCode ?? $defaultCountryCode;
 
         $addressFormatter = SproutBaseFields::$app->addressFormatter;
         $addressFormatter->setNamespace($name);
         $addressFormatter->setLanguage($defaultLanguage);
-        $addressFormatter->setCountryCode($countryCode);
+        $addressFormatter->setCountryCode($defaultCountryCode);
         $addressFormatter->setAddressModel($addressModel);
 
         if (count($field->highlightCountries)) {
