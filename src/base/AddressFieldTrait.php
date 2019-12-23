@@ -57,23 +57,23 @@ trait AddressFieldTrait
     public $highlightCountries = [];
 
     /**
-     * Indicate if this Address should be removed from the database when saved.
+     * This will be populated with the addressId if it should be removed from the database
      *
-     * @var bool
+     * @var int
      */
-    protected $clearAddress = false;
+    protected $_deletedAddressId;
 
     /**
-     * @param bool $delete
+     * @param int $addressId
      */
-    public function setClearAddress(bool $delete) {
-        $this->clearAddress = $delete;
+    public function setDeletedAddressId($addressId) {
+        $this->_deletedAddressId = $addressId;
     }
 
     /**
-     * @return bool
+     * @return int|null
      */
-    public function getClearAddress(): bool {
-        return $this->clearAddress;
+    public function getDeletedAddressId() {
+        return $this->_deletedAddressId;
     }
 }

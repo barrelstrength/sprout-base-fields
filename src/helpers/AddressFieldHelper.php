@@ -215,20 +215,33 @@ class AddressFieldHelper
     /**
      * Prepare our Address for use as an AddressModel
      *
-     * @param                       $addressField
+     * @param FieldInterface        $addressField
      * @param                       $value
      * @param ElementInterface|null $element
      *
-     * @return array|AddressModel|int|mixed|string
-     * @throws Throwable
+     * @return AddressModel|null
      */
     public function normalizeValue(FieldInterface $addressField, $value, ElementInterface $element = null)
     {
-        if (!$element instanceof Element) {
+        if ($value instanceof AddressModel) {
+            return $value;
+        }
+
+        if (!$element instanceof ElementInterface) {
             return null;
         }
 
+        // Mark this address for deletion. This is processed in the saveAddress method
+        $deleteAddress = (int)$value['delete'];
+
         $address = SproutBaseFields::$app->addressField->getAddressFromElement($element, $addressField->id);
+
+        /** @var AddressFieldTrait $addressField */
+        if ($deleteAddress) {
+            // Use the ID from the Address found in the database because the posted Address ID may not
+            // match the current Address ID if we're duplicating an Element
+            $addressField->setDeletedAddressId($address->id ?? null);
+        }
 
         // Add the address field array from the POST data to the Address Model address
         if (is_array($value)) {
@@ -250,12 +263,6 @@ class AddressFieldHelper
             $address->sortingCode = $value['sortingCode'] ?? null;
             $address->address1 = $value['address1'] ?? null;
             $address->address2 = $value['address2'] ?? null;
-
-            // Mark this address for deletion. This is processed in the saveAddress method
-            $deleteAddress = (bool)$value['delete'];
-
-            /** @var AddressFieldTrait $addressField */
-            $addressField->setClearAddress($deleteAddress);
         }
 
         return $address;
@@ -308,22 +315,28 @@ class AddressFieldHelper
      */
     public function afterElementPropagate(FieldInterface $field, ElementInterface $element, bool $isNew)
     {
+        /** @var Element $element */
         $address = $element->getFieldValue($field->handle);
 
+        // If we don't have an address model, delete the old address associated with this field
         if (!$address instanceof AddressModel) {
+            Craft::$app->db->createCommand()
+                ->delete('{{%sproutfields_addresses}}', [
+                    'elementId' => $element->id,
+                    'siteId' => $element->siteId,
+                    'fieldId' => $field->id
+                ])
+                ->execute();
+
             return;
         }
 
         // If the user cleared the address, delete it if it exists and don't save anything
-        if ($field->getClearAddress()) {
-            if ($address->id) {
-                SproutBaseFields::$app->addressField->deleteAddressById($address->id);
-            }
-
+        if ($deletedAddressId = $field->getDeletedAddressId()) {
+            SproutBaseFields::$app->addressField->deleteAddressById($deletedAddressId);
             return;
         }
 
-        /** @var Element $element */
         if ($element->duplicateOf !== null) {
             $this->duplicateAddress($field, $element->duplicateOf, $element, $isNew);
         } else {
