@@ -1,6 +1,9 @@
 {% import "_includes/forms" as forms %}
 {% set name = (namespaceInputName is not defined) ? 'address' : namespaceInputName %}
 {% set addressBox = (namespaceInputId is not defined) ? 'sproutaddressinfo-box' : 'sproutaddressinfo-box-' ~ namespaceInputId %}
+{% set showAddressOnInitialLoad = addressId is defined and addressId ? true : showAddressOnInitialLoad ?? false %}
+{% set formFieldHtmlActionUrl = formFieldHtmlActionUrl ?? null %}
+{% set addressJson = addressJson ?? null %}
 
 {% set addressInput %}
     <div class="{{ addressBox }}"
@@ -14,6 +17,18 @@
 
         {% if showCountryDropdown is defined and showCountryDropdown %}
             data-show-country-dropdown='{{ showCountryDropdown }}'
+        {% endif %}
+
+        {% if showAddressOnInitialLoad %}
+            data-show-address-on-initial-load='{{ showAddressOnInitialLoad }}'
+        {% endif %}
+
+        {% if formFieldHtmlActionUrl %}
+            data-form-field-html-action-url='{{ formFieldHtmlActionUrl }}'
+        {% endif %}
+
+        {% if addressJson %}
+            data-address-json='{{ addressJson }}'
         {% endif %}
     >
         <div class='address-add-button hidden'>
