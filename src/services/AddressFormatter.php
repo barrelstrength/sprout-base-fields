@@ -140,11 +140,13 @@ class AddressFormatter
     }
 
     /**
-     * @return mixed
+     * Always return an Address Model
+     *
+     * @return AddressModel
      */
-    public function getAddressModel()
+    public function getAddressModel(): AddressModel
     {
-        return $this->addressModel;
+        return $this->addressModel ?? new AddressModel();
     }
 
     /**
@@ -152,7 +154,7 @@ class AddressFormatter
      */
     public function setAddressModel(AddressModel $addressModel = null)
     {
-        $this->addressModel = $addressModel ?? new AddressModel();
+        $this->addressModel = $addressModel ?? null;
     }
 
     /**
@@ -211,11 +213,11 @@ class AddressFormatter
             ->withAddressLine1($model->address1)
             ->withAddressLine2($model->address2);
 
-        if ($model->dependentLocality != null) {
+        if ($model->dependentLocality !== null) {
             $address->withDependentLocality($model->dependentLocality);
         }
 
-        return $formatter->format($address);
+        return $formatter->format($address) ?? '';
     }
 
     /**
@@ -300,7 +302,7 @@ class AddressFormatter
             'class' => 'sprout-address-field-id',
             'name' => $this->namespace,
             'inputName' => 'fieldId',
-            'value' => $this->addressModel->fieldId
+            'value' => $this->getAddressModel()->fieldId
         ]);
 
         $addressLayout .= Craft::$app->view->renderTemplate(
@@ -308,7 +310,7 @@ class AddressFormatter
             'class' => 'sprout-address-id',
             'name' => $this->namespace,
             'inputName' => 'id',
-            'value' => $this->addressModel->id
+            'value' => $this->getAddressModel()->id
         ]);
 
         return $addressLayout;
@@ -352,7 +354,7 @@ class AddressFormatter
      */
     private function getAddressLineInputHtml($addressName): string
     {
-        $value = $this->addressModel->{$addressName};
+        $value = $this->getAddressModel()->{$addressName};
 
         $label = $this->renderAddressLabel('Address 1');
         $autocomplete = 'address-line1';
@@ -382,7 +384,7 @@ class AddressFormatter
      */
     private function getSortingCodeInputHtml(): string
     {
-        $value = $this->addressModel->sortingCode;
+        $value = $this->getAddressModel()->sortingCode;
 
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
@@ -404,7 +406,7 @@ class AddressFormatter
      */
     private function getLocalityInputHtml(): string
     {
-        $value = $this->addressModel->locality;
+        $value = $this->getAddressModel()->locality;
 
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
@@ -426,7 +428,7 @@ class AddressFormatter
      */
     private function getDependentLocalityInputHtml(): string
     {
-        $value = $this->addressModel->dependentLocality;
+        $value = $this->getAddressModel()->dependentLocality;
 
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
@@ -448,7 +450,7 @@ class AddressFormatter
      */
     private function getAdministrativeAreaInputHtml(): string
     {
-        $value = $this->addressModel->administrativeAreaCode;
+        $value = $this->getAddressModel()->administrativeAreaCode;
 
         $states = $this->subdivisionRepository->getList([$this->countryCode], $this->language);
 
@@ -486,7 +488,7 @@ class AddressFormatter
      */
     public function getPostalCodeInputHtml(): string
     {
-        $value = $this->addressModel->postalCode;
+        $value = $this->getAddressModel()->postalCode;
 
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
