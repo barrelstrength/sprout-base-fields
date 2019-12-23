@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutbasefields\controllers;
 
-use barrelstrength\sproutbasefields\services\AddressFormatter;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
@@ -20,7 +19,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Exception;
-use yii\base\InvalidConfigException;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -100,16 +98,15 @@ class AddressController extends Controller
         $this->requirePostRequest();
 
         $addressFormatter = SproutBaseFields::$app->addressFormatter;
-        $addressId = null;
 
-        $addressModel = new AddressModel();
+        $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
+//        $defaultCountryCode = Craft::$app->getRequest()->getBodyParam('defaultCountryCode');
 
-        if (Craft::$app->getRequest()->getBodyParam('addressId') != null) {
-            $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
+        // Integrations like Sprout SEO will not have an address ID
+        if ($addressId) {
             $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressId);
-        } elseif (Craft::$app->getRequest()->getBodyParam('defaultCountryCode') != null) {
-            $defaultCountryCode = Craft::$app->getRequest()->getBodyParam('defaultCountryCode');
-            $addressModel->countryCode = $defaultCountryCode;
+        } else {
+            $addressModel = new AddressModel();
         }
 
         $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
