@@ -100,7 +100,8 @@ class AddressController extends Controller
         $addressFormatter = SproutBaseFields::$app->addressFormatter;
 
         $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
-//        $defaultCountryCode = Craft::$app->getRequest()->getBodyParam('defaultCountryCode');
+        $fieldId = Craft::$app->getRequest()->getBodyParam('fieldId');
+        $defaultCountryCode = Craft::$app->getRequest()->getBodyParam('defaultCountryCode');
 
         // Integrations like Sprout SEO will not have an address ID
         if ($addressId) {
@@ -109,6 +110,8 @@ class AddressController extends Controller
             $addressModel = new AddressModel();
         }
 
+        $addressModel->countryCode = $defaultCountryCode;
+        $addressModel->fieldId = $fieldId;
         $addressDisplayHtml = $addressFormatter->getAddressDisplayHtml($addressModel);
 
         return $this->asJson([

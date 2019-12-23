@@ -11,6 +11,10 @@
             data-address-id='{{ addressId }}'
         {% endif %}
 
+        {% if fieldId is defined and fieldId %}
+            data-field-id='{{ fieldId }}'
+        {% endif %}
+
         {% if defaultCountryCode is defined and defaultCountryCode %}
             data-default-country-code='{{ defaultCountryCode }}'
         {% endif %}

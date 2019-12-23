@@ -139,6 +139,11 @@ class AddressFieldHelper
 
         $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $field->id);
 
+        if (!$addressModel) {
+            $addressModel = new AddressModel();
+            $addressModel->countryCode = $defaultCountryCode;
+            $addressModel->fieldId = $field->id;
+        }
         $countryCode = $addressModel->countryCode ?? $defaultCountryCode;
 
         $addressFormatter = SproutBaseFields::$app->addressFormatter;
@@ -160,7 +165,7 @@ class AddressFieldHelper
                 'namespaceInputId' => $namespaceInputId,
                 'namespaceInputName' => $namespaceInputName,
                 'field' => $field,
-                'fieldId' => $addressModel->fieldId ?? null,
+                'fieldId' => $addressModel->fieldId ?? $field->id ?? null,
                 'addressId' => $addressId,
                 'defaultCountryCode' => $defaultCountryCode,
                 'addressDisplayHtml' => Template::raw($addressDisplayHtml),
@@ -346,6 +351,7 @@ class AddressFieldHelper
 
         /** Element $target */
         $transaction = Craft::$app->getDb()->beginTransaction();
+
         try {
             $newAddress = $address;
             $newAddress->id = null;
