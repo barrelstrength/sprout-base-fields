@@ -178,7 +178,7 @@ class Address extends Component
             ]);
 
         if ($element->id) {
-            $query->where(['elementId' => $element->id]);
+            $query->andWhere(['elementId' => $element->id]);
         }
 
         $result = $query->one();
