@@ -9,6 +9,7 @@ namespace barrelstrength\sproutbasefields\helpers;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
 use barrelstrength\sproutfields\fields\Address;
+use barrelstrength\sproutforms\base\FormField;
 use barrelstrength\sproutforms\fields\formfields\Address as AddressFormField;
 use barrelstrength\sproutfields\fields\Address as AddressField;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
@@ -309,73 +310,29 @@ class AddressFieldHelper
     }
 
     /**
-     * @param FieldInterface|AddressFieldTrait $field
-     * @param ElementInterface                 $element
-     * @param bool                             $isNew
+     * @param FieldInterface   $field
+     * @param ElementInterface $element
+     * @param bool             $isNew
      *
+     * @throws StaleObjectException
      * @throws Throwable
+     * @throws \yii\db\Exception
      */
-    public function afterElementPropagate(FieldInterface $field, ElementInterface $element, bool $isNew)
+    public function afterElementSave(FieldInterface $field, ElementInterface $element, bool $isNew)
     {
+        $addressService = SproutBaseFields::$app->addressField;
+
         /** @var Element $element */
-        $address = $element->getFieldValue($field->handle);
-
-        // If we don't have an address model, delete the old address associated with this field
-        if (!$address instanceof AddressModel) {
-            Craft::$app->db->createCommand()
-                ->delete('{{%sproutfields_addresses}}', [
-                    'elementId' => $element->id,
-                    'siteId' => $element->siteId,
-                    'fieldId' => $field->id
-                ])
-                ->execute();
-
-            return;
-        }
-
-        // If the user cleared the address, delete it if it exists and don't save anything
-        if ($deletedAddressId = $field->getDeletedAddressId()) {
-            SproutBaseFields::$app->addressField->deleteAddressById($deletedAddressId);
-            return;
-        }
-
+        /** @var Field|FormField $field */
         if ($element->duplicateOf !== null) {
-            $this->duplicateAddress($field, $element->duplicateOf, $element, $isNew);
+            $addressService->duplicateAddress($field, $element->duplicateOf, $element, $isNew);
         } else {
-            SproutBaseFields::$app->addressField->saveAddress($address, $element, $isNew);
+            $addressService->saveAddress($field, $element, $isNew);
         }
 
         // Reset the field value if this is a new element
         if ($element->duplicateOf || $isNew) {
             $element->setFieldValue($field->handle, null);
-        }
-    }
-
-    /**
-     * @param FieldInterface   $field
-     * @param ElementInterface $source
-     * @param ElementInterface $target
-     * @param bool             $isNew
-     *
-     * @throws Throwable
-     */
-    public function duplicateAddress(FieldInterface $field, ElementInterface $source, ElementInterface $target, bool $isNew)
-    {
-        /** @var AddressModel $address */
-        $address = $source->getFieldValue($field->handle);
-
-        /** Element $target */
-        $transaction = Craft::$app->getDb()->beginTransaction();
-
-        try {
-            $newAddress = $address;
-            $newAddress->id = null;
-            SproutBaseFields::$app->addressField->saveAddress($newAddress, $target, $isNew);
-
-            $transaction->commit();
-        } catch (\Throwable $e) {
-            $transaction->rollBack();
-            throw $e;
         }
     }
 }
