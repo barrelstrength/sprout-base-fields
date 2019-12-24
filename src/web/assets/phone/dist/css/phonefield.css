@@ -26,19 +26,31 @@
 }
 
 .sprout-phone-field.compoundSelectText-wrapper {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
 }
 
 .sprout-phone-field .compoundSelectText-text {
-  flex-grow: 1;
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
   margin-left: 10px;
 }
 
 @media (max-width: 600px) {
   .sprout-phone-field.compoundSelectText-wrapper {
-    flex-direction: column;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
   }
 
   .sprout-phone-field .compoundSelectText-dropdown .select,
@@ -47,7 +59,9 @@
   }
 
   .sprout-phone-field .compoundSelectText-text {
-    flex-grow: 1;
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
     margin-left: 0;
     margin-top: 10px;
   }
