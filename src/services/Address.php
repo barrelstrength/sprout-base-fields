@@ -72,7 +72,7 @@ class Address extends Component
 
         // If the user cleared the address, delete it if it exists and don't save anything
         if ($deletedAddressId = $field->getDeletedAddressId()) {
-            SproutBaseFields::$app->addressField->deleteAddressById($deletedAddressId);
+            $this->deleteAddressById($deletedAddressId);
             return true;
         }
 
@@ -141,7 +141,7 @@ class Address extends Component
         $transaction = Craft::$app->getDb()->beginTransaction();
 
         try {
-            SproutBaseFields::$app->addressField->saveAddress($field, $target, $isNew);
+            $this->saveAddress($field, $target, $isNew);
 
             $transaction->commit();
         } catch (Throwable $e) {
@@ -376,7 +376,7 @@ class Address extends Component
             $addressId = $value['id'];
         }
 
-        $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $field->id);
+        $addressModel = $this->getAddressFromElement($element, $field->id);
 
         if (!$addressModel) {
             $addressModel = new AddressModel();
@@ -428,7 +428,7 @@ class Address extends Component
         /** @var $this Field */
         $name = $field->handle;
 
-        $addressModel = SproutBaseFields::$app->addressField->getAddressFromElement($element, $field->id);
+        $addressModel = $this->getAddressFromElement($element, $field->id);
 
         /** @var $this Field */
         $settings = $field->getSettings();
@@ -475,7 +475,7 @@ class Address extends Component
         // Mark this address for deletion. This is processed in the saveAddress method
         $deleteAddress = (int)$value['delete'];
 
-        $address = SproutBaseFields::$app->addressField->getAddressFromElement($element, $addressField->id);
+        $address = $this->getAddressFromElement($element, $addressField->id);
 
         /** @var AddressFieldTrait $addressField */
         if ($deleteAddress) {
@@ -558,14 +558,12 @@ class Address extends Component
      */
     public function afterElementSave(FieldInterface $field, ElementInterface $element, bool $isNew)
     {
-        $addressService = SproutBaseFields::$app->addressField;
-
         /** @var Element $element */
         /** @var Field|FormField $field */
         if ($element->duplicateOf !== null) {
-            $addressService->duplicateAddress($field, $element->duplicateOf, $element, $isNew);
+            $this->duplicateAddress($field, $element->duplicateOf, $element, $isNew);
         } else {
-            $addressService->saveAddress($field, $element, $isNew);
+            $this->saveAddress($field, $element, $isNew);
         }
 
         // Reset the field value if this is a new element
