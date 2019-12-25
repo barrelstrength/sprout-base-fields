@@ -7,8 +7,6 @@
 
 namespace barrelstrength\sproutbasefields\base;
 
-use barrelstrength\sproutbasefields\helpers\AddressFieldHelper;
-
 /**
  * Trait AddressFieldTrait
  *
@@ -18,19 +16,6 @@ use barrelstrength\sproutbasefields\helpers\AddressFieldHelper;
  */
 trait AddressFieldTrait
 {
-    /**
-     * Shared methods for managing Field Types between Sprout Forms and Sprout Fields
-     *
-     * @var AddressFieldHelper $addressFieldHelper
-     */
-    protected $addressFieldHelper;
-
-    /**
-     * @deprecated  Remove in Sprout Forms v4.x and Sprout Fields 4.x.
-     * Removed in Sprout Forms v3.6.6 and Sprout Fields v3.4.4 and remains to assist in migrations.
-     */
-    public $addressHelper;
-
     /**
      * @var string
      */
@@ -55,6 +40,12 @@ trait AddressFieldTrait
      * @var array
      */
     public $highlightCountries = [];
+
+    /**
+     * @deprecated  Remove in Sprout Forms v4.x and Sprout Fields 4.x.
+     * Removed in Sprout Forms v3.6.6 and Sprout Fields v3.4.4 and remains to assist in migrations.
+     */
+    public $addressHelper;
 
     /**
      * This will be populated with the addressId if it should be removed from the database
