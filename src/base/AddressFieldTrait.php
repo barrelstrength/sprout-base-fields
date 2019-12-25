@@ -57,14 +57,16 @@ trait AddressFieldTrait
     /**
      * @param int $addressId
      */
-    public function setDeletedAddressId($addressId) {
+    public function setDeletedAddressId($addressId)
+    {
         $this->_deletedAddressId = $addressId;
     }
 
     /**
      * @return int|null
      */
-    public function getDeletedAddressId() {
+    public function getDeletedAddressId()
+    {
         return $this->_deletedAddressId;
     }
 }

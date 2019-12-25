@@ -23,7 +23,7 @@
                     {%- set optionValue = key -%}
 
                     <option value="{{ optionValue }}"
-                            {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                        {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
                 {% endfor %}
                 <option disabled>--</option>
             {% endif %}
@@ -34,7 +34,7 @@
                 {%- set optionValue = key -%}
 
                 <option value="{{ optionValue }}"
-                        {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
+                    {% if optionValue == value %}selected{% endif %}>{{ optionLabel }}</option>
             {% endfor %}
         </select>
         </div>
