@@ -178,66 +178,6 @@ class AddressController extends Controller
     }
 
     /**
-     * Delete an address
-     *
-     * @return Response
-     * @throws BadRequestHttpException
-     */
-    public function actionDeleteAddress(): Response
-    {
-        $this->requireAcceptsJson();
-        $this->requirePostRequest();
-
-        $addressId = null;
-        $addressModel = null;
-
-        if (Craft::$app->getRequest()->getBodyParam('addressId') != null) {
-            $addressId = Craft::$app->getRequest()->getBodyParam('addressId');
-            $addressModel = SproutBaseFields::$app->addressField->getAddressById($addressId);
-        }
-
-        $result = [
-            'result' => true,
-            'errors' => []
-        ];
-
-        try {
-            $response = false;
-
-            if ($addressModel->id !== null && $addressModel->id) {
-                $addressRecord = new AddressRecord();
-                $response = $addressRecord->deleteByPk($addressModel->id);
-            }
-
-            $globals = (new Query())
-                ->select('*')
-                ->from(['{{%sproutseo_globals}}'])
-                ->one();
-
-            if ($globals && $response) {
-                $identity = $globals['identity'];
-                $identity = Json::decode($identity);
-
-                if ($identity['addressId'] != null) {
-                    $identity['addressId'] = '';
-                    $globals['identity'] = Json::encode($identity);
-
-                    Craft::$app->db->createCommand()->update('{{%sproutseo_globals}}',
-                        $globals,
-                        'id=:id',
-                        [':id' => 1]
-                    )->execute();
-                }
-            }
-        } catch (Exception $e) {
-            $result['result'] = false;
-            $result['errors'] = $e->getMessage();
-        }
-
-        return $this->asJson($result);
-    }
-
-    /**
      * Returns the Geo Coordinates for an Address via the Google Maps service
      *
      * @return Response
