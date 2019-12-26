@@ -73,20 +73,14 @@ class Email extends Component
             ]);
     }
 
-    public function validateEmail($value, FieldInterface $field, ElementInterface $element)
+    public function validate($value, FieldInterface $field, ElementInterface $element)
     {
         /** @var Field $field */
         $customPattern = $field->customPattern;
         $checkPattern = $field->customPatternToggle;
 
         if (!$this->validateEmailAddress($value, $customPattern, $checkPattern)) {
-            $message = Craft::t('sprout-base-fields', $field->name.' must be a valid email.');
-
-            if ($field->customPatternToggle && $field->customPatternErrorMessage) {
-                $message = Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
-            }
-
-            $element->addError($field->handle, $message);
+            $element->addError($field->handle, $this->getErrorMessage($field));
         }
 
         $uniqueEmail = $field->uniqueEmail;
@@ -96,34 +90,6 @@ class Email extends Component
             $element->addError($field->handle, $message);
         }
     }
-    /**
-     * Handles validation of an email address as user edits email in the UI
-     *
-     * @param string           $value
-     * @param int              $elementId
-     * @param Field|EmailField $field
-     *
-     * @return bool
-     */
-//    public function validate($value, Field $field, $elementId): bool
-//    {
-//        $customPattern = $field->customPattern;
-//        $checkPattern = $field->customPatternToggle;
-//
-//        if (!$this->validateEmailAddress($value, $customPattern, $checkPattern)) {
-//            return false;
-//        }
-//
-//        if ($elementId) {
-//            $element = Craft::$app->elements->getElementById($elementId);
-//
-//            if ($field->uniqueEmail && !$this->validateUniqueEmailAddress($value, $element, $field)) {
-//                return false;
-//            }
-//        }
-//
-//        return true;
-//    }
 
     /**
      * Validates an email address or email custom pattern
@@ -184,4 +150,19 @@ class Email extends Component
 
         return true;
     }
+
+    /**
+     * @param FieldInterface $field
+     *
+     * @return string
+     */
+    public function getErrorMessage(FieldInterface $field): string
+    {
+        /** @var Field $field */
+        if ($field->customPatternToggle && $field->customPatternErrorMessage) {
+            return Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
+        }
+
+        return Craft::t('sprout-base-fields', $field->name.' must be a valid email.');;
+}
 }

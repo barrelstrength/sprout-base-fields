@@ -7,8 +7,6 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
-use barrelstrength\sproutbasefields\SproutBaseFields;
-use barrelstrength\sproutfields\fields\Url as UrlField;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use yii\base\Component;
@@ -28,7 +26,7 @@ class Url extends Component
      *
      * @return bool|void
      */
-    public function validateUrl($value, Field $field, ElementInterface $element)
+    public function validate($value, Field $field, ElementInterface $element)
     {
         $customPattern = $field->customPattern;
         $checkPattern = $field->customPatternToggle;
@@ -50,25 +48,21 @@ class Url extends Component
             return;
         }
 
-        $message = Craft::t('sprout-base-fields', $field->name.' must be a valid URL.');
-
-        if ($field->customPatternToggle && $field->customPatternErrorMessage) {
-            $message = Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
-        }
-
-        $element->addError($field->handle, $message);
+        $element->addError($field->handle, $this->getErrorMessage($field));
     }
 
     /**
-     * Return error message
-     *
-     * @param $fieldName
-     * @param $field
+     * @param Field $field
      *
      * @return string
      */
-    public function getErrorMessage($fieldName, $field): string
+    public function getErrorMessage(Field $field): string
     {
+        /** @var Field $field */
+        if ($field->customPatternToggle && $field->customPatternErrorMessage) {
+            return Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
+        }
 
+        return Craft::t('sprout-base-fields', $field->name.' must be a valid URL.');
     }
 }

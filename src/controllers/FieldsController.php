@@ -43,7 +43,7 @@ class FieldsController extends BaseController
             $element = new Element();
         }
 
-        SproutBaseFields::$app->emailField->validateEmail($value, $field, $element);
+        SproutBaseFields::$app->emailField->validate($value, $field, $element);
 
         if ($element->hasErrors()) {
             return $this->asJson(['success' => false]);
@@ -75,7 +75,7 @@ class FieldsController extends BaseController
             $element = new Element();
         }
 
-        SproutBaseFields::$app->urlField->validateUrl($value, $field, $element);
+        SproutBaseFields::$app->urlField->validate($value, $field, $element);
 
         if ($element->hasErrors()) {
             return $this->asJson(['success' => false]);
