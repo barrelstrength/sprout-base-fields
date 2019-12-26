@@ -8,25 +8,24 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
+use barrelstrength\sproutbasefields\helpers\CountryRepositoryHelper;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
 use barrelstrength\sproutbasefields\events\OnSaveAddressEvent;
+use barrelstrength\sproutbasefields\services\Address as AddressService;
 use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\FormField;
+use CommerceGuys\Addressing\Country\CountryRepository;
 use Craft;
 use craft\base\Component;
-
 use craft\base\Element;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\db\Query;
 use craft\errors\SiteNotFoundException;
-use craft\helpers\ArrayHelper;
-use craft\helpers\ElementHelper;
-use craft\models\Site;
+use craft\helpers\Template;
 use Exception;
-use InvalidArgumentException;
 use Throwable;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -129,13 +128,12 @@ class Address extends Component
 
     /**
      * @param FieldInterface   $field
-     * @param ElementInterface $source
      * @param ElementInterface $target
      * @param bool             $isNew
      *
      * @throws Throwable
      */
-    public function duplicateAddress(FieldInterface $field, ElementInterface $source, ElementInterface $target, bool $isNew)
+    public function duplicateAddress(FieldInterface $field, ElementInterface $target, bool $isNew)
     {
         /** Element $target */
         $transaction = Craft::$app->getDb()->beginTransaction();
@@ -280,7 +278,7 @@ class Address extends Component
     }
 
     /**
-     * @param FieldInterface $field
+     * @param FieldInterface|AddressFieldTrait $field
      *
      * @return string
      * @throws LoaderError
@@ -376,7 +374,11 @@ class Address extends Component
             $addressId = $value['id'];
         }
 
-        $addressModel = $this->getAddressFromElement($element, $field->id);
+        $addressModel = null;
+
+        if ($element) {
+            $addressModel = $this->getAddressFromElement($element, $field->id);
+        }
 
         if (!$addressModel) {
             $addressModel = new AddressModel();
@@ -417,6 +419,13 @@ class Address extends Component
         );
     }
 
+    /**
+     * @param Field|AddressFieldTrait $field
+     * @param                         $value
+     * @param ElementInterface|null   $element
+     *
+     * @return string
+     */
     public function getStaticHtml(Field $field, $value, ElementInterface $element = null): string
     {
         $noAddressHtml = '<p class="light">'.Craft::t('sprout-base-fields', 'No address saved.').'</p>';
@@ -428,7 +437,11 @@ class Address extends Component
         /** @var $this Field */
         $name = $field->handle;
 
-        $addressModel = $this->getAddressFromElement($element, $field->id);
+        $addressModel = null;
+
+        if ($element) {
+            $addressModel = $this->getAddressFromElement($element, $field->id);
+        }
 
         /** @var $this Field */
         $settings = $field->getSettings();
@@ -456,14 +469,16 @@ class Address extends Component
     /**
      * Prepare our Address for use as an AddressModel
      *
-     * @param FieldInterface        $addressField
+     * @param FieldInterface        $field
      * @param                       $value
      * @param ElementInterface|null $element
      *
      * @return AddressModel|null
      */
-    public function normalizeValue(FieldInterface $addressField, $value, ElementInterface $element = null)
+    public function normalizeValue(FieldInterface $field, $value, ElementInterface $element = null)
     {
+        /** @var Field|AddressFieldTrait $field */
+        /** @var Element $element */
         if ($value instanceof AddressModel) {
             return $value;
         }
@@ -475,13 +490,13 @@ class Address extends Component
         // Mark this address for deletion. This is processed in the saveAddress method
         $deleteAddress = (int)$value['delete'];
 
-        $address = $this->getAddressFromElement($element, $addressField->id);
 
-        /** @var AddressFieldTrait $addressField */
+        $address = $this->getAddressFromElement($element, $field->id);
+
         if ($deleteAddress) {
             // Use the ID from the Address found in the database because the posted Address ID may not
             // match the current Address ID if we're duplicating an Element
-            $addressField->setDeletedAddressId($address->id ?? null);
+            $field->setDeletedAddressId($address->id ?? null);
         }
 
         // Add the address field array from the POST data to the Address Model address
@@ -495,7 +510,7 @@ class Address extends Component
 
             $address->elementId = $element->id;
             $address->siteId = $element->siteId;
-            $address->fieldId = $addressField->id;
+            $address->fieldId = $field->id;
             $address->countryCode = $value['countryCode'];
             $address->administrativeAreaCode = $value['administrativeAreaCode'] ?? null;
             $address->locality = $value['locality'] ?? null;
@@ -507,44 +522,6 @@ class Address extends Component
         }
 
         return $address;
-    }
-
-    /**
-     *
-     * Prepare the field value for the database.
-     *
-     * We store the Address ID in the content column.
-     *
-     * @param mixed                 $value
-     * @param ElementInterface|null $element
-     *
-     * @return array|bool|mixed|null|string
-     */
-    public function serializeValue($value, ElementInterface $element = null)
-    {
-        if (empty($value)) {
-            return false;
-        }
-
-        $addressId = null;
-
-        // When loading a Field Layout with an Address Field
-        if (is_object($value) && get_class($value) == AddressModel::class) {
-            $addressId = $value->id;
-        }
-
-        // For the ResaveElements task $value is the id
-        if (is_int($value)) {
-            $addressId = $value;
-        }
-
-        // When the field is saved by post request the id an attribute on $value
-        if (isset($value['id']) && $value['id']) {
-            $addressId = $value['id'];
-        }
-
-        // Save the addressId in the content table
-        return $addressId;
     }
 
     /**
@@ -561,7 +538,7 @@ class Address extends Component
         /** @var Element $element */
         /** @var Field|FormField $field */
         if ($element->duplicateOf !== null) {
-            $this->duplicateAddress($field, $element->duplicateOf, $element, $isNew);
+            $this->duplicateAddress($field, $element, $isNew);
         } else {
             $this->saveAddress($field, $element, $isNew);
         }

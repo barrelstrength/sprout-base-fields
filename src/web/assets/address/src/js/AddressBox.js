@@ -244,7 +244,7 @@ if (typeof Craft.SproutBase === typeof undefined) {
         if (response.result === true) {
           const latitude = response.geo.latitude;
           const longitude = response.geo.longitude;
-          // @todo - add generic name?
+
           $("input[name='sproutseo[globals][identity][latitude]']").val(latitude);
           $("input[name='sproutseo[globals][identity][longitude]']").val(longitude);
 

@@ -2,10 +2,6 @@
 
 namespace barrelstrength\sproutbasefields\migrations;
 
-use barrelstrength\sproutforms\fields\formfields\Entries;
-use barrelstrength\sproutforms\fields\formfields\Categories;
-use barrelstrength\sproutforms\fields\formfields\FileUpload;
-use barrelstrength\sproutforms\fields\formfields\Tags;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
@@ -21,6 +17,7 @@ class m191218_000000_remove_addressHelper_from_settings extends Migration
      */
     public function safeUp(): bool
     {
+        /** @noinspection ClassConstantCanBeUsedInspection */
         $addressFieldTypes = [
             'barrelstrength\sproutfields\fields\Address',
             'barrelstrength\sproutforms\fields\formfields\Address'

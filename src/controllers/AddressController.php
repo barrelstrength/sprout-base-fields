@@ -7,18 +7,17 @@
 
 namespace barrelstrength\sproutbasefields\controllers;
 
+use barrelstrength\sproutbasefields\base\AddressFieldTrait;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
-use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use barrelstrength\sproutbasefields\SproutBaseFields;
-use craft\db\Query;
 use craft\errors\MissingComponentException;
 use craft\helpers\Json;
 use craft\web\Controller;
 use Craft;
+use Exception;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use yii\base\Exception;
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 
@@ -90,7 +89,7 @@ class AddressController extends Controller
     /**
      * @return Response
      * @throws BadRequestHttpException
-     * @throws \Exception
+     * @throws Exception
      */
     public function actionGetAddressFormFieldsHtml(): Response
     {
@@ -154,12 +153,9 @@ class AddressController extends Controller
 
         $addressFormatter->setNamespace($namespace);
 
-        if ($addressModel->fieldId) {
-            $field = Craft::$app->fields->getFieldById($addressModel->fieldId);
-
-            if (isset($field->highlightCountries) && count($field->highlightCountries)) {
-                $addressFormatter->setHighlightCountries($field->highlightCountries);
-            }
+        /** @var AddressFieldTrait $field */
+        if ($field = Craft::$app->fields->getFieldById($addressModel->fieldId)) {
+            $addressFormatter->setHighlightCountries($field->highlightCountries);
         }
 
         $addressFormatter->setCountryCode($countryCode);
@@ -222,7 +218,7 @@ class AddressController extends Controller
                     ];
                 }
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $result['result'] = false;
             $result['errors'] = $e->getMessage();
         }

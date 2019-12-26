@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
+use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use Craft;
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
 use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
@@ -21,9 +22,9 @@ use Twig\Error\SyntaxError;
 class AddressFormatter
 {
     /**
-     * @var AddressFormatRepository
+     * @var AddressFormat
      */
-    protected $addressFormatRepository;
+    protected $addressFormat;
 
     /**
      * @var SubdivisionRepository
@@ -76,7 +77,7 @@ class AddressFormatter
         $this->language = $language;
     }
 
-    public function setHighlightCountries($highlightCountries)
+    public function setHighlightCountries($highlightCountries = [])
     {
         $highlightCountries = $this->getHighlightCountries($highlightCountries);
 
@@ -90,17 +91,19 @@ class AddressFormatter
      *
      * @return array
      */
-    public function getHighlightCountries($highlightCountries): array
+    public function getHighlightCountries($highlightCountries = []): array
     {
         $countryRepository = new CountryRepository();
         $options = [];
 
         $commonCountries = $highlightCountries;
 
-        if (is_array($commonCountries) && count($commonCountries)) {
-            foreach ($commonCountries as $code) {
-                $options[$code] = $countryRepository->get($code)->getName();
-            }
+        if (!count($commonCountries)) {
+            return $options;
+        }
+
+        foreach ($commonCountries as $code) {
+            $options[$code] = $countryRepository->get($code)->getName();
         }
 
         return $options;
@@ -232,9 +235,9 @@ class AddressFormatter
     {
         $this->subdivisionRepository = new SubdivisionRepository();
         $addressFormatRepository = new AddressFormatRepository();
-        $this->addressFormatRepository = $addressFormatRepository->get($this->countryCode);
+        $this->addressFormat = $addressFormatRepository->get($this->countryCode);
 
-        $addressLayout = $this->addressFormatRepository->getFormat();
+        $addressLayout = $this->addressFormat->getFormat();
 
         // Remove unused attributes
         $addressLayout = preg_replace('/%recipient/', '', $addressLayout);
@@ -259,7 +262,7 @@ class AddressFormatter
         // An exception when building our Form Input Field in the CP
         // Removes a backslash character that is needed for the Address Display Only
         if ($this->countryCode === 'TR') {
-            $addressLayout = preg_replace('`%locality\/`', '%locality', $addressLayout);
+            $addressLayout = preg_replace('`%locality/`', '%locality', $addressLayout);
         }
 
         // A few exceptions when building our Form Input Fields for the CP
@@ -411,7 +414,7 @@ class AddressFormatter
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
                 'fieldClass' => 'sprout-address-onchange-country',
-                'label' => $this->renderAddressLabel($this->addressFormatRepository->getLocalityType()),
+                'label' => $this->renderAddressLabel($this->addressFormat->getLocalityType()),
                 'name' => $this->namespace,
                 'inputName' => 'locality',
                 'autocomplete' => 'address-level2',
@@ -433,7 +436,7 @@ class AddressFormatter
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
                 'fieldClass' => 'sprout-address-onchange-country',
-                'label' => $this->renderAddressLabel($this->addressFormatRepository->getDependentLocalityType()),
+                'label' => $this->renderAddressLabel($this->addressFormat->getDependentLocalityType()),
                 'name' => $this->namespace,
                 'inputName' => 'dependentLocality',
                 'autocomplete' => 'address-level3',
@@ -458,7 +461,7 @@ class AddressFormatter
             return Craft::$app->view->renderTemplate(
                 $this->getBaseAddressFieldPath().'address/_components/select', [
                     'fieldClass' => 'sprout-address-onchange-country',
-                    'label' => $this->renderAddressLabel($this->addressFormatRepository->getAdministrativeAreaType()),
+                    'label' => $this->renderAddressLabel($this->addressFormat->getAdministrativeAreaType()),
                     'name' => $this->namespace,
                     'inputName' => 'administrativeAreaCode',
                     'autocomplete' => 'address-level1',
@@ -471,7 +474,7 @@ class AddressFormatter
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
                 'fieldClass' => 'sprout-address-onchange-country',
-                'label' => $this->renderAddressLabel($this->addressFormatRepository->getAdministrativeAreaType()),
+                'label' => $this->renderAddressLabel($this->addressFormat->getAdministrativeAreaType()),
                 'name' => $this->namespace,
                 'inputName' => 'administrativeAreaCode',
                 'autocomplete' => 'address-level1',
@@ -493,7 +496,7 @@ class AddressFormatter
         return Craft::$app->view->renderTemplate(
             $this->getBaseAddressFieldPath().'address/_components/text', [
                 'fieldClass' => 'sprout-address-onchange-country',
-                'label' => $this->renderAddressLabel($this->addressFormatRepository->getPostalCodeType()),
+                'label' => $this->renderAddressLabel($this->addressFormat->getPostalCodeType()),
                 'name' => $this->namespace,
                 'inputName' => 'postalCode',
                 'autocomplete' => 'postal-code',

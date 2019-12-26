@@ -68,5 +68,8 @@ Shorthand Syntax: {title}',
     'Display multiple fields' => 'Display multiple fields',
     'Display this field in the field layout.' => 'Display this field in the field layout.',
     'Show Field' => 'Show Field',
-    '}' => '}'
+    '}' => '}',
+    'No address saved.' => 'No address saved.',
+    'Address 1 field cannot be blank.' => 'Address 1 field cannot be blank.',
+    'No address added.' => 'No address added.'
 ];

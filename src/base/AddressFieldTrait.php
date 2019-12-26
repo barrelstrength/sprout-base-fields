@@ -7,13 +7,6 @@
 
 namespace barrelstrength\sproutbasefields\base;
 
-/**
- * Trait AddressFieldTrait
- *
- * @package barrelstrength\sproutbasefields\base
- *
- * @property null|string $settingsHtml
- */
 trait AddressFieldTrait
 {
     /**

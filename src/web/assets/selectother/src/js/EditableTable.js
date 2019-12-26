@@ -305,7 +305,7 @@ Craft.SproutSeo.EditableTable.Row = Garnish.Base.extend(
 
       if (ev.data.type === 'number') {
         // Only grab the number at the beginning of the value (if any)
-        const match = ev.currentTarget.value.match(/^\s*(-?[\d\.]*)/);
+        const match = ev.currentTarget.value.match(/^\s*(-?[\d.]*)/);
 
         if (match !== null) {
           safeValue = match[1];

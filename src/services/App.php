@@ -17,19 +17,9 @@ class App extends Component
     public $addressField;
 
     /**
-     * @var Phone
+     * @var AddressFormatter
      */
-    public $phoneField;
-
-    /**
-     * @var Utilities
-     */
-    public $utilities;
-
-    /**
-     * @var Url
-     */
-    public $urlField;
+    public $addressFormatter;
 
     /**
      * @var Email
@@ -42,14 +32,29 @@ class App extends Component
     public $emailDropdownField;
 
     /**
+     * @var Name
+     */
+    public $nameField;
+
+    /**
+     * @var Phone
+     */
+    public $phoneField;
+
+    /**
      * @var RegularExpression
      */
     public $regularExpressionField;
 
     /**
-     * @var AddressFormatter
+     * @var Url
      */
-    public $addressFormatter;
+    public $urlField;
+
+    /**
+     * @var Utilities
+     */
+    public $utilities;
 
     /**
      * @inheritdoc
@@ -61,6 +66,7 @@ class App extends Component
         $this->addressFormatter = new AddressFormatter();
         $this->emailField = new Email();
         $this->emailDropdownField = new EmailDropdown();
+        $this->nameField = new Name();
         $this->phoneField = new Phone();
         $this->regularExpressionField = new RegularExpression();
         $this->urlField = new Url();
