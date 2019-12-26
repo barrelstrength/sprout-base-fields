@@ -26,8 +26,8 @@ SproutEmailField = Garnish.Base.extend({
       };
 
       // Query the controller so the regex validation is all done through PHP.
-      Craft.postActionRequest('sprout-base-fields/fields/email-validate', data, function(response) {
-        if (response) {
+      Craft.postActionRequest('sprout-base-fields/fields/validate-email', data, function(response) {
+        if (response.success) {
           $(sproutEmailButtonClass).addClass('fade');
           $(sproutEmailButtonClass + ' a').attr("href", "mailto:" + data.value);
         } else {

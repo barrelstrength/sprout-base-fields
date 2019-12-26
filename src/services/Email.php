@@ -7,19 +7,95 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutfields\fields\Email as EmailField;
 use Craft;
+use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\FieldInterface;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Component;
 use craft\db\Query;
 use craft\db\Table;
 
 /**
  * Class EmailService
- *
  */
 class Email extends Component
 {
+    /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getSettingsHtml(): string
+    {
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/email/settings',
+            [
+                'field' => $this,
+            ]);
+    }
+
+    /**
+     * @param FieldInterface        $field
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getInputHtml(FieldInterface $field, $value, ElementInterface $element = null): string
+    {
+        /** @var Field $field */
+        $name = $field->handle;
+        $inputId = Craft::$app->getView()->formatInputId($name);
+        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+
+        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($field, $element);
+
+        // Set this to false for Quick Entry Dashboard Widget
+        $elementId = ($element != null) ? $element->id : false;
+
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/email/input',
+            [
+                'namespaceInputId' => $namespaceInputId,
+                'id' => $inputId,
+                'name' => $name,
+                'value' => $value,
+                'elementId' => $elementId,
+                'fieldContext' => $fieldContext,
+                'placeholder' => $field->placeholder
+            ]);
+    }
+
+    public function validateEmail($value, FieldInterface $field, ElementInterface $element)
+    {
+        /** @var Field $field */
+        $customPattern = $field->customPattern;
+        $checkPattern = $field->customPatternToggle;
+
+        if (!$this->validateEmailAddress($value, $customPattern, $checkPattern)) {
+            $message = Craft::t('sprout-base-fields', $field->name.' must be a valid email.');
+
+            if ($field->customPatternToggle && $field->customPatternErrorMessage) {
+                $message = Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
+            }
+
+            $element->addError($field->handle, $message);
+        }
+
+        $uniqueEmail = $field->uniqueEmail;
+
+        if ($uniqueEmail && !SproutBaseFields::$app->emailField->validateUniqueEmailAddress($value, $element, $field)) {
+            $message = Craft::t('sprout-base-fields', $field->name.' must be a unique email.');
+            $element->addError($field->handle, $message);
+        }
+    }
     /**
      * Handles validation of an email address as user edits email in the UI
      *
@@ -29,25 +105,25 @@ class Email extends Component
      *
      * @return bool
      */
-    public function validate($value, Field $field, $elementId): bool
-    {
-        $customPattern = $field->customPattern;
-        $checkPattern = $field->customPatternToggle;
-
-        if (!$this->validateEmailAddress($value, $customPattern, $checkPattern)) {
-            return false;
-        }
-
-        if ($elementId) {
-            $element = Craft::$app->elements->getElementById($elementId);
-
-            if ($field->uniqueEmail && !$this->validateUniqueEmailAddress($value, $element, $field)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
+//    public function validate($value, Field $field, $elementId): bool
+//    {
+//        $customPattern = $field->customPattern;
+//        $checkPattern = $field->customPatternToggle;
+//
+//        if (!$this->validateEmailAddress($value, $customPattern, $checkPattern)) {
+//            return false;
+//        }
+//
+//        if ($elementId) {
+//            $element = Craft::$app->elements->getElementById($elementId);
+//
+//            if ($field->uniqueEmail && !$this->validateUniqueEmailAddress($value, $element, $field)) {
+//                return false;
+//            }
+//        }
+//
+//        return true;
+//    }
 
     /**
      * Validates an email address or email custom pattern
@@ -108,20 +184,4 @@ class Email extends Component
 
         return true;
     }
-
-    /**
-     * @param $fieldName
-     * @param $field
-     *
-     * @return string
-     */
-    public function getErrorMessage($fieldName, $field): string
-    {
-        if ($field->customPatternToggle && $field->customPatternErrorMessage) {
-            return Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
-        }
-
-        return Craft::t('sprout-base-fields', $fieldName.' must be a valid email.');
-    }
-
 }
