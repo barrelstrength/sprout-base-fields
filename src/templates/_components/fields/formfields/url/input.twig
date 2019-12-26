@@ -17,10 +17,10 @@
 {% js %}
 
     (function() {
-    new SproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ name }}", "{{ fieldContext }}");
+    new SproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
 
     $('input#{{ namespaceInputId }}').on('input', function () {
-    new SproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ name }}", "{{ fieldContext }}");
+    new SproutUrlField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
     });
     })();
 

@@ -56,33 +56,32 @@ class FieldsController extends BaseController
      * @return Response
      * @throws BadRequestHttpException
      */
-    public function actionUrlValidate(): Response
+    public function actionValidateUrl(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
         $value = Craft::$app->getRequest()->getParam('value');
-        $oldFieldContext = Craft::$app->content->fieldContext;
-        $fieldContext = Craft::$app->getRequest()->getParam('fieldContext');
-        $fieldHandle = Craft::$app->getRequest()->getParam('fieldHandle');
-
-        // Retrieve a URL Field, wherever it may be
-        Craft::$app->content->fieldContext = $fieldContext;
-
-        /** @var Field $field */
-        $field = Craft::$app->fields->getFieldByHandle($fieldHandle);
-        Craft::$app->content->fieldContext = $oldFieldContext;
+        $elementId = Craft::$app->getRequest()->getParam('elementId');
+        $field = $this->getFieldModel();
 
         // If we don't find a URL Field, return a new URL Field model
         if (!$field) {
-            return $this->asJson(false);
+            return $this->asJson(['success' => false]);
         }
 
-        if (!SproutBaseFields::$app->urlField->validate($value, $field)) {
-            return $this->asJson(false);
+        if (!$element = Craft::$app->elements->getElementById($elementId)) {
+            // If this is a new Element, just use a temporary Element model to store errors
+            $element = new Element();
         }
 
-        return $this->asJson(true);
+        SproutBaseFields::$app->urlField->validateUrl($value, $field, $element);
+
+        if ($element->hasErrors()) {
+            return $this->asJson(['success' => false]);
+        }
+
+        return $this->asJson(['success' => true]);
     }
 
     /**
@@ -118,20 +117,31 @@ class FieldsController extends BaseController
         $this->requireAcceptsJson();
 
         $value = Craft::$app->getRequest()->getParam('value');
-        $oldFieldContext = Craft::$app->content->fieldContext;
-        $fieldContext = Craft::$app->getRequest()->getParam('fieldContext');
-        $fieldHandle = Craft::$app->getRequest()->getParam('fieldHandle');
-
-        Craft::$app->content->fieldContext = $fieldContext;
-
-        /** @var Field $field */
-        $field = Craft::$app->fields->getFieldByHandle($fieldHandle);
-        Craft::$app->content->fieldContext = $oldFieldContext;
+        $field = $this->getFieldModel();
 
         if (!SproutBaseFields::$app->regularExpressionField->validate($value, $field)) {
             return $this->asJson(false);
         }
 
         return $this->asJson(true);
+    }
+
+    /**
+     * @return Field
+     */
+    protected function getFieldModel(): Field
+    {
+        $oldFieldContext = Craft::$app->content->fieldContext;
+        $fieldContext = Craft::$app->getRequest()->getParam('fieldContext');
+        $fieldHandle = Craft::$app->getRequest()->getParam('fieldHandle');
+
+        // Retrieve an Email Field, wherever it may be
+        Craft::$app->content->fieldContext = $fieldContext;
+
+        /** @var Field $field */
+        $field = Craft::$app->fields->getFieldByHandle($fieldHandle);
+        Craft::$app->content->fieldContext = $oldFieldContext;
+
+        return $field;
     }
 }

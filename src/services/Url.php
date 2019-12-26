@@ -7,7 +7,9 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutfields\fields\Url as UrlField;
+use craft\base\ElementInterface;
 use craft\base\Field;
 use yii\base\Component;
 use Craft;
@@ -20,12 +22,13 @@ class Url extends Component
     /**
      * Validates a phone number against a given mask/pattern
      *
-     * @param                $value
-     * @param Field|UrlField $field
+     * @param                  $value
+     * @param Field            $field
+     * @param ElementInterface $element
      *
-     * @return bool
+     * @return bool|void
      */
-    public function validate($value, Field $field): bool
+    public function validateUrl($value, Field $field, ElementInterface $element)
     {
         $customPattern = $field->customPattern;
         $checkPattern = $field->customPatternToggle;
@@ -35,19 +38,25 @@ class Url extends Component
             $customPattern = '`'.$customPattern.'`';
 
             if (preg_match($customPattern, $value)) {
-                return true;
-            }
-        } else {
-            $path = parse_url($value, PHP_URL_PATH);
-            $encodedPath = array_map('urlencode', explode('/', $path));
-            $url = str_replace($path, implode('/', $encodedPath), $value);
-
-            if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
-                return true;
+                return;
             }
         }
 
-        return false;
+        $path = parse_url($value, PHP_URL_PATH);
+        $encodedPath = array_map('urlencode', explode('/', $path));
+        $url = str_replace($path, implode('/', $encodedPath), $value);
+
+        if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
+            return;
+        }
+
+        $message = Craft::t('sprout-base-fields', $field->name.' must be a valid URL.');
+
+        if ($field->customPatternToggle && $field->customPatternErrorMessage) {
+            $message = Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
+        }
+
+        $element->addError($field->handle, $message);
     }
 
     /**
@@ -60,10 +69,6 @@ class Url extends Component
      */
     public function getErrorMessage($fieldName, $field): string
     {
-        if ($field->customPatternToggle && $field->customPatternErrorMessage) {
-            return Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
-        }
 
-        return Craft::t('sprout-base-fields', $fieldName.' must be a valid URL.');
     }
 }

@@ -6,11 +6,11 @@ if (typeof SproutUrlField === typeof undefined) {
 
 SproutUrlField = Garnish.Base.extend({
 
-  init: function(namespaceInputId, id, fieldHandle, fieldContext) {
-    this.checkSproutUrlField(namespaceInputId, id, fieldHandle, fieldContext);
+  init: function(namespaceInputId, id, elementId, fieldHandle, fieldContext) {
+    this.checkSproutUrlField(namespaceInputId, id, elementId, fieldHandle, fieldContext);
   },
 
-  checkSproutUrlField: function(namespaceInputId, id, fieldHandle, fieldContext) {
+  checkSproutUrlField: function(namespaceInputId, id, elementId, fieldHandle, fieldContext) {
 
     let sproutUrlFieldId = '#' + namespaceInputId;
     let sproutUrlButtonClass = '.' + id;
@@ -19,14 +19,15 @@ SproutUrlField = Garnish.Base.extend({
     setTimeout(function() {
       // Set up data for the controller.
       let data = {
+        'elementId': elementId,
         'fieldHandle': fieldHandle,
         'fieldContext': fieldContext,
         'value': $(sproutUrlFieldId).val()
       };
 
       // Query the controller so the regex validation is all done through PHP.
-      Craft.postActionRequest('sprout-base-fields/fields/url-validate', data, function(response) {
-        if (response) {
+      Craft.postActionRequest('sprout-base-fields/fields/validate-url', data, function(response) {
+        if (response.success) {
           $(sproutUrlButtonClass).addClass('fade');
           $(sproutUrlButtonClass + ' a').attr("href", data.value);
         } else {
