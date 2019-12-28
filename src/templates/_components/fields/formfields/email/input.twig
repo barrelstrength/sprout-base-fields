@@ -1,9 +1,5 @@
 {% import "_includes/forms" as forms %}
 
-{% if elementId is not defined %}
-    {% set elementId = null %}
-{% endif %}
-
 {{ forms.text({
     id: id,
     name: name,
@@ -17,14 +13,13 @@
 
 {% do view.registerAssetBundle("barrelstrength\\sproutbasefields\\web\\assets\\email\\EmailFieldAsset") %}
 
+{# Element may be null for Quick Entry widget #}
 {% js %}
-
     (function() {
-    new SproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
+    new SproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ element.id ?? null }}", "{{ name }}", "{{ fieldContext }}");
 
     $('input#{{ namespaceInputId }}').on('input', function() {
-    new SproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ elementId }}", "{{ name }}", "{{ fieldContext }}");
+    new SproutEmailField("{{ namespaceInputId }}", "{{ id }}", "{{ element.id ?? null }}", "{{ name }}", "{{ fieldContext }}");
     });
     })();
-
 {% endjs %}

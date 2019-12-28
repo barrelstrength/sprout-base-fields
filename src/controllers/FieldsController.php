@@ -10,7 +10,7 @@ namespace barrelstrength\sproutbasefields\controllers;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Field;
-use craft\records\Element;
+use craft\base\Element;
 use craft\web\Controller as BaseController;
 
 use yii\web\BadRequestHttpException;
@@ -31,25 +31,15 @@ class FieldsController extends BaseController
         $this->requireAcceptsJson();
 
         $value = Craft::$app->getRequest()->getParam('value');
-        $elementId = Craft::$app->getRequest()->getParam('elementId');
         $field = $this->getFieldModel();
 
         if (!$field) {
             return $this->asJson(['success' => false]);
         }
 
-        if (!$element = Craft::$app->elements->getElementById($elementId)) {
-            // If this is a new Element, just use a temporary Element model to store errors
-            $element = new Element();
-        }
+        $isValid = SproutBaseFields::$app->emailField->validateEmail($value, $field);
 
-        SproutBaseFields::$app->emailField->validate($value, $field, $element);
-
-        if ($element->hasErrors()) {
-            return $this->asJson(['success' => false]);
-        }
-
-        return $this->asJson(['success' => true]);
+        return $this->asJson(['success' => $isValid]);
     }
 
     /**
@@ -62,7 +52,6 @@ class FieldsController extends BaseController
         $this->requireAcceptsJson();
 
         $value = Craft::$app->getRequest()->getParam('value');
-        $elementId = Craft::$app->getRequest()->getParam('elementId');
         $field = $this->getFieldModel();
 
         // If we don't find a URL Field, return a new URL Field model
@@ -70,18 +59,9 @@ class FieldsController extends BaseController
             return $this->asJson(['success' => false]);
         }
 
-        if (!$element = Craft::$app->elements->getElementById($elementId)) {
-            // If this is a new Element, just use a temporary Element model to store errors
-            $element = new Element();
-        }
+        $isValid = SproutBaseFields::$app->urlField->validateUrl($value, $field);
 
-        SproutBaseFields::$app->urlField->validate($value, $field, $element);
-
-        if ($element->hasErrors()) {
-            return $this->asJson(['success' => false]);
-        }
-
-        return $this->asJson(['success' => true]);
+        return $this->asJson(['success' => $isValid]);
     }
 
     /**

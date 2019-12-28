@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
-use barrelstrength\sproutfields\fields\Email as EmailField;
 use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
@@ -60,75 +59,54 @@ class Email extends Component
 
         $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($field, $element);
 
-        // Set this to false for Quick Entry Dashboard Widget
-        $elementId = ($element != null) ? $element->id : false;
-
         return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/email/input',
             [
                 'namespaceInputId' => $namespaceInputId,
                 'id' => $inputId,
                 'name' => $name,
                 'value' => $value,
-                'elementId' => $elementId,
                 'fieldContext' => $fieldContext,
-                'placeholder' => $field->placeholder
+                'placeholder' => $field->placeholder,
+                'element' => $element
             ]);
     }
 
-    public function validate($value, FieldInterface $field, ElementInterface $element)
+    /**
+     * @param                $value
+     * @param FieldInterface $field
+     *
+     * @return bool
+     */
+    public function validateEmail($value, FieldInterface $field): bool
     {
         /** @var Field $field */
         $customPattern = $field->customPattern;
         $checkPattern = $field->customPatternToggle;
 
-        if (!$this->validateEmailAddress($value, $customPattern, $checkPattern)) {
-            $element->addError($field->handle, $this->getErrorMessage($field));
-        }
-
-        $uniqueEmail = $field->uniqueEmail;
-
-        if ($uniqueEmail && !SproutBaseFields::$app->emailField->validateUniqueEmailAddress($value, $element, $field)) {
-            $message = Craft::t('sprout-base-fields', $field->name.' must be a unique email.');
-            $element->addError($field->handle, $message);
-        }
-    }
-
-    /**
-     * Validates an email address or email custom pattern
-     *
-     * @param $value         string current email to validate
-     * @param $customPattern string regular expression
-     * @param $checkPattern  bool
-     *
-     * @return bool
-     */
-    public function validateEmailAddress($value, $customPattern, $checkPattern = false): bool
-    {
         if ($checkPattern) {
             // Use backtick as delimiters as they are invalid characters for emails
             $customPattern = '`'.$customPattern.'`';
 
-            if (preg_match($customPattern, $value)) {
-                return true;
+            if (!preg_match($customPattern, $value)) {
+                return false;
             }
-        } else if (!filter_var($value, FILTER_VALIDATE_EMAIL) === false) {
-            return true;
         }
 
-        return false;
+        return !(filter_var($value, FILTER_VALIDATE_EMAIL) === false);
     }
 
     /**
      * Validates that an email address is unique to a particular field type
      *
-     * @param $value
-     * @param $element
-     * @param $field
+     * @param                  $value
+     * @param FieldInterface   $field
+     * @param ElementInterface $element
      *
      * @return bool
      */
-    public function validateUniqueEmailAddress($value, $element, $field): bool
+    public function validateUniqueEmail($value, FieldInterface $field, ElementInterface $element): bool
     {
+        /** @var Field $field */
         $fieldHandle = $element->fieldColumnPrefix.$field->handle;
         $contentTable = $element->contentTable;
 
