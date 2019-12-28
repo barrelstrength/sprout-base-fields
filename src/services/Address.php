@@ -508,17 +508,11 @@ class Address extends Component
                 $address = new AddressModel();
             }
 
+            $address->setAttributes($value, false);
+
             $address->elementId = $element->id;
             $address->siteId = $element->siteId;
             $address->fieldId = $field->id;
-            $address->countryCode = $value['countryCode'];
-            $address->administrativeAreaCode = $value['administrativeAreaCode'] ?? null;
-            $address->locality = $value['locality'] ?? null;
-            $address->dependentLocality = $value['dependentLocality'] ?? null;
-            $address->postalCode = $value['postalCode'] ?? null;
-            $address->sortingCode = $value['sortingCode'] ?? null;
-            $address->address1 = $value['address1'] ?? null;
-            $address->address2 = $value['address2'] ?? null;
         }
 
         return $address;
