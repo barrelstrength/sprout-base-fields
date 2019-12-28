@@ -165,6 +165,6 @@ class Email extends Component
             return Craft::t('sprout-base-fields', $field->customPatternErrorMessage);
         }
 
-        return Craft::t('sprout-base-fields', $field->name.' must be a valid email.');;
-}
+        return Craft::t('sprout-base-fields', $field->name.' must be a valid email.');
+    }
 }
