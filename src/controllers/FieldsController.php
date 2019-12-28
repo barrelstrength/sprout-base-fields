@@ -99,11 +99,9 @@ class FieldsController extends BaseController
         $value = Craft::$app->getRequest()->getParam('value');
         $field = $this->getFieldModel();
 
-        if (!SproutBaseFields::$app->regularExpressionField->validate($value, $field)) {
-            return $this->asJson(false);
-        }
+        $isValid = SproutBaseFields::$app->regularExpressionField->validate($value, $field);
 
-        return $this->asJson(true);
+        return $this->asJson(['success' => $isValid]);
     }
 
     /**
