@@ -10,7 +10,6 @@ namespace barrelstrength\sproutbasefields\controllers;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Field;
-use craft\base\Element;
 use craft\web\Controller as BaseController;
 
 use yii\web\BadRequestHttpException;

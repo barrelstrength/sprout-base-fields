@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
-use barrelstrength\sproutbase\SproutBase;
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use CommerceGuys\Addressing\Country\CountryRepository;
 use craft\base\ElementInterface;
@@ -51,14 +50,13 @@ class Phone extends Component
     /**
      * @param FieldInterface        $field
      * @param                       $value
-     * @param ElementInterface|null $element
      *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getInputHtml(FieldInterface $field, $value, ElementInterface $element = null): string
+    public function getInputHtml(FieldInterface $field, $value): string
     {
         /** @var Field $field */
         $name = $field->handle;

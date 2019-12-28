@@ -77,5 +77,14 @@ Shorthand Syntax: {title}',
     'Require email address to be unique' => 'Require email address to be unique',
     'Display this error message when an email address is invalid.' => 'Display this error message when an email address is invalid.',
     'Validation Pattern' => 'Validation Pattern',
-    'Duplicate email addresses saved to this field will not be allowed.' => 'Duplicate email addresses saved to this field will not be allowed.'
+    'Duplicate email addresses saved to this field will not be allowed.' => 'Duplicate email addresses saved to this field will not be allowed.',
+    'Phone number must match the format: ##########' => 'Phone number must match the format: ##########',
+    'Invalid format.' => 'Invalid format.',
+    'Validate URLs using this regular expression.' => 'Validate URLs using this regular expression.',
+    'The regular expression to use to validate this field.' => 'The regular expression to use to validate this field.',
+    'Must be a valid profile URL from twitter.com' => 'Must be a valid profile URL from twitter.com',
+    'Display this error message when validation fails.' => 'Display this error message when validation fails.',
+    '{fieldName} is invalid.' => '{fieldName} is invalid.',
+    'URLs for this field have their own validation pattern' => 'URLs for this field have their own validation pattern',
+    'Display this error message when a URL is invalid.' => 'Display this error message when a URL is invalid.'
 ];

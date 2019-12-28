@@ -8,7 +8,6 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\SproutBaseFields;
-use barrelstrength\sproutbasefields\web\assets\url\UrlFieldAsset;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use Twig\Error\LoaderError;
