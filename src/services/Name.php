@@ -116,11 +116,7 @@ class Name extends Component
 
         $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($field, $element);
 
-        // Set this to false for Quick Entry Dashboard Widget
-        // @todo - can we update the Quick Entry widget to expect null?
-        $elementId = $element->id ?? false;
-
-        $rendered = Craft::$app->getView()->renderTemplate(
+        return Craft::$app->getView()->renderTemplate(
             'sprout-base-fields/_components/fields/formfields/name/input',
             [
                 'namespaceInputId' => $namespaceInputId,
@@ -128,10 +124,7 @@ class Name extends Component
                 'name' => $name,
                 'field' => $field,
                 'value' => $value,
-                'elementId' => $elementId,
                 'fieldContext' => $fieldContext
             ]);
-
-        return TemplateHelper::raw($rendered);
     }
 }

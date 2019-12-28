@@ -7,8 +7,13 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutbasefields\web\assets\url\UrlFieldAsset;
 use craft\base\ElementInterface;
 use craft\base\Field;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Component;
 use Craft;
 
@@ -18,6 +23,54 @@ use Craft;
 class Url extends Component
 {
     /**
+     * @param Field $field
+     *
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getSettingsHtml(Field $field): string
+    {
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-base-fields/_components/fields/formfields/url/settings',
+            [
+                'field' => $field,
+            ]
+        );
+    }
+
+    /**
+     * @param Field                 $field
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getInputHtml(Field $field, $value, ElementInterface $element = null): string
+    {
+        $name = $field->handle;
+        $inputId = Craft::$app->getView()->formatInputId($name);
+        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+
+        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($field, $element);
+
+        return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/url/input', [
+                'namespaceInputId' => $namespaceInputId,
+                'id' => $inputId,
+                'name' => $name,
+                'value' => $value,
+                'fieldContext' => $fieldContext,
+                'placeholder' => $field->placeholder,
+                'element' => $element
+            ]
+        );
+    }
+
+    /**
      * Validates a phone number against a given mask/pattern
      *
      * @param                  $value
@@ -25,7 +78,7 @@ class Url extends Component
      *
      * @return bool
      */
-    public function validateUrl($value, Field $field): bool
+    public function validate($value, Field $field): bool
     {
         $customPattern = $field->customPattern;
         $checkPattern = $field->customPatternToggle;

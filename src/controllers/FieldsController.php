@@ -59,7 +59,7 @@ class FieldsController extends BaseController
             return $this->asJson(['success' => false]);
         }
 
-        $isValid = SproutBaseFields::$app->urlField->validateUrl($value, $field);
+        $isValid = SproutBaseFields::$app->urlField->validate($value, $field);
 
         return $this->asJson(['success' => $isValid]);
     }
@@ -68,30 +68,23 @@ class FieldsController extends BaseController
      * @return Response
      * @throws BadRequestHttpException
      */
-    public function actionPhoneValidate(): Response
+    public function actionValidatePhone(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();
 
-        $phone = Craft::$app->getRequest()->getParam('phone');
-        $country = Craft::$app->getRequest()->getParam('country');
+        $value = Craft::$app->getRequest()->getParam('value');
 
-        if (!SproutBaseFields::$app->phoneField->validate($phone, $country)) {
-            return $this->asJson([
-                'success' => false
-            ]);
-        }
+        $isValid = SproutBaseFields::$app->phoneField->validate($value);
 
-        return $this->asJson([
-            'success' => true
-        ]);
+        return $this->asJson(['success' => $isValid]);
     }
 
     /**
      * @return Response
      * @throws BadRequestHttpException
      */
-    public function actionRegularExpressionValidate(): Response
+    public function actionValidateRegularExpression(): Response
     {
         $this->requirePostRequest();
         $this->requireAcceptsJson();

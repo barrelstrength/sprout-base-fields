@@ -71,5 +71,11 @@ Shorthand Syntax: {title}',
     '}' => '}',
     'No address saved.' => 'No address saved.',
     'Address 1 field cannot be blank.' => 'Address 1 field cannot be blank.',
-    'No address added.' => 'No address added.'
+    'No address added.' => 'No address added.',
+    'Validate email addresses using this regular expression.' => 'Validate email addresses using this regular expression.',
+    'Email Addresses for this field have their own validation pattern' => 'Email Addresses for this field have their own validation pattern',
+    'Require email address to be unique' => 'Require email address to be unique',
+    'Display this error message when an email address is invalid.' => 'Display this error message when an email address is invalid.',
+    'Validation Pattern' => 'Validation Pattern',
+    'Duplicate email addresses saved to this field will not be allowed.' => 'Duplicate email addresses saved to this field will not be allowed.'
 ];

@@ -18,8 +18,10 @@ SproutPhoneField = Garnish.Base.extend({
       let country = $(sproutPhoneCountryId).val();
 
       let data = {
-        'country': country,
-        'phone': phoneNumber
+        value: {
+          'country': country,
+          'phone': phoneNumber
+        }
       };
 
       // Determine if we should show Phone link on initial load
@@ -31,20 +33,21 @@ SproutPhoneField = Garnish.Base.extend({
       let phoneNumber = $(this).val();
       let country = $(sproutPhoneCountryId).val();
       let data = {
-        'country': country,
-        'phone': phoneNumber
+        value: {
+          'country': country,
+          'phone': phoneNumber
+        }
       };
       validatePhoneNumber(currentPhoneField, data);
     });
 
     function validatePhoneNumber(currentPhoneField, data) {
-      Craft.postActionRequest('sprout-base-fields/fields/phone-validate', data, function(response) {
+      Craft.postActionRequest('sprout-base-fields/fields/validate-phone', data, function(response) {
         if (response.success) {
           $(sproutPhoneFieldButtonClass).addClass('fade');
           $(sproutPhoneFieldButtonClass + ' a').attr("href", "tel:" + data.phone);
         } else {
           $(sproutPhoneFieldButtonClass).removeClass('fade');
-
         }
       }, [])
     }

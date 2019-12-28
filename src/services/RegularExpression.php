@@ -7,10 +7,17 @@
 
 namespace barrelstrength\sproutbasefields\services;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
+use barrelstrength\sproutbasefields\web\assets\regularexpression\RegularExpressionFieldAsset;
 use barrelstrength\sproutfields\fields\RegularExpression as RegularExpressionField;
+use craft\base\ElementInterface;
 use craft\base\Field;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 use yii\base\Component;
 use Craft;
+use yii\base\InvalidConfigException;
 
 /**
  * Class RegularExpression
@@ -18,6 +25,58 @@ use Craft;
  */
 class RegularExpression extends Component
 {
+    /**
+     * @param Field $field
+     *
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getSettingsHtml(Field $field): string
+    {
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-base-fields/_components/fields/formfields/regularexpression/settings',
+            [
+                'field' => $field,
+            ]
+        );
+    }
+
+    /**
+     * @param Field                 $field
+     * @param                       $value
+     * @param ElementInterface|null $element
+     *
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     * @throws InvalidConfigException
+     */
+    public function getInputHtml(Field $field, $value, ElementInterface $element = null): string
+    {
+        $view = Craft::$app->getView();
+        $view->registerAssetBundle(RegularExpressionFieldAsset::class);
+
+        $name = $field->handle;
+        $inputId = Craft::$app->getView()->formatInputId($name);
+        $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
+
+        $fieldContext = SproutBaseFields::$app->utilities->getFieldContext($field, $element);
+
+        return Craft::$app->getView()->renderTemplate(
+            'sprout-base-fields/_components/fields/formfields/regularexpression/input',
+            [
+                'id' => $namespaceInputId,
+                'field' => $field,
+                'name' => $name,
+                'value' => $value,
+                'fieldContext' => $fieldContext
+            ]
+        );
+    }
+
     /**
      * @param                              $value
      * @param Field|RegularExpressionField $field
