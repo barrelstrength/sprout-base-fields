@@ -22,11 +22,10 @@ class Url extends Component
      *
      * @param                  $value
      * @param Field            $field
-     * @param ElementInterface $element
      *
-     * @return bool|void
+     * @return bool
      */
-    public function validate($value, Field $field, ElementInterface $element)
+    public function validateUrl($value, Field $field): bool
     {
         $customPattern = $field->customPattern;
         $checkPattern = $field->customPatternToggle;
@@ -35,8 +34,8 @@ class Url extends Component
             // Use backtick as delimiters as they are invalid characters for emails
             $customPattern = '`'.$customPattern.'`';
 
-            if (preg_match($customPattern, $value)) {
-                return;
+            if (!preg_match($customPattern, $value)) {
+                return false;
             }
         }
 
@@ -44,11 +43,7 @@ class Url extends Component
         $encodedPath = array_map('urlencode', explode('/', $path));
         $url = str_replace($path, implode('/', $encodedPath), $value);
 
-        if (!filter_var($url, FILTER_VALIDATE_URL) === false) {
-            return;
-        }
-
-        $element->addError($field->handle, $this->getErrorMessage($field));
+        return !(filter_var($url, FILTER_VALIDATE_URL) === false);
     }
 
     /**
