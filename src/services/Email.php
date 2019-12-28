@@ -26,16 +26,18 @@ use craft\db\Table;
 class Email extends Component
 {
     /**
+     * @param $field
+     *
      * @return string
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
-    public function getSettingsHtml(): string
+    public function getSettingsHtml($field): string
     {
         return Craft::$app->getView()->renderTemplate('sprout-base-fields/_components/fields/formfields/email/settings',
             [
-                'field' => $this,
+                'field' => $field
             ]);
     }
 
