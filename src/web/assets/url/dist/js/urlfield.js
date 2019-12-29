@@ -101,23 +101,24 @@ if ((typeof SproutUrlField === "undefined" ? "undefined" : _typeof(SproutUrlFiel
 }
 
 SproutUrlField = Garnish.Base.extend({
-  init: function init(namespaceInputId, id, fieldHandle, fieldContext) {
-    this.checkSproutUrlField(namespaceInputId, id, fieldHandle, fieldContext);
+  init: function init(namespaceInputId, id, elementId, fieldHandle, fieldContext) {
+    this.checkSproutUrlField(namespaceInputId, id, elementId, fieldHandle, fieldContext);
   },
-  checkSproutUrlField: function checkSproutUrlField(namespaceInputId, id, fieldHandle, fieldContext) {
+  checkSproutUrlField: function checkSproutUrlField(namespaceInputId, id, elementId, fieldHandle, fieldContext) {
     var sproutUrlFieldId = '#' + namespaceInputId;
     var sproutUrlButtonClass = '.' + id; // We use setTimeout to make sure our function works every time
 
     setTimeout(function () {
       // Set up data for the controller.
       var data = {
+        'elementId': elementId,
         'fieldHandle': fieldHandle,
         'fieldContext': fieldContext,
         'value': $(sproutUrlFieldId).val()
       }; // Query the controller so the regex validation is all done through PHP.
 
-      Craft.postActionRequest('sprout-base-fields/fields/url-validate', data, function (response) {
-        if (response) {
+      Craft.postActionRequest('sprout-base-fields/fields/validate-url', data, function (response) {
+        if (response.success) {
           $(sproutUrlButtonClass).addClass('fade');
           $(sproutUrlButtonClass + ' a').attr("href", data.value);
         } else {

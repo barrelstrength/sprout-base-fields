@@ -279,8 +279,7 @@ if (_typeof(Craft.SproutBase) === ( true ? "undefined" : undefined)) {
       Craft.postActionRequest('sprout-base-fields/fields-address/query-address-coordinates-from-google-maps', data, $.proxy(function (response) {
         if (response.result === true) {
           var latitude = response.geo.latitude;
-          var longitude = response.geo.longitude; // @todo - add generic name?
-
+          var longitude = response.geo.longitude;
           $("input[name='sproutseo[globals][identity][latitude]']").val(latitude);
           $("input[name='sproutseo[globals][identity][longitude]']").val(longitude);
           Craft.cp.displayNotice(Craft.t('sprout-base-fields', 'Latitude and Longitude updated.'));
