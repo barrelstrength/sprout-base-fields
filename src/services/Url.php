@@ -77,17 +77,19 @@ class Url extends Component
      *
      * @return bool
      */
-    public function validate($value, Field $field): bool
+    public function validate($value, Field $field = null): bool
     {
-        $customPattern = $field->customPattern;
-        $checkPattern = $field->customPatternToggle;
+        if ($field) {
+            $customPattern = $field->customPattern;
+            $checkPattern = $field->customPatternToggle;
 
-        if ($customPattern && $checkPattern) {
-            // Use backtick as delimiters as they are invalid characters for emails
-            $customPattern = '`'.$customPattern.'`';
+            if ($customPattern && $checkPattern) {
+                // Use backtick as delimiters as they are invalid characters for emails
+                $customPattern = '`'.$customPattern.'`';
 
-            if (!preg_match($customPattern, $value)) {
-                return false;
+                if (!preg_match($customPattern, $value)) {
+                    return false;
+                }
             }
         }
 

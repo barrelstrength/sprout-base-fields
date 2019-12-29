@@ -12,6 +12,7 @@ use barrelstrength\sproutbasefields\web\assets\regularexpression\RegularExpressi
 use barrelstrength\sproutfields\fields\RegularExpression as RegularExpressionField;
 use craft\base\ElementInterface;
 use craft\base\Field;
+use craft\base\FieldInterface;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -78,12 +79,12 @@ class RegularExpression extends Component
     }
 
     /**
-     * @param                              $value
-     * @param Field|RegularExpressionField $field
+     * @param                                       $value
+     * @param FieldInterface|RegularExpressionField $field
      *
      * @return bool
      */
-    public function validate($value, Field $field): bool
+    public function validate($value, FieldInterface $field): bool
     {
         $customPattern = $field->customPattern;
 

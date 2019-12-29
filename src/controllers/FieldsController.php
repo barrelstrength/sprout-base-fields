@@ -10,6 +10,7 @@ namespace barrelstrength\sproutbasefields\controllers;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use Craft;
 use craft\base\Field;
+use craft\base\FieldInterface;
 use craft\web\Controller as BaseController;
 
 use yii\web\BadRequestHttpException;
@@ -32,10 +33,6 @@ class FieldsController extends BaseController
         $value = Craft::$app->getRequest()->getParam('value');
         $field = $this->getFieldModel();
 
-        if (!$field) {
-            return $this->asJson(['success' => false]);
-        }
-
         $isValid = SproutBaseFields::$app->emailField->validateEmail($value, $field);
 
         return $this->asJson(['success' => $isValid]);
@@ -52,11 +49,6 @@ class FieldsController extends BaseController
 
         $value = Craft::$app->getRequest()->getParam('value');
         $field = $this->getFieldModel();
-
-        // If we don't find a URL Field, return a new URL Field model
-        if (!$field) {
-            return $this->asJson(['success' => false]);
-        }
 
         $isValid = SproutBaseFields::$app->urlField->validate($value, $field);
 
@@ -91,15 +83,19 @@ class FieldsController extends BaseController
         $value = Craft::$app->getRequest()->getParam('value');
         $field = $this->getFieldModel();
 
+        if (!$field) {
+            return $this->asJson(['success' => false]);
+        }
+
         $isValid = SproutBaseFields::$app->regularExpressionField->validate($value, $field);
 
         return $this->asJson(['success' => $isValid]);
     }
 
     /**
-     * @return Field
+     * @return FieldInterface|null
      */
-    protected function getFieldModel(): Field
+    protected function getFieldModel()
     {
         $oldFieldContext = Craft::$app->content->fieldContext;
         $fieldContext = Craft::$app->getRequest()->getParam('fieldContext');

@@ -77,18 +77,20 @@ class Email extends Component
      *
      * @return bool
      */
-    public function validateEmail($value, FieldInterface $field): bool
+    public function validateEmail($value, FieldInterface $field = null): bool
     {
-        /** @var Field $field */
-        $customPattern = $field->customPattern;
-        $checkPattern = $field->customPatternToggle;
+        if ($field) {
+            /** @var Field $field */
+            $customPattern = $field->customPattern;
+            $checkPattern = $field->customPatternToggle;
 
-        if ($checkPattern) {
-            // Use backtick as delimiters as they are invalid characters for emails
-            $customPattern = '`'.$customPattern.'`';
+            if ($checkPattern) {
+                // Use backtick as delimiters as they are invalid characters for emails
+                $customPattern = '`'.$customPattern.'`';
 
-            if (!preg_match($customPattern, $value)) {
-                return false;
+                if (!preg_match($customPattern, $value)) {
+                    return false;
+                }
             }
         }
 
