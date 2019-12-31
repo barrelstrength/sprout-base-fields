@@ -101,6 +101,7 @@ if (_typeof(Craft.SproutSeo) === ( true ? "undefined" : undefined)) {
 }
 /**
  * Editable table class
+ * @todo - move to Sprout SEO
  */
 
 
@@ -243,7 +244,7 @@ Craft.SproutSeo.EditableTable = Garnish.Base.extend({
       rowHtml += '</td>';
     }
 
-    rowHtml += '<td class="thin action"><a class="move icon" title="' + Craft.t('sprout-seo', 'Reorder') + '"></a></td>' + '<td class="thin action"><a class="delete icon" title="' + Craft.t('sprout-seo', 'Delete') + '"></a></td>' + '</tr>';
+    rowHtml += '<td class="thin action"><a class="move icon" title="' + Craft.t('sprout-base-fields', 'Reorder') + '"></a></td>' + '<td class="thin action"><a class="delete icon" title="' + Craft.t('sprout-base-fields', 'Delete') + '"></a></td>' + '</tr>';
     return rowHtml;
   }
 });
