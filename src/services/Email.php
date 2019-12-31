@@ -117,6 +117,8 @@ class Email extends Component
             ->from($contentTable)
             ->innerJoin(Table::ELEMENTS.' elements', '[[elements.id]] = '.$contentTable.'.`elementId`')
             ->where([$fieldHandle => $value])
+            ->andWhere(['elements.draftId' => null])
+            ->andWhere(['elements.revisionId' => null])
             ->andWhere(['elements.dateDeleted' => null]);
 
         if (is_numeric($element->id)) {
