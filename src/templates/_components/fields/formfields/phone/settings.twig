@@ -1,10 +1,12 @@
 {% import "_includes/forms" as forms %}
 
+{% set options = craft.sproutFields.getCountries() %}
+
 {{ forms.selectField({
     name: 'country',
     instructions: "This country will display as selected when the field loads for the first time."|t('sprout-base-fields'),
     label: 'Default Country'|t('sprout-base-fields'),
-    options: field.getCountries(),
+    options: options,
     value: field.country
 }) }}
 

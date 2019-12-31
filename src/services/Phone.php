@@ -8,6 +8,7 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use CommerceGuys\Addressing\Country\CountryRepository;
 use craft\base\ElementInterface;
 use craft\base\Field;
@@ -64,7 +65,7 @@ class Phone extends Component
         $inputId = Craft::$app->getView()->formatInputId($name);
         $namespaceInputId = Craft::$app->getView()->namespaceInputId($inputId);
         $namespaceCountryId = Craft::$app->getView()->namespaceInputId($countryId);
-        $countries = $this->getCountries();
+        $countries = SproutBaseFields::$app->phoneField->getCountries();
 
         $country = $value['country'] ?? $field->country;
         $val = $value['phone'] ?? null;
@@ -77,11 +78,10 @@ class Phone extends Component
                 'id' => $inputId,
                 'countryId' => $countryId,
                 'name' => $field->handle,
+                'field' => $field,
                 'value' => $val,
-                'placeholder' => $field->placeholder,
                 'countries' => $countries,
-                'country' => $country,
-                'limitToSingleCountry' => $field->limitToSingleCountry
+                'country' => $country
             ]
         );
     }
@@ -97,6 +97,10 @@ class Phone extends Component
     {
         $phoneInfo = [];
 
+        if (is_string($value)) {
+            $phoneInfo = Json::decode($value);
+        }
+
         /** @var Field $field */
         if (is_array($value) && $element) {
             $namespace = $element->getFieldParamNamespace();
@@ -105,15 +109,11 @@ class Phone extends Component
             // bad phone or empty phone
         }
 
-        if (is_string($value)) {
-            $phoneInfo = Json::decode($value);
+        if (isset($phoneInfo['phone'], $phoneInfo['country'])) {
+            return new PhoneModel($phoneInfo['phone'], $phoneInfo['country']);
         }
 
-        if (!isset($phoneInfo['phone'], $phoneInfo['country'])) {
-            return $value;
-        }
-
-        return new PhoneModel($phoneInfo['phone'], $phoneInfo['country']);
+        return $value;
     }
 
     /**
