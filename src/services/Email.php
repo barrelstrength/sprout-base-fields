@@ -121,9 +121,9 @@ class Email extends Component
             ->andWhere(['elements.revisionId' => null])
             ->andWhere(['elements.dateDeleted' => null]);
 
-        if (is_numeric($element->id)) {
-            // Exclude current elementId from our results
-            $query->andWhere(['not in', 'elementId', $element->id]);
+        if ($element->getSourceId()) {
+            // Exclude current element or source element (if draft) from our results
+            $query->andWhere(['not in', 'elementId', $element->getSourceId()]);
         }
 
         $emailExists = $query->scalar();
