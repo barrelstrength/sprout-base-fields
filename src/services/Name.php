@@ -62,17 +62,16 @@ class Name extends Component
     /**
      * @param $value
      *
-     * @return NameModel|bool|string
+     * @return string|null
      */
     public function serializeValue($value)
     {
-        /** @var NameModel $value */
         if ($value === null) {
-            return false;
+            return null;
         }
 
         // Submitting an Element to be saved
-        if (is_object($value) && get_class($value) == NameModel::class) {
+        if ($value instanceof NameModel) {
             return Json::encode($value->getAttributes());
         }
 

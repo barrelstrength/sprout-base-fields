@@ -119,10 +119,14 @@ class Phone extends Component
     /**
      * @param $value
      *
-     * @return string
+     * @return string|null
      */
-    public function serializeValue($value): string
+    public function serializeValue($value)
     {
+        if ($value === null) {
+            return null;
+        }
+
         if ($value instanceof PhoneModel) {
             return $value->getAsJson();
         }
