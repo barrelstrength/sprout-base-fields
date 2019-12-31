@@ -95,22 +95,19 @@ class Phone extends Component
      */
     public function normalizeValue(FieldInterface $field, $value, ElementInterface $element = null)
     {
-        $phoneInfo = [];
+        $phoneArray = [];
 
         if (is_string($value)) {
-            $phoneInfo = Json::decode($value);
+            $phoneArray = Json::decode($value);
         }
 
         /** @var Field $field */
-        if (is_array($value) && $element) {
-            $namespace = $element->getFieldParamNamespace();
-            $namespace .= '.'.$field->handle;
-            $phoneInfo = Craft::$app->getRequest()->getBodyParam($namespace);
-            // bad phone or empty phone
+        if (is_array($value)) {
+            $phoneArray = $value;
         }
 
-        if (isset($phoneInfo['phone'], $phoneInfo['country'])) {
-            return new PhoneModel($phoneInfo['phone'], $phoneInfo['country']);
+        if (isset($phoneArray['phone'], $phoneArray['country'])) {
+            return new PhoneModel($phoneArray['phone'], $phoneArray['country']);
         }
 
         return $value;
@@ -128,6 +125,14 @@ class Phone extends Component
         }
 
         if ($value instanceof PhoneModel) {
+            $country = !empty($value->country) ? $value->country : null;
+            $phone = !empty($value->phone) ? $value->phone : null;
+
+            // Don't save anything unless we have both a country and a phone
+            if ($country === null || $phone === null) {
+                return null;
+            }
+
             return $value->getAsJson();
         }
 
