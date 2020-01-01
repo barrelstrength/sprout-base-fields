@@ -13,15 +13,11 @@ use craft\base\Model;
  * Class Name
  *
  * @property string $friendlyName
+ * @property string $fullName
  * @property string $fullNameExtended
  */
 class Name extends Model
 {
-    /**
-     * @var string
-     */
-    public $fullName;
-
     /**
      * @var string
      */
@@ -98,27 +94,28 @@ class Name extends Model
      */
     public function getFullNameExtended(): string
     {
+        $fullName = '';
 
-        $this->fullName = '';
+        $fullName .= $this->appendName($this->prefix);
+        $fullName .= $this->appendName($this->firstName);
+        $fullName .= $this->appendName($this->middleName);
+        $fullName .= $this->appendName($this->lastName);
+        $fullName .= $this->appendName($this->suffix);
 
-        $this->addName($this->prefix);
-        $this->addName($this->firstName);
-        $this->addName($this->middleName);
-        $this->addName($this->lastName);
-        $this->addName($this->suffix);
-
-        $this->fullName = trim($this->fullName);
-
-        return $this->fullName;
+        return trim($fullName);
     }
 
     /**
      * @param $name
+     *
+     * @return string|null
      */
-    protected function addName($name)
+    protected function appendName($name)
     {
         if ($name) {
-            $this->fullName .= ' '.$name;
+            return ' '.$name;
         }
+
+        return null;
     }
 }
