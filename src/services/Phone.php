@@ -125,15 +125,15 @@ class Phone extends Component
         }
 
         if ($value instanceof PhoneModel) {
-            $country = !empty($value->country) ? $value->country : null;
-            $phone = !empty($value->phone) ? $value->phone : null;
-
-            // Don't save anything unless we have both a country and a phone
-            if ($country === null || $phone === null) {
+            // Don't save anything unless we can render a phone
+            if ($value->national === null) {
                 return null;
             }
 
-            return $value->getAsJson();
+            return Json::encode([
+                'country' => $value->country,
+                'phone' => $value->phone
+            ]);
         }
 
         return $value;

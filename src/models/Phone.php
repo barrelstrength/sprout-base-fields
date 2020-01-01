@@ -88,12 +88,4 @@ class Phone extends Model
 
         parent::__construct();
     }
-
-    public function getAsJson(): string
-    {
-        return Json::encode([
-            'country' => $this->country,
-            'phone' => $this->phone
-        ]);
-    }
 }

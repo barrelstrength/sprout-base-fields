@@ -47,7 +47,6 @@ class Name extends Component
 
             if ($fullNameShort = $value['name']['fullNameShort'] ?? null) {
                 $nameArray = explode(' ', trim($fullNameShort));
-
                 $nameModel->firstName = $nameArray[0] ?? $fullNameShort;
                 unset($nameArray[0]);
 
@@ -72,6 +71,10 @@ class Name extends Component
 
         // Submitting an Element to be saved
         if ($value instanceof NameModel) {
+            if (!$value->getFullNameExtended()) {
+                return null;
+            }
+
             return Json::encode($value->getAttributes());
         }
 
