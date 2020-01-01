@@ -7,8 +7,8 @@
 
 namespace barrelstrength\sproutbasefields\models;
 
+use barrelstrength\sproutbasefields\SproutBaseFields;
 use craft\base\Model;
-use craft\helpers\Json;
 use Exception;
 use libphonenumber\PhoneNumberFormat;
 use libphonenumber\PhoneNumberUtil;
@@ -16,7 +16,8 @@ use libphonenumber\PhoneNumberUtil;
 /**
  * Class Name
  *
- * @property string $asJson
+ * @property null|string $e164
+ * @property null|string $rFC3966
  */
 class Phone extends Model
 {
@@ -30,53 +31,91 @@ class Phone extends Model
     public $country;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $code;
+    protected $code;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $international;
+    protected $international;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $national;
+    protected $national;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $E164;
+    protected $E164;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public $RFC3966;
+    protected $RFC3966;
 
     /**
      * @return string
      */
     public function __toString()
     {
+        if (!$this->international) {
+            $this->populatePhoneDetails();
+        }
         return (string)$this->international;
     }
 
+    public function getCode()
+    {
+        if (!$this->code) {
+            $this->populatePhoneDetails();
+        }
+        return $this->code;
+    }
+
+    public function getInternational()
+    {
+        if (!$this->international) {
+            $this->populatePhoneDetails();
+        }
+        return $this->international;
+    }
+
+    public function getNational()
+    {
+        if (!$this->national) {
+            $this->populatePhoneDetails();
+        }
+        return $this->national;
+    }
+
+    public function getE164()
+    {
+        if (!$this->E164) {
+            $this->populatePhoneDetails();
+        }
+        return $this->E164;
+    }
+
+    public function getRFC3966()
+    {
+        if (!$this->RFC3966) {
+            $this->populatePhoneDetails();
+        }
+        return $this->RFC3966;
+    }
+
     /**
-     * Phone constructor.
-     *
-     * @param string $phone
-     * @param string $country
+     * Populate the model with specific details based on the phone number and country
      */
-    public function __construct($phone, $country)
+    public function populatePhoneDetails()
     {
         $phoneUtil = PhoneNumberUtil::getInstance();
-        $this->phone = $phone;
-        $this->country = $country;
 
         try {
-            $phoneNumber = $phoneUtil->parse($phone, $country);
-            $code = $phoneUtil->getCountryCodeForRegion($country);
+            $phoneNumber = $phoneUtil->parse($this->phone, $this->country);
+            $code = $phoneUtil->getCountryCodeForRegion($this->country);
             $this->code = $code;
             $this->international = $phoneUtil->format($phoneNumber, PhoneNumberFormat::INTERNATIONAL);
             $this->national = $phoneUtil->format($phoneNumber, PhoneNumberFormat::NATIONAL);
@@ -84,8 +123,7 @@ class Phone extends Model
             $this->RFC3966 = $phoneUtil->format($phoneNumber, PhoneNumberFormat::RFC3966);
         } catch (Exception $e) {
             // let's continue
+            SproutBaseFields::error('Unable to populate phone field model: '.$e->getMessage());
         }
-
-        parent::__construct();
     }
 }

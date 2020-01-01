@@ -107,7 +107,10 @@ class Phone extends Component
         }
 
         if (isset($phoneArray['phone'], $phoneArray['country'])) {
-            return new PhoneModel($phoneArray['phone'], $phoneArray['country']);
+            $phoneModel = new PhoneModel();
+            $phoneModel->country = $phoneArray['country'];
+            $phoneModel->phone = $phoneArray['phone'];
+            return $phoneModel;
         }
 
         return $value;
@@ -126,7 +129,7 @@ class Phone extends Component
 
         if ($value instanceof PhoneModel) {
             // Don't save anything unless we can render a phone
-            if ($value->national === null) {
+            if ($value->getNational() === null) {
                 return null;
             }
 
