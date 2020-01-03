@@ -8,6 +8,7 @@ use craft\db\Query;
 use craft\helpers\Json;
 use Craft;
 use yii\base\NotSupportedException;
+use yii\db\Exception;
 
 /**
  * m200102_000000_update_sproutseo_globals_address migration.
@@ -16,7 +17,7 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
 {
     /**
      * @return bool
-     * @throws NotSupportedException
+     * @throws Exception
      */
     public function safeUp(): bool
     {

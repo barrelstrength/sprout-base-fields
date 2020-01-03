@@ -29,14 +29,14 @@ class m200102_000000_update_empty_name_fields_to_null extends Migration
 
         // Get all Name fields from content table (Craft / Sprout Forms)
         $nameFieldTypes = (new Query())
-            ->select(['id', 'settings', 'type'])
+            ->select(['id', 'handle', 'settings', 'type'])
             ->from([Table::FIELDS])
             ->where(['type' => $sproutFieldsNameFieldClass])
             ->all();
 
         // Update every Name Column that matches a blank name JSON string and set it to null
         foreach ($nameFieldTypes as $field) {
-            $columnName = 'field_'.$field->handle;
+            $columnName = 'field_'.$field['handle'];
             if (!$this->db->columnExists(Table::CONTENT, $columnName)) {
                 continue;
             }
@@ -59,19 +59,19 @@ class m200102_000000_update_empty_name_fields_to_null extends Migration
             ->all();
 
         $sproutFormsNameFieldTypes = (new Query())
-            ->select(['id', 'settings', 'type'])
+            ->select(['id', 'handle', 'settings', 'type'])
             ->from([Table::FIELDS])
             ->where(['type' => $sproutFormsNameFieldClass])
             ->all();
 
         foreach ($forms as $form) {
-            $contentTable = 'sproutformscontent_'.$form->handle;
+            $contentTable = 'sproutformscontent_'.$form['handle'];
             if (!$this->db->tableExists($contentTable)) {
                 continue;
             }
 
             foreach ($sproutFormsNameFieldTypes as $field) {
-                $columnName = 'field_'.$field->handle;
+                $columnName = 'field_'.$field['handle'];
                if ($this->db->columnExists($contentTable, $columnName)) {
                    continue;
                }
