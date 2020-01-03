@@ -40,7 +40,7 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
 
         // Temporarily Save any addresses found in our identity settings to the sprout_settings table
         foreach ($identities as $identity) {
-            $identity = Json::decode($identity);
+            $identity = Json::decode($identity['identity']);
             $addressId = $identity['addressId'] ?? null;
 
             if (!$addressId || !is_int($addressId)) {
