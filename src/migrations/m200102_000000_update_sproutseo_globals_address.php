@@ -43,7 +43,7 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
             $identity = Json::decode($identity['identity']);
             $addressId = $identity['addressId'] ?? null;
 
-            if (!$addressId || !is_int($addressId)) {
+            if (!$addressId) {
                 continue;
             }
 
