@@ -32,7 +32,7 @@ class m191218_000000_remove_addressHelper_from_settings extends Migration
         foreach ($fields as $field) {
 
             $settings = Json::decodeIfJson($field['settings']) ?: [];
-            unset($settings['addressHelper']);
+            unset($settings['addressHelper'], $settings['value']);
             $settings = Json::encode($settings);
 
             $this->update(Table::FIELDS, ['settings' => $settings], ['id' => $field['id']], [], false);
