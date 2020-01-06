@@ -66,7 +66,11 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
                 ->where(['id' => $addressId])
                 ->one();
 
-            unset($address['id'], $address['elementId'], $address['fieldId']);
+            unset(
+                $address['id'],
+                $address['elementId'],
+                $address['fieldId']
+            );
 
             Craft::$app->db->createCommand()->insert('{{%sprout_settings}}', [
                 'model' => 'address-fields-migration-sprout-seo-v4.2.9-siteId:'.$address['siteId'],

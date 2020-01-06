@@ -154,7 +154,7 @@ class AddressController extends Controller
         $addressFormatter->setNamespace($namespace);
 
         /** @var AddressFieldTrait $field */
-        if ($field = Craft::$app->fields->getFieldById($addressModel->fieldId)) {
+        if (!empty($addressModel->fieldId) && $field = Craft::$app->fields->getFieldById($addressModel->fieldId)) {
             $addressFormatter->setHighlightCountries($field->highlightCountries);
         }
 
@@ -226,4 +226,3 @@ class AddressController extends Controller
         return $this->asJson($result);
     }
 }
-
