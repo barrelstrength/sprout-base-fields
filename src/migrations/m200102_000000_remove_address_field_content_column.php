@@ -27,29 +27,10 @@ class m200102_000000_remove_address_field_content_column extends Migration
 
         // SPROUT FIELDS
 
-        $tempAddressFieldsTable = '{{%sproutfields_addresses_temp}}';
         $addressFieldsTable = '{{%sproutfields_addresses}}';
-
-        if (!$this->db->tableExists($tempAddressFieldsTable)) {
-            // Create a fresh address field table
-            $this->createTable($tempAddressFieldsTable, [
-                'id' => $this->primaryKey(),
-                'elementId' => $this->integer(),
-                'siteId' => $this->integer(),
-                'fieldId' => $this->integer(),
-                'countryCode' => $this->string(),
-                'administrativeAreaCode' => $this->string(),
-                'locality' => $this->string(),
-                'dependentLocality' => $this->string(),
-                'postalCode' => $this->string(),
-                'sortingCode' => $this->string(),
-                'address1' => $this->string(),
-                'address2' => $this->string(),
-                'dateCreated' => $this->dateTime()->notNull(),
-                'dateUpdated' => $this->dateTime()->notNull(),
-                'uid' => $this->uid(),
-            ]);
-        }
+        $sproutSeoAddressTable = '{{%sproutseo_addresses}}';
+        $tempAddressFieldsTable = '{{%sproutfields_addresses_temp}}';
+        $oldAddressFieldsTable = '{{%sproutfields_addresses_old}}';
 
         // Get all Name fields from content table (Craft / Sprout Forms)
         $addressFieldTypes = (new Query())
@@ -61,8 +42,14 @@ class m200102_000000_remove_address_field_content_column extends Migration
         // Update every Name Column that matches a blank name JSON string and set it to null
         foreach ($addressFieldTypes as $field) {
             $columnName = 'field_'.$field['handle'];
+
+            // If we don't have an address column in the content table, no need to migrate anything
             if (!$this->db->columnExists(Table::CONTENT, $columnName)) {
                 continue;
+            }
+
+            if (!$this->db->tableExists($tempAddressFieldsTable)) {
+                $this->createTemporaryAddressTable($tempAddressFieldsTable);
             }
 
             $elementsWithAddressIds = (new Query())
@@ -88,12 +75,22 @@ class m200102_000000_remove_address_field_content_column extends Migration
 
                 $address['elementId'] = $elementsWithAddressId['elementId'];
                 unset($address['id']);
+
                 $this->insert($tempAddressFieldsTable, $address, false);
             }
 
-            $this->dropTable($addressFieldsTable);
-            $this->renameTable($tempAddressFieldsTable, $addressFieldsTable);
             $this->dropColumn(Table::CONTENT, $columnName);
+        }
+
+        // The temp table will only get created if address columns exist, so only
+        // rename and delete if it exists
+        if ($this->db->tableExists($tempAddressFieldsTable)) {
+            $this->renameTable($addressFieldsTable, $oldAddressFieldsTable);
+            $this->renameTable($tempAddressFieldsTable, $addressFieldsTable);
+
+            $this->dropTableIfExists($tempAddressFieldsTable);
+            $this->dropTableIfExists($oldAddressFieldsTable);
+            $this->dropTableIfExists($sproutSeoAddressTable);
         }
 
         if (!$this->db->tableExists('{{%sproutforms_forms}}')) {
@@ -128,6 +125,27 @@ class m200102_000000_remove_address_field_content_column extends Migration
         }
 
         return true;
+    }
+
+    public function createTemporaryAddressTable($tempAddressFieldsTable) {
+        // Create a fresh address field table
+        $this->createTable($tempAddressFieldsTable, [
+            'id' => $this->primaryKey(),
+            'elementId' => $this->integer(),
+            'siteId' => $this->integer(),
+            'fieldId' => $this->integer(),
+            'countryCode' => $this->string(),
+            'administrativeAreaCode' => $this->string(),
+            'locality' => $this->string(),
+            'dependentLocality' => $this->string(),
+            'postalCode' => $this->string(),
+            'sortingCode' => $this->string(),
+            'address1' => $this->string(),
+            'address2' => $this->string(),
+            'dateCreated' => $this->dateTime()->notNull(),
+            'dateUpdated' => $this->dateTime()->notNull(),
+            'uid' => $this->uid(),
+        ]);
     }
 
     /**
