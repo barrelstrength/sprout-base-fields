@@ -65,14 +65,14 @@ class m200102_000000_update_empty_phone_fields_to_null extends Migration
             ->all();
 
         foreach ($forms as $form) {
-            $contentTable = 'sproutformscontent_'.$form['handle'];
+            $contentTable = '{{%sproutformscontent_'.$form['handle'].'}}';
             if (!$this->db->tableExists($contentTable)) {
                 continue;
             }
 
             foreach ($sproutFormsNameFieldTypes as $field) {
                 $columnName = 'field_'.$field['handle'];
-                if ($this->db->columnExists($contentTable, $columnName)) {
+                if (!$this->db->columnExists($contentTable, $columnName)) {
                     continue;
                 }
 

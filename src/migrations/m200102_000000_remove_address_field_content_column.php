@@ -82,17 +82,6 @@ class m200102_000000_remove_address_field_content_column extends Migration
             $this->dropColumn(Table::CONTENT, $columnName);
         }
 
-        // The temp table will only get created if address columns exist, so only
-        // rename and delete if it exists
-        if ($this->db->tableExists($tempAddressFieldsTable)) {
-            $this->renameTable($addressFieldsTable, $oldAddressFieldsTable);
-            $this->renameTable($tempAddressFieldsTable, $addressFieldsTable);
-
-            $this->dropTableIfExists($tempAddressFieldsTable);
-            $this->dropTableIfExists($oldAddressFieldsTable);
-            $this->dropTableIfExists($sproutSeoAddressTable);
-        }
-
         if (!$this->db->tableExists('{{%sproutforms_forms}}')) {
             return true;
         }
@@ -111,17 +100,61 @@ class m200102_000000_remove_address_field_content_column extends Migration
             ->all();
 
         foreach ($forms as $form) {
-            $contentTable = 'sproutformscontent_'.$form['handle'];
+            $contentTable = '{{%sproutformscontent_'.$form['handle'].'}}';
             if (!$this->db->tableExists($contentTable)) {
                 continue;
             }
 
             foreach ($sproutFormsNameFieldTypes as $field) {
                 $columnName = 'field_'.$field['handle'];
-                if ($this->db->columnExists($contentTable, $columnName)) {
-                    $this->dropColumn($contentTable, $columnName);
+                if (!$this->db->columnExists($contentTable, $columnName)) {
+                    continue;
                 }
+
+                if (!$this->db->tableExists($tempAddressFieldsTable)) {
+                    $this->createTemporaryAddressTable($tempAddressFieldsTable);
+                }
+
+                $formElementsWithAddressIds = (new Query())
+                    ->select(['id', 'elementId', $columnName])
+                    ->from([$contentTable])
+                    ->where(['not', [$columnName => null]])
+                    ->all();
+
+                // Insert new Address records with Element IDs to match existing Elements
+                foreach ($formElementsWithAddressIds as $elementsWithAddressId) {
+                    $addressId = $elementsWithAddressId[$columnName];
+
+                    $address = (new Query())
+                        ->select(['*'])
+                        ->from([$addressFieldsTable])
+                        ->where(['id' => $addressId])
+                        ->one();
+
+                    if (!$address) {
+                        SproutBaseFields::info('Unable to migrate address. Unable to find address with ID: '. $addressId. ' for form element '. $elementsWithAddressId['elementId']);
+                        continue;
+                    }
+
+                    $address['elementId'] = $elementsWithAddressId['elementId'];
+                    unset($address['id']);
+
+                    $this->insert($tempAddressFieldsTable, $address, false);
+                }
+
+                $this->dropColumn($contentTable, $columnName);
             }
+        }
+
+        // The temp table will only get created if address columns exist, so only
+        // rename and delete if it exists
+        if ($this->db->tableExists($tempAddressFieldsTable)) {
+            $this->renameTable($addressFieldsTable, $oldAddressFieldsTable);
+            $this->renameTable($tempAddressFieldsTable, $addressFieldsTable);
+
+            $this->dropTableIfExists($tempAddressFieldsTable);
+            $this->dropTableIfExists($oldAddressFieldsTable);
+            $this->dropTableIfExists($sproutSeoAddressTable);
         }
 
         return true;
