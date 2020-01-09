@@ -41,6 +41,7 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
 
         // Temporarily Save any addresses found in our identity settings to the sprout_settings table
         foreach ($identities as $identity) {
+            $siteId = $identity['siteId'];
             $identity = Json::decode($identity['identity']);
             $addressId = $identity['addressId'] ?? null;
 
@@ -68,7 +69,7 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
             unset($address['id'], $address['administrativeArea']);
 
             Craft::$app->db->createCommand()->insert('{{%sprout_settings}}', [
-                'model' => 'address-fields-migration-sprout-seo-v4.2.9-siteId:'.$identity['siteId'],
+                'model' => 'address-fields-migration-sprout-seo-v4.2.9-siteId:'.$siteId,
                 'settings' => Json::encode($address)
             ])->execute();
         }
