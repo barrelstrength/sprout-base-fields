@@ -38,6 +38,6 @@ class Address extends ActiveRecord
      */
     public static function tableName(): string
     {
-        return '{{%sproutfields_addresses}}';
+        return '{{%sprout_addresses}}';
     }
 }

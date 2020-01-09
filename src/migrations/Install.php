@@ -17,7 +17,7 @@ class Install extends Migration
     /**
      * @var string|null The table name
      */
-    public $tableName = '{{%sproutfields_addresses}}';
+    public $tableName = '{{%sprout_addresses}}';
 
     // Public Methods
     // =========================================================================

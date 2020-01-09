@@ -59,7 +59,7 @@ class Address extends Component
         // If we don't have an address model, delete the old address associated with this field
         if (!$address instanceof AddressModel) {
             Craft::$app->db->createCommand()
-                ->delete('{{%sproutfields_addresses}}', [
+                ->delete('{{%sprout_addresses}}', [
                     'elementId' => $element->id,
                     'siteId' => $element->siteId,
                     'fieldId' => $field->id
@@ -157,13 +157,13 @@ class Address extends Component
     {
         $addressIdsWithDeletedElementIds = (new Query())
             ->select('addresses.id')
-            ->from('{{%sproutfields_addresses}} addresses')
+            ->from('{{%sprout_addresses}} addresses')
             ->leftJoin('{{%elements}} elements', '[[addresses.elementId]] = [[elements.id]]')
             ->where(['elements.id' => null])
             ->column();
 
         Craft::$app->db->createCommand()
-            ->delete('{{%sproutfields_addresses}}', [
+            ->delete('{{%sprout_addresses}}', [
                 'id' => $addressIdsWithDeletedElementIds
             ])
             ->execute();
@@ -191,7 +191,7 @@ class Address extends Component
                 'address1',
                 'address2'
             ])
-            ->from('{{%sproutfields_addresses}}')
+            ->from('{{%sprout_addresses}}')
             ->where(['id' => $id])
             ->one();
 
@@ -228,7 +228,7 @@ class Address extends Component
                 'address1',
                 'address2'
             ])
-            ->from('{{%sproutfields_addresses}}')
+            ->from('{{%sprout_addresses}}')
             ->where([
                 'siteId' => $element->siteId,
                 'fieldId' => $fieldId
