@@ -28,9 +28,9 @@ class m200102_000000_remove_address_field_content_column extends Migration
         // SPROUT FIELDS
 
         $addressFieldsTable = '{{%sproutfields_addresses}}';
-        $sproutSeoAddressTable = '{{%sproutseo_addresses}}';
         $tempAddressFieldsTable = '{{%sproutfields_addresses_temp}}';
         $oldAddressFieldsTable = '{{%sproutfields_addresses_old}}';
+        $newAddressFieldsTable = '{{%sprout_addresses}}';
 
         // Get all Name fields from content table (Craft / Sprout Forms)
         $addressFieldTypes = (new Query())
@@ -150,11 +150,10 @@ class m200102_000000_remove_address_field_content_column extends Migration
         // rename and delete if it exists
         if ($this->db->tableExists($tempAddressFieldsTable)) {
             $this->renameTable($addressFieldsTable, $oldAddressFieldsTable);
-            $this->renameTable($tempAddressFieldsTable, $addressFieldsTable);
+            $this->renameTable($tempAddressFieldsTable, $newAddressFieldsTable);
 
             $this->dropTableIfExists($tempAddressFieldsTable);
             $this->dropTableIfExists($oldAddressFieldsTable);
-            $this->dropTableIfExists($sproutSeoAddressTable);
         }
 
         return true;

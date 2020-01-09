@@ -22,8 +22,9 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
     public function safeUp(): bool
     {
         $sproutSeoGlobalsTable = '{{%sproutseo_globals}}';
+        $sproutSeoAddressesTable = '{{%sproutseo_addresses}}';
 
-        if (!$this->db->tableExists($sproutSeoGlobalsTable)) {
+        if (!$this->db->tableExists($sproutSeoAddressesTable)) {
             return true;
         }
 
@@ -34,7 +35,7 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
         ob_end_clean();
 
         $identities = (new Query())
-            ->select(['id', 'identity'])
+            ->select(['id', 'siteId', 'identity'])
             ->from([$sproutSeoGlobalsTable])
             ->all();
 
@@ -50,11 +51,8 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
             $address = (new Query())
                 ->select([
                     'id',
-                    'elementId',
-                    'siteId',
-                    'fieldId',
                     'countryCode',
-                    'administrativeAreaCode',
+                    'administrativeArea',
                     'locality',
                     'dependentLocality',
                     'postalCode',
@@ -62,18 +60,15 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
                     'address1',
                     'address2'
                 ])
-                ->from('{{%sproutfields_addresses}}')
+                ->from('{{%sproutseo_addresses}}')
                 ->where(['id' => $addressId])
                 ->one();
 
-            unset(
-                $address['id'],
-                $address['elementId'],
-                $address['fieldId']
-            );
+            $address['administrativeAreaCode'] = $address['administrativeArea'];
+            unset($address['id'], $address['administrativeArea']);
 
             Craft::$app->db->createCommand()->insert('{{%sprout_settings}}', [
-                'model' => 'address-fields-migration-sprout-seo-v4.2.9-siteId:'.$address['siteId'],
+                'model' => 'address-fields-migration-sprout-seo-v4.2.9-siteId:'.$identity['siteId'],
                 'settings' => Json::encode($address)
             ])->execute();
         }
