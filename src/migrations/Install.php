@@ -11,26 +11,15 @@ use craft\db\Migration;
 
 class Install extends Migration
 {
-    // Properties
-    // =========================================================================
-
-    /**
-     * @var string|null The table name
-     */
-    public $tableName = '{{%sprout_addresses}}';
-
-    // Public Methods
-    // =========================================================================
-
     /**
      * @inheritdoc
      */
     public function safeUp()
     {
-        $response = $this->getDb()->tableExists($this->tableName);
+        $tableName = '{{%sprout_addresses}}';
 
-        if ($response == false) {
-            $this->createTable($this->tableName, [
+        if (!$this->getDb()->tableExists($tableName)) {
+            $this->createTable($tableName, [
                 'id' => $this->primaryKey(),
                 'elementId' => $this->integer(),
                 'siteId' => $this->integer(),

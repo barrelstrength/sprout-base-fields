@@ -23,8 +23,6 @@ class m200109_000000_update_address_tables extends Migration
         $oldAddressTableName = '{{%sproutfields_addresses}}';
         $newAddressTableName = '{{%sprout_addresses}}';
 
-        // In some cases, our temp address migration table never got created
-        // Make sure we rename the address table to the new name
         if ($this->db->tableExists($oldAddressTableName) && !$this->db->tableExists($newAddressTableName)) {
             $this->renameTable($oldAddressTableName, $newAddressTableName);
         }

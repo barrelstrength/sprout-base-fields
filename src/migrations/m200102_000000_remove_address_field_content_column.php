@@ -27,10 +27,19 @@ class m200102_000000_remove_address_field_content_column extends Migration
 
         // SPROUT FIELDS
 
-        $addressFieldsTable = '{{%sproutfields_addresses}}';
+        $currentAddressFieldsTable = '{{%sproutfields_addresses}}';
         $tempAddressFieldsTable = '{{%sproutfields_addresses_temp}}';
         $oldAddressFieldsTable = '{{%sproutfields_addresses_old}}';
         $newAddressFieldsTable = '{{%sprout_addresses}}';
+
+        // Make sure we are starting with the table sproutfields_addresses and not sprout_addresses
+        // We need to do this because when the table was renamed in the install migration, it created
+        // a scenario where the migrations for installs that still need to run several migrations
+        // may have different assumptions about which table exists. This migration will get that all
+        // cleared up
+        if ($this->db->tableExists($newAddressFieldsTable) && !$this->db->tableExists($currentAddressFieldsTable)) {
+            $this->renameTable($newAddressFieldsTable, $currentAddressFieldsTable);
+        }
 
         // Get all Name fields from content table (Craft / Sprout Forms)
         $addressFieldTypes = (new Query())
@@ -64,7 +73,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
 
                 $address = (new Query())
                     ->select(['*'])
-                    ->from([$addressFieldsTable])
+                    ->from([$currentAddressFieldsTable])
                     ->where(['id' => $addressId])
                     ->one();
 
@@ -124,7 +133,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
 
                         $address = (new Query())
                             ->select(['*'])
-                            ->from([$addressFieldsTable])
+                            ->from([$currentAddressFieldsTable])
                             ->where(['id' => $addressId])
                             ->one();
 
@@ -147,7 +156,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
         // The temp table will only get created if address columns exist, so only
         // rename and delete if it exists
         if ($this->db->tableExists($tempAddressFieldsTable)) {
-            $this->renameTable($addressFieldsTable, $oldAddressFieldsTable);
+            $this->renameTable($currentAddressFieldsTable, $oldAddressFieldsTable);
             $this->renameTable($tempAddressFieldsTable, $newAddressFieldsTable);
 
             $this->dropTableIfExists($tempAddressFieldsTable);

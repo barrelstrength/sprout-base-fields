@@ -14,11 +14,9 @@ class m190226_000000_add_address_table extends Migration
      */
     public function safeUp(): bool
     {
-        $tableName = '{{%sproutfields_addresses}}';
+        $tableName = '{{%sprout_addresses}}';
 
-        $response = $this->getDb()->tableExists($tableName);
-
-        if ($response == false) {
+        if (!$this->getDb()->tableExists($tableName)) {
             $this->createTable($tableName, [
                 'id' => $this->primaryKey(),
                 'elementId' => $this->integer(),
