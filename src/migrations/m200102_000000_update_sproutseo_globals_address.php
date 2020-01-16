@@ -74,6 +74,8 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
             ])->execute();
         }
 
+        $this->dropTableIfExists('{{%sproutseo_addresses}}');
+
         return true;
     }
 

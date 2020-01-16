@@ -27,10 +27,6 @@ class m200109_000000_update_address_tables extends Migration
             $this->renameTable($oldAddressTableName, $newAddressTableName);
         }
 
-        // In some cases, Sprout SEO could migrate the address and not cleanup the table.
-        // Make sure we've deleted it.
-        $this->dropTableIfExists('{{%sproutseo_addresses}}');
-
         return true;
     }
 
