@@ -488,8 +488,8 @@ class Address extends Component
         }
 
         // Mark this address for deletion. This is processed in the saveAddress method
-        $deleteAddress = (int)$value['delete'];
-
+        $delete = $value['delete'] ?? 0;
+        $deleteAddress = (int)$delete;
 
         $address = $this->getAddressFromElement($element, $field->id);
 
