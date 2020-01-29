@@ -28,6 +28,8 @@ class Url extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml(Field $field): string
     {
@@ -48,6 +50,8 @@ class Url extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getInputHtml(Field $field, $value, ElementInterface $element = null): string
     {

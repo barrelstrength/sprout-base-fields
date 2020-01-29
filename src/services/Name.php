@@ -90,6 +90,8 @@ class Name extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml(FieldInterface $field): string
     {
@@ -109,6 +111,8 @@ class Name extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getInputHtml(FieldInterface $field, $value, ElementInterface $element = null): string
     {

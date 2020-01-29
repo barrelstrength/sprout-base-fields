@@ -286,6 +286,8 @@ class Address extends Component
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws SiteNotFoundException
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml(FieldInterface $field): string
     {
@@ -350,6 +352,8 @@ class Address extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getInputHtml(Field $field, $value, ElementInterface $element = null): string
     {
@@ -490,7 +494,7 @@ class Address extends Component
 
         // Mark this address for deletion. This is processed in the saveAddress method
         $delete = $value['delete'] ?? 0;
-        $deleteAddress = (int)$delete;
+        $deleteAddress = $delete;
 
         $address = $this->getAddressFromElement($element, $field->id);
 

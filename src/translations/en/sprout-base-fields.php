@@ -71,7 +71,6 @@ Shorthand Syntax: {title}',
     '}' => '}',
     'No address saved.' => 'No address saved.',
     'Address 1 field cannot be blank.' => 'Address 1 field cannot be blank.',
-    'No address added.' => 'No address added.',
     'Validate email addresses using this regular expression.' => 'Validate email addresses using this regular expression.',
     'Email Addresses for this field have their own validation pattern' => 'Email Addresses for this field have their own validation pattern',
     'Require email address to be unique' => 'Require email address to be unique',
@@ -86,5 +85,12 @@ Shorthand Syntax: {title}',
     'Display this error message when validation fails.' => 'Display this error message when validation fails.',
     '{fieldName} is invalid.' => '{fieldName} is invalid.',
     'URLs for this field have their own validation pattern' => 'URLs for this field have their own validation pattern',
-    'Display this error message when a URL is invalid.' => 'Display this error message when a URL is invalid.'
+    'Display this error message when a URL is invalid.' => 'Display this error message when a URL is invalid.',
+    ')}' => ')}',
+    'Reference the Element you are saving using the `object` variable:
+Object syntax: {{ object.title }}
+Shorthand syntax: {title}' => 'Reference the Element you are saving using the `object` variable:
+Object syntax: {{ object.title }}
+Shorthand syntax: {title}',
+    'The auto-generated date value. Format Date in the proper Date format: `Y-m-d h:i:s`.' => 'The auto-generated date value. Format Date in the proper Date format: `Y-m-d h:i:s`.'
 ];

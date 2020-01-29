@@ -230,6 +230,10 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getAddressFormHtml()
     {
@@ -326,6 +330,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getCountryInputHtml($showCountryDropdown = true): string
     {
@@ -352,6 +358,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getPostalCodeInputHtml(): string
     {
@@ -386,6 +394,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     private function getAddressLineInputHtml($addressName): string
     {
@@ -416,6 +426,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     private function getSortingCodeInputHtml(): string
     {
@@ -438,6 +450,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     private function getLocalityInputHtml(): string
     {
@@ -460,6 +474,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     private function getDependentLocalityInputHtml(): string
     {
@@ -482,6 +498,9 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     private function getAdministrativeAreaInputHtml(): string
     {

@@ -31,6 +31,8 @@ class Email extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getSettingsHtml($field): string
     {
@@ -49,6 +51,8 @@ class Email extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function getInputHtml(FieldInterface $field, $value, ElementInterface $element = null): string
     {

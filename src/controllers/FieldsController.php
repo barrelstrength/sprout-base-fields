@@ -47,8 +47,9 @@ class FieldsController extends BaseController
         $this->requireAcceptsJson();
 
         $value = Craft::$app->getRequest()->getParam('value');
-        $field = $this->getFieldModel();
 
+        /** @var Field $field */
+        $field = $this->getFieldModel();
         $isValid = SproutBaseFields::$app->urlField->validate($value, $field);
 
         return $this->asJson(['success' => $isValid]);
