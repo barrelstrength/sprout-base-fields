@@ -8,5 +8,6 @@
     "/src/web/assets/phone/dist/js/phonefield.js": "/src/web/assets/phone/dist/js/phonefield.js",
     "/src/web/assets/regularexpression/dist/js/regularexpressionfield.js": "/src/web/assets/regularexpression/dist/js/regularexpressionfield.js",
     "/src/web/assets/selectother/dist/js/selectotherfield.js": "/src/web/assets/selectother/dist/js/selectotherfield.js",
-    "/src/web/assets/url/dist/js/urlfield.js": "/src/web/assets/url/dist/js/urlfield.js"
+    "/src/web/assets/url/dist/js/urlfield.js": "/src/web/assets/url/dist/js/urlfield.js",
+    "/lib/craftcms-sass/_mixins.scss": "/lib/craftcms-sass/_mixins.scss"
 }

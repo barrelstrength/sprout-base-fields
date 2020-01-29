@@ -48,7 +48,6 @@ mix
 
   // Select Other
   .js([
-    'src/web/assets/selectother/src/js/EditableTable.js',
     'src/web/assets/selectother/src/js/SelectOtherField.js'
   ], 'src/web/assets/selectother/dist/js/selectotherfield.js')
 
