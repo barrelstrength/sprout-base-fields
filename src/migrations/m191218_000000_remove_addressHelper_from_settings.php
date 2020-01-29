@@ -47,6 +47,7 @@ class m191218_000000_remove_addressHelper_from_settings extends Migration
     public function safeDown(): bool
     {
         echo "m191218_000000_remove_addressHelper_from_settings cannot be reverted.\n";
+
         return false;
     }
 }

@@ -5,7 +5,6 @@ namespace barrelstrength\sproutbasefields\migrations;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
-use craft\helpers\Json;
 use yii\base\NotSupportedException;
 
 /**
@@ -42,7 +41,8 @@ class m200102_000000_update_empty_phone_fields_to_null extends Migration
             }
 
             $this->update(Table::CONTENT, [
-                $columnName => null], [
+                $columnName => null
+            ], [
                 $columnName => $oldEmptyPhoneFieldValue
             ], [], false);
         }
@@ -93,6 +93,7 @@ class m200102_000000_update_empty_phone_fields_to_null extends Migration
     public function safeDown(): bool
     {
         echo "m200102_000000_update_empty_phone_fields_to_null cannot be reverted.\n";
+
         return false;
     }
 }

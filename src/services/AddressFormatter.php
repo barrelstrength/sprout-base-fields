@@ -8,13 +8,13 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
+use CommerceGuys\Addressing\Address;
 use CommerceGuys\Addressing\AddressFormat\AddressFormat;
-use Craft;
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
-use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
 use CommerceGuys\Addressing\Country\CountryRepository;
 use CommerceGuys\Addressing\Formatter\DefaultFormatter;
-use CommerceGuys\Addressing\Address;
+use CommerceGuys\Addressing\Subdivision\SubdivisionRepository;
+use Craft;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -62,6 +62,15 @@ class AddressFormatter
     protected $highlightCountries = [];
 
     /**
+     * Our base address field path defaults to the path we use for rendering the Address Field in the
+     * Control Panel. In the case of Sprout Forms, we need to override this and set this to blank because
+     * Sprout Forms dynamically determines the path so that users can control template overrides.
+     *
+     * @var string
+     */
+    private $baseAddressFieldPath = 'sprout-base-fields/_components/fields/formfields/';
+
+    /**
      * @return mixed
      */
     public function getLanguage()
@@ -75,13 +84,6 @@ class AddressFormatter
     public function setLanguage($language)
     {
         $this->language = $language;
-    }
-
-    public function setHighlightCountries($highlightCountries = [])
-    {
-        $highlightCountries = $this->getHighlightCountries($highlightCountries);
-
-        $this->highlightCountries = $highlightCountries;
     }
 
     /**
@@ -109,14 +111,12 @@ class AddressFormatter
         return $options;
     }
 
-    /**
-     * Our base address field path defaults to the path we use for rendering the Address Field in the
-     * Control Panel. In the case of Sprout Forms, we need to override this and set this to blank because
-     * Sprout Forms dynamically determines the path so that users can control template overrides.
-     *
-     * @var string
-     */
-    private $baseAddressFieldPath = 'sprout-base-fields/_components/fields/formfields/';
+    public function setHighlightCountries($highlightCountries = [])
+    {
+        $highlightCountries = $this->getHighlightCountries($highlightCountries);
+
+        $this->highlightCountries = $highlightCountries;
+    }
 
     /**
      * @return string
@@ -348,6 +348,38 @@ class AddressFormatter
     }
 
     /**
+     * @return string
+     * @throws LoaderError
+     * @throws RuntimeError
+     * @throws SyntaxError
+     */
+    public function getPostalCodeInputHtml(): string
+    {
+        $value = $this->getAddressModel()->postalCode;
+
+        return Craft::$app->view->renderTemplate(
+            $this->getBaseAddressFieldPath().'address/_components/text', [
+                'fieldClass' => 'sprout-address-onchange-country',
+                'label' => $this->renderAddressLabel($this->addressFormat->getPostalCodeType()),
+                'name' => $this->namespace,
+                'inputName' => 'postalCode',
+                'autocomplete' => 'postal-code',
+                'value' => $value
+            ]
+        );
+    }
+
+    /**
+     * @param $label
+     *
+     * @return null|string
+     */
+    protected function renderAddressLabel($label)
+    {
+        return Craft::t('sprout-base-fields', str_replace('_', ' ', ucwords($label)));
+    }
+
+    /**
      * @param $addressName
      *
      * @return string
@@ -481,37 +513,5 @@ class AddressFormatter
                 'value' => $value
             ]
         );
-    }
-
-    /**
-     * @return string
-     * @throws LoaderError
-     * @throws RuntimeError
-     * @throws SyntaxError
-     */
-    public function getPostalCodeInputHtml(): string
-    {
-        $value = $this->getAddressModel()->postalCode;
-
-        return Craft::$app->view->renderTemplate(
-            $this->getBaseAddressFieldPath().'address/_components/text', [
-                'fieldClass' => 'sprout-address-onchange-country',
-                'label' => $this->renderAddressLabel($this->addressFormat->getPostalCodeType()),
-                'name' => $this->namespace,
-                'inputName' => 'postalCode',
-                'autocomplete' => 'postal-code',
-                'value' => $value
-            ]
-        );
-    }
-
-    /**
-     * @param $label
-     *
-     * @return null|string
-     */
-    protected function renderAddressLabel($label)
-    {
-        return Craft::t('sprout-base-fields', str_replace('_', ' ', ucwords($label)));
     }
 }

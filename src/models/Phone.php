@@ -25,6 +25,7 @@ class Phone extends Model
      * @var string
      */
     public $phone;
+
     /**
      * @var string
      */
@@ -63,6 +64,7 @@ class Phone extends Model
         if (!$this->international) {
             $this->populatePhoneDetails();
         }
+
         return (string)$this->international;
     }
 
@@ -71,6 +73,7 @@ class Phone extends Model
         if (!$this->code) {
             $this->populatePhoneDetails();
         }
+
         return $this->code;
     }
 
@@ -79,6 +82,7 @@ class Phone extends Model
         if (!$this->international) {
             $this->populatePhoneDetails();
         }
+
         return $this->international;
     }
 
@@ -87,6 +91,7 @@ class Phone extends Model
         if (!$this->national) {
             $this->populatePhoneDetails();
         }
+
         return $this->national;
     }
 
@@ -95,6 +100,7 @@ class Phone extends Model
         if (!$this->E164) {
             $this->populatePhoneDetails();
         }
+
         return $this->E164;
     }
 
@@ -103,6 +109,7 @@ class Phone extends Model
         if (!$this->RFC3966) {
             $this->populatePhoneDetails();
         }
+
         return $this->RFC3966;
     }
 

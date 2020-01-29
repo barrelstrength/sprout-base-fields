@@ -12,7 +12,6 @@ use Craft;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\web\Controller as BaseController;
-
 use yii\web\BadRequestHttpException;
 use yii\web\Response;
 

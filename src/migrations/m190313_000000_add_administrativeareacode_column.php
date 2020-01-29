@@ -40,6 +40,7 @@ class m190313_000000_add_administrativeareacode_column extends Migration
     public function safeDown(): bool
     {
         echo "m190313_000000_add_administrativeareacode_column cannot be reverted.\n";
+
         return false;
     }
 }

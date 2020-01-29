@@ -9,8 +9,8 @@ namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\models\Name as NameModel;
 use barrelstrength\sproutbasefields\SproutBaseFields;
-use craft\base\Component;
 use Craft;
+use craft\base\Component;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\FieldInterface;
@@ -37,6 +37,7 @@ class Name extends Component
         if (is_string($value)) {
             $nameArray = Json::decode($value);
             $nameModel->setAttributes($nameArray, false);
+
             return $nameModel;
         }
 
@@ -52,6 +53,7 @@ class Name extends Component
 
                 $nameModel->lastName = implode(' ', $nameArray);
             }
+
             return $nameModel;
         }
 

@@ -150,23 +150,6 @@ class Address extends Model
     }
 
     /**
-     * @return array
-     */
-    protected function defineRules(): array
-    {
-        $rules = parent::defineRules();
-
-        $rules[] = ['postalCode', 'validatePostalCode'];
-        $rules[] = [
-            'address1',
-            'required',
-            'message' => Craft::t('sprout-base-fields', 'Address 1 field cannot be blank.')
-        ];
-
-        return $rules;
-    }
-
-    /**
      * @param $attribute
      *
      * @return bool
@@ -195,5 +178,22 @@ class Address extends Model
         ]));
 
         return true;
+    }
+
+    /**
+     * @return array
+     */
+    protected function defineRules(): array
+    {
+        $rules = parent::defineRules();
+
+        $rules[] = ['postalCode', 'validatePostalCode'];
+        $rules[] = [
+            'address1',
+            'required',
+            'message' => Craft::t('sprout-base-fields', 'Address 1 field cannot be blank.')
+        ];
+
+        return $rules;
     }
 }

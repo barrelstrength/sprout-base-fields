@@ -3,11 +3,10 @@
 namespace barrelstrength\sproutbasefields\migrations;
 
 use barrelstrength\sproutbase\migrations\Install as SproutBaseInstall;
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\helpers\Json;
-use Craft;
-use yii\base\NotSupportedException;
 use yii\db\Exception;
 
 /**
@@ -85,6 +84,7 @@ class m200102_000000_update_sproutseo_globals_address extends Migration
     public function safeDown(): bool
     {
         echo "m200102_000000_update_sproutseo_globals_address cannot be reverted.\n";
+
         return false;
     }
 }

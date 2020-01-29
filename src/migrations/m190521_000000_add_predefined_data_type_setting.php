@@ -49,6 +49,7 @@ class m190521_000000_add_predefined_data_type_setting extends Migration
     public function safeDown(): bool
     {
         echo "m190521_000000_add_predefined_data_type_setting cannot be reverted.\n";
+
         return false;
     }
 }

@@ -8,11 +8,11 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\base\AddressFieldTrait;
+use barrelstrength\sproutbasefields\events\OnSaveAddressEvent;
 use barrelstrength\sproutbasefields\helpers\CountryRepositoryHelper;
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
-use barrelstrength\sproutbasefields\events\OnSaveAddressEvent;
-use barrelstrength\sproutbasefields\services\Address as AddressService;
 use barrelstrength\sproutbasefields\records\Address as AddressRecord;
+use barrelstrength\sproutbasefields\services\Address as AddressService;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutforms\base\FormField;
 use CommerceGuys\Addressing\Country\CountryRepository;
@@ -72,6 +72,7 @@ class Address extends Component
         // If the user cleared the address, delete it if it exists and don't save anything
         if ($deletedAddressId = $field->getDeletedAddressId()) {
             $this->deleteAddressById($deletedAddressId);
+
             return true;
         }
 

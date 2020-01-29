@@ -45,6 +45,7 @@ class m190226_000000_add_address_table extends Migration
     public function safeDown(): bool
     {
         echo "m190226_000000_add_address_table cannot be reverted.\n";
+
         return false;
     }
 }

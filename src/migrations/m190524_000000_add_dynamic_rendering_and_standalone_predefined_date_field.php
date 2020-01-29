@@ -70,6 +70,7 @@ class m190524_000000_add_dynamic_rendering_and_standalone_predefined_date_field 
     public function safeDown(): bool
     {
         echo "m190524_000000_add_dynamic_rendering_and_standalone_predefined_date_field cannot be reverted.\n";
+
         return false;
     }
 }

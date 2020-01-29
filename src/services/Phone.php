@@ -10,6 +10,7 @@ namespace barrelstrength\sproutbasefields\services;
 use barrelstrength\sproutbasefields\models\Phone as PhoneModel;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use CommerceGuys\Addressing\Country\CountryRepository;
+use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\FieldInterface;
@@ -21,7 +22,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Component;
-use Craft;
 
 /**
  * Class PhoneService
@@ -110,6 +110,7 @@ class Phone extends Component
             $phoneModel = new PhoneModel();
             $phoneModel->country = $phoneArray['country'];
             $phoneModel->phone = $phoneArray['phone'];
+
             return $phoneModel;
         }
 
@@ -158,6 +159,7 @@ class Phone extends Component
 
         try {
             $swissNumberProto = $phoneUtil->parse($phone, $country);
+
             return $phoneUtil->isValidNumber($swissNumberProto);
         } catch (NumberParseException $e) {
             return false;

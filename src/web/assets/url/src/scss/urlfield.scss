@@ -12,15 +12,15 @@
     background-color: #ffffff;
     display: inline-block;
     height: 14px;
-    width: 14px;
     opacity: 0;
     padding: 8px 6px 8px 6px;
     position: absolute;
     right: 1px;
     top: 1px;
-    transition: opacity .15s ease-in-out;
     -moz-transition: opacity .15s ease-in-out;
     -webkit-transition: opacity .15s ease-in-out;
+    transition: opacity .15s ease-in-out;
+    width: 14px;
 }
 
 .fade {

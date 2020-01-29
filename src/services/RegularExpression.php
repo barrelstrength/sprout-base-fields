@@ -10,6 +10,7 @@ namespace barrelstrength\sproutbasefields\services;
 use barrelstrength\sproutbasefields\SproutBaseFields;
 use barrelstrength\sproutbasefields\web\assets\regularexpression\RegularExpressionFieldAsset;
 use barrelstrength\sproutfields\fields\RegularExpression as RegularExpressionField;
+use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\FieldInterface;
@@ -17,7 +18,6 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Component;
-use Craft;
 use yii\base\InvalidConfigException;
 
 /**

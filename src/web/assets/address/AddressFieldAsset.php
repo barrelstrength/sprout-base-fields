@@ -7,8 +7,8 @@
 
 namespace barrelstrength\sproutbasefields\web\assets\address;
 
-use craft\web\AssetBundle;
 use barrelstrength\sproutbase\web\assets\cp\CpAsset;
+use craft\web\AssetBundle;
 
 class AddressFieldAsset extends AssetBundle
 {

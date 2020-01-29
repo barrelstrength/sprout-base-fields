@@ -12,24 +12,19 @@ use barrelstrength\sproutbasefields\controllers\AddressController;
 use barrelstrength\sproutbasefields\controllers\FieldsController;
 use barrelstrength\sproutbasefields\services\App;
 use barrelstrength\sproutbasefields\web\twig\variables\SproutFieldsVariable;
-use craft\web\twig\variables\CraftVariable;
-use yii\base\Event;
-use yii\base\InvalidConfigException;
-use \yii\base\Module;
-use craft\web\View;
+use Craft;
 use craft\events\RegisterTemplateRootsEvent;
 use craft\helpers\ArrayHelper;
 use craft\i18n\PhpMessageSource;
-use Craft;
+use craft\web\twig\variables\CraftVariable;
+use craft\web\View;
+use yii\base\Event;
+use yii\base\InvalidConfigException;
+use yii\base\Module;
 
 class SproutBaseFields extends Module
 {
     use BaseSproutTrait;
-
-    /**
-     * @var string
-     */
-    public $handle;
 
     /**
      * @var App
@@ -42,6 +37,11 @@ class SproutBaseFields extends Module
      * @var string
      */
     public static $pluginHandle = 'sprout-base-fields';
+
+    /**
+     * @var string
+     */
+    public $handle;
 
     /**
      * @var string|null The translation category that this module translation messages should use. Defaults to the lowercase plugin handle.

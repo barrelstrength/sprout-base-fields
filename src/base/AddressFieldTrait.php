@@ -48,18 +48,18 @@ trait AddressFieldTrait
     protected $_deletedAddressId;
 
     /**
-     * @param int $addressId
-     */
-    public function setDeletedAddressId($addressId)
-    {
-        $this->_deletedAddressId = $addressId;
-    }
-
-    /**
      * @return int|null
      */
     public function getDeletedAddressId()
     {
         return $this->_deletedAddressId;
+    }
+
+    /**
+     * @param int $addressId
+     */
+    public function setDeletedAddressId($addressId)
+    {
+        $this->_deletedAddressId = $addressId;
     }
 }

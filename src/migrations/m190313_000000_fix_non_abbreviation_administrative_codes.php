@@ -58,6 +58,7 @@ class m190313_000000_fix_non_abbreviation_administrative_codes extends Migration
     public function safeDown(): bool
     {
         echo "m190313_000000_fix_non_abbreviation_administrative_codes cannot be reverted.\n";
+
         return false;
     }
 }

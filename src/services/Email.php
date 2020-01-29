@@ -12,12 +12,12 @@ use Craft;
 use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\FieldInterface;
+use craft\db\Query;
+use craft\db\Table;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Component;
-use craft\db\Query;
-use craft\db\Table;
 
 /**
  * Class EmailService

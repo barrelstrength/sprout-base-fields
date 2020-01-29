@@ -6,7 +6,6 @@ use barrelstrength\sproutbasefields\SproutBaseFields;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
-use craft\helpers\Json;
 use yii\base\NotSupportedException;
 
 /**
@@ -78,7 +77,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
                     ->one();
 
                 if (!$address) {
-                    SproutBaseFields::info('Unable to migrate address. Unable to find address with ID: '. $addressId. ' for element '. $elementsWithAddressId['elementId']);
+                    SproutBaseFields::info('Unable to migrate address. Unable to find address with ID: '.$addressId.' for element '.$elementsWithAddressId['elementId']);
                     continue;
                 }
 
@@ -138,7 +137,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
                             ->one();
 
                         if (!$address) {
-                            SproutBaseFields::info('Unable to migrate address. Unable to find address with ID: '. $addressId. ' for form element '. $elementsWithAddressId['elementId']);
+                            SproutBaseFields::info('Unable to migrate address. Unable to find address with ID: '.$addressId.' for form element '.$elementsWithAddressId['elementId']);
                             continue;
                         }
 
@@ -166,7 +165,8 @@ class m200102_000000_remove_address_field_content_column extends Migration
         return true;
     }
 
-    public function createTemporaryAddressTable($tempAddressFieldsTable) {
+    public function createTemporaryAddressTable($tempAddressFieldsTable)
+    {
         // Create a fresh address field table
         $this->createTable($tempAddressFieldsTable, [
             'id' => $this->primaryKey(),
@@ -193,6 +193,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
     public function safeDown(): bool
     {
         echo "m200102_000000_remove_address_field_content_column cannot be reverted.\n";
+
         return false;
     }
 }
