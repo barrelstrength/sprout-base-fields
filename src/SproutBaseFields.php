@@ -14,6 +14,7 @@ use barrelstrength\sproutbasefields\services\App;
 use barrelstrength\sproutbasefields\web\twig\variables\SproutFieldsVariable;
 use craft\web\twig\variables\CraftVariable;
 use yii\base\Event;
+use yii\base\InvalidConfigException;
 use \yii\base\Module;
 use craft\web\View;
 use craft\events\RegisterTemplateRootsEvent;
@@ -86,9 +87,18 @@ class SproutBaseFields extends Module
         parent::__construct($id, $parent, $config);
     }
 
+    /**
+     * @throws InvalidConfigException
+     */
     public function init()
     {
-        self::$app = new App();
+        parent::init();
+
+        $this->setComponents([
+            'app' => App::class
+        ]);
+
+        self::$app = $this->get('app');
 
         Craft::setAlias('@sproutbasefields', $this->getBasePath());
         Craft::setAlias('@sproutbasefieldslib', dirname(__DIR__).'/lib');
@@ -114,7 +124,5 @@ class SproutBaseFields extends Module
         Event::on(CraftVariable::class, CraftVariable::EVENT_INIT, static function(Event $event) {
             $event->sender->set('sproutFields', SproutFieldsVariable::class);
         });
-
-        parent::init();
     }
 }
