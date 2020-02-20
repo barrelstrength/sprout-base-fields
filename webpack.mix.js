@@ -50,6 +50,10 @@ mix
   .js([
     'src/web/assets/selectother/src/js/SelectOtherField.js'
   ], 'src/web/assets/selectother/dist/js/selectotherfield.js')
+  .sass(
+    'src/web/assets/selectother/src/scss/select-other.scss',
+    'src/web/assets/selectother/dist/css/select-other.css'
+  )
 
   // URL
   .js([

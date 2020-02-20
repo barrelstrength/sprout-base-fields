@@ -3,6 +3,7 @@
     "/src/web/assets/address/dist/css/addressfield.css": "/src/web/assets/address/dist/css/addressfield.css",
     "/src/web/assets/email/dist/css/emailfield.css": "/src/web/assets/email/dist/css/emailfield.css",
     "/src/web/assets/phone/dist/css/phonefield.css": "/src/web/assets/phone/dist/css/phonefield.css",
+    "/src/web/assets/selectother/dist/css/select-other.css": "/src/web/assets/selectother/dist/css/select-other.css",
     "/src/web/assets/url/dist/css/urlfield.css": "/src/web/assets/url/dist/css/urlfield.css",
     "/src/web/assets/email/dist/js/emailfield.js": "/src/web/assets/email/dist/js/emailfield.js",
     "/src/web/assets/phone/dist/js/phonefield.js": "/src/web/assets/phone/dist/js/phonefield.js",

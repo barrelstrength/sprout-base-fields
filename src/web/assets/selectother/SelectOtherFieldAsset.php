@@ -24,6 +24,10 @@ class SelectOtherFieldAsset extends AssetBundle
             'js/selectotherfield.js'
         ];
 
+        $this->css = [
+            'css/select-other.css'
+        ];
+
         parent::init();
     }
 }
