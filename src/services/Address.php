@@ -86,10 +86,6 @@ class Address extends Component
             $record = new AddressRecord();
         }
 
-        if ($isNew) {
-            $record->id = null;
-        }
-
         $record->elementId = $element->id;
         $record->siteId = $element->siteId;
         $record->fieldId = $field->id;
