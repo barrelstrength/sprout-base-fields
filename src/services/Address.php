@@ -23,6 +23,7 @@ use craft\base\ElementInterface;
 use craft\base\Field;
 use craft\base\FieldInterface;
 use craft\db\Query;
+use craft\db\Table;
 use craft\errors\SiteNotFoundException;
 use craft\helpers\Template;
 use Exception;
@@ -59,7 +60,7 @@ class Address extends Component
         // If we don't have an address model, delete the old address associated with this field
         if (!$address instanceof AddressModel) {
             Craft::$app->db->createCommand()
-                ->delete('{{%sprout_addresses}}', [
+                ->delete(AddressRecord::tableName(), [
                     'elementId' => $element->id,
                     'siteId' => $element->siteId,
                     'fieldId' => $field->id
@@ -154,13 +155,13 @@ class Address extends Component
     {
         $addressIdsWithDeletedElementIds = (new Query())
             ->select('addresses.id')
-            ->from('{{%sprout_addresses}} addresses')
-            ->leftJoin('{{%elements}} elements', '[[addresses.elementId]] = [[elements.id]]')
+            ->from(AddressRecord::tableName().' addresses')
+            ->leftJoin(Table::ELEMENTS.' elements', '[[addresses.elementId]] = [[elements.id]]')
             ->where(['elements.id' => null])
             ->column();
 
         Craft::$app->db->createCommand()
-            ->delete('{{%sprout_addresses}}', [
+            ->delete(AddressRecord::tableName(), [
                 'id' => $addressIdsWithDeletedElementIds
             ])
             ->execute();
@@ -188,7 +189,7 @@ class Address extends Component
                 'address1',
                 'address2'
             ])
-            ->from('{{%sprout_addresses}}')
+            ->from(AddressRecord::tableName())
             ->where(['id' => $id])
             ->one();
 
@@ -225,7 +226,7 @@ class Address extends Component
                 'address1',
                 'address2'
             ])
-            ->from('{{%sprout_addresses}}')
+            ->from(AddressRecord::tableName())
             ->where([
                 'siteId' => $element->siteId,
                 'fieldId' => $fieldId

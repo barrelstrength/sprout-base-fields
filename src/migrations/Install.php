@@ -7,6 +7,7 @@
 
 namespace barrelstrength\sproutbasefields\migrations;
 
+use barrelstrength\sproutbasefields\records\Address as AddressRecord;
 use craft\db\Migration;
 
 class Install extends Migration
@@ -16,10 +17,8 @@ class Install extends Migration
      */
     public function safeUp()
     {
-        $tableName = '{{%sprout_addresses}}';
-
-        if (!$this->getDb()->tableExists($tableName)) {
-            $this->createTable($tableName, [
+        if (!$this->getDb()->tableExists(AddressRecord::tableName())) {
+            $this->createTable(AddressRecord::tableName(), [
                 'id' => $this->primaryKey(),
                 'elementId' => $this->integer(),
                 'siteId' => $this->integer(),
@@ -37,5 +36,10 @@ class Install extends Migration
                 'uid' => $this->uid(),
             ]);
         }
+    }
+
+    public function safeDown()
+    {
+        $this->dropTableIfExists(AddressRecord::tableName());
     }
 }
