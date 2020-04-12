@@ -130,7 +130,7 @@ class Phone extends Model
             $this->RFC3966 = $phoneUtil->format($phoneNumber, PhoneNumberFormat::RFC3966);
         } catch (Exception $e) {
             // let's continue
-            SproutBaseFields::error('Unable to populate phone field model: '.$e->getMessage());
+            Craft::error('Unable to populate phone field model: '.$e->getMessage(), __METHOD__);
         }
     }
 }

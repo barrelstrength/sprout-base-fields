@@ -7,10 +7,8 @@ use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
 use yii\base\NotSupportedException;
+use Craft;
 
-/**
- * m200102_000000_remove_address_field_content_column migration.
- */
 class m200102_000000_remove_address_field_content_column extends Migration
 {
     /**
@@ -77,7 +75,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
                     ->one();
 
                 if (!$address) {
-                    SproutBaseFields::info('Unable to migrate address. Unable to find address with ID: '.$addressId.' for element '.$elementsWithAddressId['elementId']);
+                    Craft::info('Unable to migrate address. Unable to find address with ID: '.$addressId.' for element '.$elementsWithAddressId['elementId'], __METHOD__);
                     continue;
                 }
 
@@ -137,7 +135,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
                             ->one();
 
                         if (!$address) {
-                            SproutBaseFields::info('Unable to migrate address. Unable to find address with ID: '.$addressId.' for form element '.$elementsWithAddressId['elementId']);
+                            Craft::info('Unable to migrate address. Unable to find address with ID: '.$addressId.' for form element '.$elementsWithAddressId['elementId'], __METHOD__);
                             continue;
                         }
 

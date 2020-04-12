@@ -7,7 +7,6 @@
 
 namespace barrelstrength\sproutbasefields;
 
-use barrelstrength\sproutbase\base\BaseSproutTrait;
 use barrelstrength\sproutbasefields\controllers\AddressController;
 use barrelstrength\sproutbasefields\controllers\FieldsController;
 use barrelstrength\sproutbasefields\services\App;
@@ -24,19 +23,10 @@ use yii\base\Module;
 
 class SproutBaseFields extends Module
 {
-    use BaseSproutTrait;
-
     /**
      * @var App
      */
     public static $app;
-
-    /**
-     * Identify our plugin for BaseSproutTrait
-     *
-     * @var string
-     */
-    public static $pluginHandle = 'sprout-base-fields';
 
     /**
      * @var string
