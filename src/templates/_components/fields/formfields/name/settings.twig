@@ -21,12 +21,13 @@
             <tbody>
             <tr>
                 <td>
-                    <label for="enableSentEmails">{{ "Prefix"|t('sprout-base-fields') }}</label>
+                    <label for="displayPrefix">{{ "Prefix"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
                         {{ forms.lightswitch({
                             name: 'displayPrefix',
+                            id: 'displayPrefix',
                             on: field.displayPrefix,
                             small: true
                         }) }}
@@ -35,12 +36,13 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableCampaignEmails">{{ "First Name"|t('sprout-base-fields') }}</label>
+                    <label for="displayFirstName">{{ "First Name"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
                         {{ forms.lightswitch({
                             name: 'displayFirstName',
+                            id: 'displayFirstName',
                             on: true,
                             small: true,
                             disabled: true
@@ -50,12 +52,13 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableNotificationEmails">{{ "Middle Name"|t('sprout-base-fields') }}</label>
+                    <label for="displayMiddleName">{{ "Middle Name"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
                         {{ forms.lightswitch({
                             name: 'displayMiddleName',
+                            id: 'displayMiddleName',
                             on: field.displayMiddleName,
                             small: true
                         }) }}
@@ -64,12 +67,13 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableSentEmails">{{ "Last Name"|t('sprout-base-fields') }}</label>
+                    <label for="displayLastName">{{ "Last Name"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
                         {{ forms.lightswitch({
                             name: 'displayLastName',
+                            id: 'displayLastName',
                             on: true,
                             small: true,
                             disabled: true
@@ -79,12 +83,13 @@
             </tr>
             <tr>
                 <td>
-                    <label for="enableSentEmails">{{ "Suffix"|t('sprout-base-fields') }}</label>
+                    <label for="displaySuffix">{{ "Suffix"|t('sprout-base-fields') }}</label>
                 </td>
                 <td class="centeralign">
                     <div>
                         {{ forms.lightswitch({
                             name: 'displaySuffix',
+                            id: 'displaySuffix',
                             on: field.displaySuffix,
                             small: true
                         }) }}
