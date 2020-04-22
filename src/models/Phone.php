@@ -7,7 +7,7 @@
 
 namespace barrelstrength\sproutbasefields\models;
 
-use barrelstrength\sproutbasefields\SproutBaseFields;
+use Craft;
 use craft\base\Model;
 use Exception;
 use libphonenumber\PhoneNumberFormat;

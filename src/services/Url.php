@@ -15,6 +15,7 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 use yii\base\Component;
+use yii\base\Exception;
 
 /**
  * Class Url
@@ -28,8 +29,8 @@ class Url extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function getSettingsHtml(Field $field): string
     {
@@ -50,8 +51,8 @@ class Url extends Component
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function getInputHtml(Field $field, $value, ElementInterface $element = null): string
     {

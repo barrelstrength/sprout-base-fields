@@ -39,6 +39,7 @@ class AddressController extends Controller
      * @throws RuntimeError
      * @throws SyntaxError
      * @throws MissingComponentException
+     * @throws \yii\base\Exception
      */
     public function actionUpdateAddressFormHtml(): Response
     {
@@ -126,6 +127,8 @@ class AddressController extends Controller
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
+     * @throws \yii\base\Exception
+     * @throws \yii\base\Exception
      */
     public function actionGetAddressDisplayHtml(): Response
     {

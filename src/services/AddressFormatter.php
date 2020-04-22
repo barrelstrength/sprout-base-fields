@@ -18,6 +18,7 @@ use Craft;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use yii\base\Exception;
 
 class AddressFormatter
 {
@@ -230,10 +231,10 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function getAddressFormHtml()
     {
@@ -330,8 +331,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function getCountryInputHtml($showCountryDropdown = true): string
     {
@@ -358,8 +359,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     public function getPostalCodeInputHtml(): string
     {
@@ -394,8 +395,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     private function getAddressLineInputHtml($addressName): string
     {
@@ -426,8 +427,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     private function getSortingCodeInputHtml(): string
     {
@@ -450,8 +451,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     private function getLocalityInputHtml(): string
     {
@@ -474,8 +475,8 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
      */
     private function getDependentLocalityInputHtml(): string
     {
@@ -498,9 +499,9 @@ class AddressFormatter
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
-     * @throws \yii\base\Exception
+     * @throws Exception
+     * @throws Exception
+     * @throws Exception
      */
     private function getAdministrativeAreaInputHtml(): string
     {

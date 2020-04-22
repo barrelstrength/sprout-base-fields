@@ -92,5 +92,21 @@ Object syntax: {{ object.title }}
 Shorthand syntax: {title}' => 'Reference the Element you are saving using the `object` variable:
 Object syntax: {{ object.title }}
 Shorthand syntax: {title}',
-    'The auto-generated date value. Format Date in the proper Date format: `Y-m-d h:i:s`.' => 'The auto-generated date value. Format Date in the proper Date format: `Y-m-d h:i:s`.'
+    'The auto-generated date value. Format Date in the proper Date format: `Y-m-d h:i:s`.' => 'The auto-generated date value. Format Date in the proper Date format: `Y-m-d h:i:s`.',
+    'The templates a user will see as hints using the Autosuggest Field or as options using the Dropdown Field.' => 'The templates a user will see as hints using the Autosuggest Field or as options using the Dropdown Field.',
+    'All Templates' => 'All Templates',
+    'The field type that will displayed in the field layout to content authors. The Autosuggest Field displays an open-ended input with search and template hints while a user types. The Dropdown Field displays all available options as a list.' => 'The field type that will displayed in the field layout to content authors. The Autosuggest Field displays an open-ended input with search and template hints while a user types. The Dropdown Field displays all available options as a list.',
+    'Minute Increment' => 'Minute Increment',
+    'Input Style' => 'Input Style',
+    'Autosuggest Field' => 'Autosuggest Field',
+    'No Address exists with the ID “{id}”' => 'No Address exists with the ID “{id}”',
+    'Limits the Suggested Templates shown to the templates within this folder.' => 'Limits the Suggested Templates shown to the templates within this folder.',
+    'Suggested Templates' => 'Suggested Templates',
+    'The maximum date allowed for the date field. Leave blank for no maximum. Format must be YYYY-MM-DD. You can reference the current date with the <code>now</code> tag: <code>{{ now|date_modify(\'+1 month\')|date(\'Y-m-d\') }}</code>' => 'The maximum date allowed for the date field. Leave blank for no maximum. Format must be YYYY-MM-DD. You can reference the current date with the <code>now</code> tag: <code>{{ now|date_modify(\'+1 month\')|date(\'Y-m-d\') }}</code>',
+    'Templates within a specific folder' => 'Templates within a specific folder',
+    'Minimum Date' => 'Minimum Date',
+    'Dropdown Field' => 'Dropdown Field',
+    'The minimum date allowed for the date field. Leave blank for no minimum. Format must be YYYY-MM-DD. You can reference the current date with the <code>now</code> tag: <code>{{ now|date(\'Y-m-d\') }}</code>' => 'The minimum date allowed for the date field. Leave blank for no minimum. Format must be YYYY-MM-DD. You can reference the current date with the <code>now</code> tag: <code>{{ now|date(\'Y-m-d\') }}</code>',
+    'Limit suggestions to template folder' => 'Limit suggestions to template folder',
+    'Maximum Date' => 'Maximum Date'
 ];

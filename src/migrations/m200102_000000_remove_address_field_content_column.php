@@ -2,12 +2,11 @@
 
 namespace barrelstrength\sproutbasefields\migrations;
 
-use barrelstrength\sproutbasefields\SproutBaseFields;
+use Craft;
 use craft\db\Migration;
 use craft\db\Query;
 use craft\db\Table;
 use yii\base\NotSupportedException;
-use Craft;
 
 class m200102_000000_remove_address_field_content_column extends Migration
 {
