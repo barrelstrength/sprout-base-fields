@@ -94,7 +94,9 @@ if (typeof Craft.SproutBase === typeof undefined) {
 
       this.$addressForm = this.$addressBox.find('.sproutfields-address-formfields');
 
-      this.getAddressFormFieldsHtml();
+      if (this.addressId) {
+        this.getAddressFormFieldsHtml();
+      }
     },
 
     editAddressBox: function(event) {

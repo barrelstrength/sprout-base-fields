@@ -388,6 +388,26 @@ class Address extends Component
             $addressModel->fieldId = $field->id;
         }
 
+        $showAddressOnInitialLoad = false;
+
+        // Retain values if element validation fails
+        if ($value) {
+            $showAddressOnInitialLoad = true;
+
+            $addressModel->id = $value['id'];
+            $addressModel->elementId = $value['elementId'];
+            $addressModel->siteId = $value['siteId'];
+            $addressModel->fieldId = $value['fieldId'];
+            $addressModel->countryCode = $value['countryCode'];
+            $addressModel->administrativeAreaCode = $value['administrativeAreaCode'];
+            $addressModel->locality = $value['locality'];
+            $addressModel->dependentLocality = $value['dependentLocality'];
+            $addressModel->postalCode = $value['postalCode'];
+            $addressModel->sortingCode = $value['sortingCode'];
+            $addressModel->address1 = $value['address1'];
+            $addressModel->address2 = $value['address2'];
+        }
+
         // Override the Default Country Code with the current country code if it exists
         $defaultCountryCode = $addressModel->countryCode ?? $defaultCountryCode;
 
@@ -401,7 +421,9 @@ class Address extends Component
             $addressFormatter->setHighlightCountries($field->highlightCountries);
         }
 
-        $addressDisplayHtml = $addressId ? $addressFormatter->getAddressDisplayHtml($addressModel) : '';
+        $addressDisplayHtml = $addressId || $showAddressOnInitialLoad
+            ? $addressFormatter->getAddressDisplayHtml($addressModel)
+            : '';
         $countryInputHtml = $addressFormatter->getCountryInputHtml($showCountryDropdown);
         $addressFormHtml = $addressFormatter->getAddressFormHtml();
 
@@ -416,7 +438,8 @@ class Address extends Component
                 'addressDisplayHtml' => Template::raw($addressDisplayHtml),
                 'countryInputHtml' => Template::raw($countryInputHtml),
                 'addressFormHtml' => Template::raw($addressFormHtml),
-                'showCountryDropdown' => $showCountryDropdown
+                'showCountryDropdown' => $showCountryDropdown,
+                'showAddressOnInitialLoad' => $showAddressOnInitialLoad
             ]
         );
     }
