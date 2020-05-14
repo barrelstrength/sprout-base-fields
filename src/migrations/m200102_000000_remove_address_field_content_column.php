@@ -39,17 +39,96 @@ class m200102_000000_remove_address_field_content_column extends Migration
 
         // Get all Name fields from content table (Craft / Sprout Forms)
         $addressFieldTypes = (new Query())
-            ->select(['id', 'handle', 'settings', 'type'])
+            ->select(['id', 'handle', 'context', 'settings', 'type'])
             ->from([Table::FIELDS])
             ->where(['type' => $sproutFieldsAddressFieldClass])
             ->all();
 
         // Update every Name Column that matches a blank name JSON string and set it to null
         foreach ($addressFieldTypes as $field) {
+
+            // Global Field
+            $contentTable = Table::CONTENT;
             $columnName = 'field_'.$field['handle'];
 
+            // Give special fields a chance to override
+            if (strpos($field['context'], 'matrixBlockType') === 0) {
+                // Matrix Field
+                $matrixBlockTypes = (new Query())
+                    ->select(['id', 'fieldId', 'fieldLayoutId', 'handle'])
+                    ->from(['{{%matrixblocktypes}}'])
+                    ->all();
+
+                $matrixBlockTypeHandle = null;
+                $matrixBlockTypeFieldId = null;
+                foreach ($matrixBlockTypes as $matrixBlockType) {
+                    $matrixFieldLayoutFieldIds = (new Query())
+                        ->select(['fieldId'])
+                        ->from(['{{%fieldlayoutfields}}'])
+                        ->where(['layoutId' => $matrixBlockType['fieldLayoutId']])
+                        ->column();
+
+                    if (in_array($field['id'], $matrixFieldLayoutFieldIds, true)) {
+                        $matrixBlockTypeHandle = $matrixBlockType['handle'];
+                        $matrixBlockTypeFieldId = $matrixBlockType['fieldId'];
+                        break;
+                    }
+                }
+
+                if (!$matrixBlockTypeFieldId) {
+                    continue;
+                }
+
+                $matrixFieldHandle = (new Query())
+                    ->select(['handle'])
+                    ->from([Table::FIELDS])
+                    ->where(['id' => $matrixBlockTypeFieldId])
+                    ->scalar();
+
+                $columnName = 'field_'.$matrixBlockTypeHandle.'_'.$field['handle'];
+                $contentTable = '{{%matrixcontent_'.strtolower($matrixFieldHandle).'}}';
+            } else if (\Craft::$app->getPlugins()->isPluginEnabled('super-table') &&
+                strpos($field['context'], 'superTableBlockType') === 0) {
+                // Super Table Field
+                $superTableBlockTypes = (new Query())
+                    ->select(['id', 'fieldId', 'fieldLayoutId'])
+                    ->from(['{{%supertableblocktypes}}'])
+                    ->all();
+
+                $superTableBlockTypeFieldId = null;
+                foreach ($superTableBlockTypes as $superTableBlockType) {
+                    $superTableLayoutFieldIds = (new Query())
+                        ->select(['fieldId'])
+                        ->from(['{{%fieldlayoutfields}}'])
+                        ->where(['layoutId' => $superTableBlockType['fieldLayoutId']])
+                        ->column();
+
+                    if (in_array($field['id'], $superTableLayoutFieldIds, true)) {
+                        $superTableBlockTypeFieldId = $superTableBlockType['fieldId'];
+                        break;
+                    }
+                }
+
+                if (!$superTableBlockTypeFieldId) {
+                    continue;
+                }
+
+                $superTableFieldHandle = (new Query())
+                    ->select(['handle'])
+                    ->from([Table::FIELDS])
+                    ->where(['id' => $superTableBlockTypeFieldId])
+                    ->scalar();
+
+                $contentTable = '{{%stc_'.strtolower($superTableFieldHandle).'}}';
+            }
+
+            // If we don't have a match for a table, no need to migrate anything
+            if (!$this->db->tableExists($contentTable)) {
+                continue;
+            }
+
             // If we don't have an address column in the content table, no need to migrate anything
-            if (!$this->db->columnExists(Table::CONTENT, $columnName)) {
+            if (!$this->db->columnExists($contentTable, $columnName)) {
                 continue;
             }
 
@@ -57,9 +136,11 @@ class m200102_000000_remove_address_field_content_column extends Migration
                 $this->createTemporaryAddressTable($tempAddressFieldsTable);
             }
 
+            // Get any rows in the content table
+            // Handles the GLOBAL and NEO use cases
             $elementsWithAddressIds = (new Query())
                 ->select(['id', 'elementId', $columnName])
-                ->from([Table::CONTENT])
+                ->from([$contentTable])
                 ->where(['not', [$columnName => null]])
                 ->all();
 
@@ -84,7 +165,7 @@ class m200102_000000_remove_address_field_content_column extends Migration
                 $this->insert($tempAddressFieldsTable, $address, false);
             }
 
-            $this->dropColumn(Table::CONTENT, $columnName);
+            $this->dropColumn($contentTable, $columnName);
         }
 
         // SPROUT FORMS
