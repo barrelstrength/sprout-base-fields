@@ -1,7 +1,7 @@
 {
   "name": "barrelstrength/sprout-base-fields",
   "description": "Common fields libraries for Sprout Plugins for Craft CMS",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "type": "yii-module",
   "license": "proprietary",
   "authors": [
