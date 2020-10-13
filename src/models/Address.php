@@ -133,6 +133,8 @@ class Address extends Model
                 $this->administrativeArea = $subdivision->getName();
             }
         }
+
+        parent::init();
     }
 
     /**
