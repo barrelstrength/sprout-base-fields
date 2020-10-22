@@ -8,7 +8,7 @@
 namespace barrelstrength\sproutbasefields\services;
 
 use barrelstrength\sproutbasefields\models\Address as AddressModel;
-use CommerceGuys\Addressing\Address;
+use CommerceGuys\Addressing\Address as AddressingAddress;
 use CommerceGuys\Addressing\AddressFormat\AddressFormat;
 use CommerceGuys\Addressing\AddressFormat\AddressFormatRepository;
 use CommerceGuys\Addressing\Country\CountryRepository;
@@ -202,7 +202,7 @@ class AddressFormatter
      */
     public function getAddressDisplayHtml(AddressModel $model): string
     {
-        $address = new Address();
+        $address = new AddressingAddress();
         $addressFormatRepository = new AddressFormatRepository();
         $countryRepository = new CountryRepository();
         $subdivisionRepository = new SubdivisionRepository();
