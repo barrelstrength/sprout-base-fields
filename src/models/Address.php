@@ -126,11 +126,16 @@ class Address extends Model
             $this->currencyCode = $country->getCurrencyCode();
             $this->locale = $country->getLocale();
 
-            $subdivisionRepository = new SubdivisionRepository();
-            $subdivision = $subdivisionRepository->get($this->administrativeAreaCode, [$this->countryCode]);
+            if ($this->administrativeAreaCode) {
+                $subdivisionRepository = new SubdivisionRepository();
 
-            if ($subdivision) {
-                $this->administrativeArea = $subdivision->getName();
+                $subdivision = $subdivisionRepository->get(
+                    $this->administrativeAreaCode, [$this->countryCode]
+                );
+
+                if ($subdivision) {
+                    $this->administrativeArea = $subdivision->getName();
+                }
             }
         }
 
