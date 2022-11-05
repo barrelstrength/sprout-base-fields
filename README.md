@@ -2,6 +2,11 @@
 
 A collection of common field classes and libraries for the Sprout Plugins Suite for Craft CMS.
 
+## Resources
+
+- [Report issues](https://github.com/barrelstrength/craft-sprout-fields/issues) to the [Sprout Fields](https://github.com/barrelstrength/craft-sprout-fields) plugin repository.
+- Pull Requests should reference an open issue in the Sprout Fields plugin repository
+
 ## Usage
 
 Include Sprout Base Fields in your Sprout plugin composer.json file:
